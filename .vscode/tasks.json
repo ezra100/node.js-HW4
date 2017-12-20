@@ -1,0 +1,17 @@
+{
+    "version": "0.1.0",
+    "command": "myCommand",
+    "isShellCommand": false,
+    "args": [],
+    "showOutput": "always",
+    "tasks": [
+        {
+            "taskName": "build",
+            "isBuildCommand": true ,
+            "command": "tsc",
+            "args": [
+                "-p", "./"
+            ]
+        }
+    ]
+}
