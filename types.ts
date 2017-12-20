@@ -4,14 +4,22 @@ export class Person {
     id: number;
     firstName: string;
     lastName: string;
+    userName: string;
     password: string;
     email: string;
     gender: Gender;
     address: string;
     static idCounter: number = 0;
+    static persons: Person[] = [];
     public constructor(init?: Partial<Person>) {
+        console.assert(!Person.findByUserName(init.userName));
         Object.assign(this, init);
         this.id = Person.idCounter++;
+        Person.persons.push(this);
+    }
+
+    static findByUserName(userName: string): Person {
+        return this.persons.find(x => (x.userName.localeCompare(userName) === 0));
     }
 }
 
