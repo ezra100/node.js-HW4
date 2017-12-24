@@ -14,6 +14,8 @@ app.use(bodyParser.urlencoded({
 // set the view engine to ejs
 app.set("view engine", "ejs");
 app.use("/scripts", express.static(path.join(__dirname, "scripts")));
+app.use("/img", express.static(path.join(__dirname, "img")));
+app.use("/css", express.static(path.join(__dirname, "css")));
 app.post("/login", function (req, res) {
     var userName = req.body.name;
     var password = req.body.password;
@@ -31,6 +33,16 @@ app.post("/login", function (req, res) {
         res.writeHead(401, { "Content-Type": "text/plain" });
         res.end();
     }
+});
+app.get(/\/ajax\/*/i, function (req, res) {
+    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: types_1.Person.findByUserName(req.query.userName) });
+});
+// redirecting form the home page to login page
+app.get("/", function (req, res) {
+    res.redirect(301, "/login");
+});
+app.get("/login", function (req, res) {
+    res.render("login");
 });
 app.listen(8080);
 console.log("8080 is the magic port");

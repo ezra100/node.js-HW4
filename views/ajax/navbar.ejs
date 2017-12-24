@@ -1,0 +1,13 @@
+<div class="navbar-nav mr-auto">
+    <a class="nav-item nav-link active" href="#">About
+        <span class="sr-only">(current)</span>
+    </a>
+    <a class="nav-item nav-link" href="#Catalog">Catalog</a>
+    <% if (typeof user === "MyWorker" || typeof user === "Manager") {%>
+        <a class="nav-item nav-link" href="#customer-management">Customer Management</a>
+    <% } %>
+
+    <% if (typeof user === "Manager") {%>
+        <a class="nav-item nav-link" href="#workers-management">Workers Management</a>
+    <% } %>
+</div>

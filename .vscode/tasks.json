@@ -1,16 +1,26 @@
 {
-    "version": "0.1.0",
-    "command": "myCommand",
-    "isShellCommand": false,
-    "args": [],
-    "showOutput": "always",
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
-            "isBuildCommand": true ,
-            "command": "tsc",
+            "label": "build",
+            "type": "shell",
+            "command": "tsc -p tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "label": "url-launch",
+            "type": "shell",
+            "command": "start",
             "args": [
-                "-p", "./"
+                "http://localhost:8080"
             ]
         }
     ]

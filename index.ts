@@ -3,6 +3,8 @@
 import express = require("express");
 import * as data from "./data";
 import { Person, Customer, Manager, MyWorker } from "./types";
+import { Response } from "express-serve-static-core";
+import { Request } from "express";
 var app = express();
 var path = require("path");
 var bodyParser = require("body-parser");
@@ -17,6 +19,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 // set the view engine to ejs
 app.set("view engine", "ejs");
 app.use("/scripts", express.static(path.join(__dirname, "scripts")));
+app.use("/img", express.static(path.join(__dirname, "img")));
+app.use("/css", express.static(path.join(__dirname, "css")));
+
+
 
 
 app.post("/login", function (req, res) {
@@ -36,6 +42,21 @@ app.post("/login", function (req, res) {
         res.end();
     }
 
+});
+app.get(/\/ajax\/*/i, function (req: Request, res) {
+    res.render(req.url.substring(1, req.url.indexOf("?")),
+        { query: req.query, user: Person.findByUserName(req.query.userName) });
+
+});
+
+
+
+// redirecting form the home page to login page
+app.get("/", function (req, res) {
+    res.redirect(301, "/login");
+});
+app.get("/login", function (req, res) {
+    res.render("login");
 });
 
 app.listen(8080);

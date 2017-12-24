@@ -1,7 +1,4 @@
-.navbar-brand {
-    padding: 10px
+.hidden{
+    display: none
 }
 
-.navbar-brand>img {
-    height: -webkit-fill-available;
-}
