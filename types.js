@@ -12,8 +12,8 @@ class Person {
         this.id = Person.idCounter++;
         Person.persons.push(this);
     }
-    static findByUserName(userName) {
-        return this.persons.find(x => (x.userName.localeCompare(userName) === 0));
+    static findByUserName(userName, persons = this.persons) {
+        return persons.find(x => (x.userName.toLowerCase() === userName.toLowerCase()));
     }
 }
 Person.idCounter = 0;

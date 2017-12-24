@@ -18,8 +18,10 @@ export class Person {
         Person.persons.push(this);
     }
 
-    static findByUserName(userName: string): Person {
-        return this.persons.find(x => (x.userName.localeCompare(userName) === 0));
+    static findByUserName(userName: string, persons: Person[] = this.persons): Person {
+        return persons.find(x =>
+            (x.userName.toLowerCase() === userName.toLowerCase())
+        );
     }
 }
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("./types");
-var Customers = [new types_1.Customer({
+exports.persons = [new types_1.Customer({
         "userName": "Shelba",
         "firstName": "Shelba",
         "lastName": "Tipper",
@@ -14,7 +14,8 @@ var Customers = [new types_1.Customer({
         "lastName": "Bright",
         "email": "rbright1@yelp.com",
         "gender": types_1.Gender.Male,
-        "address": "97 Mandrake Center"
+        "address": "97 Mandrake Center",
+        "password": "asdf1234"
     }), new types_1.Customer({
         "userName": "Roderigo",
         "firstName": "Roderigo",

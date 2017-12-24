@@ -1,7 +1,7 @@
-import { Manager, MyWorker, Customer, Gender } from "./types";
+import {Person, Manager, MyWorker, Customer, Gender } from "./types";
 
 
-var Customers: Customer[] = [new Customer({
+export var persons: Person [] = [new Customer({
     "userName": "Shelba",
     "firstName": "Shelba",
     "lastName": "Tipper",
@@ -14,7 +14,8 @@ var Customers: Customer[] = [new Customer({
     "lastName": "Bright",
     "email": "rbright1@yelp.com",
     "gender": Gender.Male,
-    "address": "97 Mandrake Center"
+    "address": "97 Mandrake Center",
+    "password": "asdf1234"
 }), new Customer({
     "userName": "Roderigo",
     "firstName": "Roderigo",

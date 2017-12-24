@@ -26,9 +26,9 @@ app.use("/css", express.static(path.join(__dirname, "css")));
 
 
 app.post("/login", function (req, res) {
-    var userName = req.body.name;
+    var userName = req.body.userName;
     var password = req.body.password;
-    var user = Person.findByUserName(userName);
+    var user = Person.findByUserName(userName, data.persons);
     if (!user) {
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end();

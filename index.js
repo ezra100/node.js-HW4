@@ -2,6 +2,7 @@
 // tslint:disable:typedef
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const data = require("./data");
 const types_1 = require("./types");
 var app = express();
 var path = require("path");
@@ -17,9 +18,9 @@ app.use("/scripts", express.static(path.join(__dirname, "scripts")));
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/css", express.static(path.join(__dirname, "css")));
 app.post("/login", function (req, res) {
-    var userName = req.body.name;
+    var userName = req.body.userName;
     var password = req.body.password;
-    var user = types_1.Person.findByUserName(userName);
+    var user = types_1.Person.findByUserName(userName, data.persons);
     if (!user) {
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end();
