@@ -10,7 +10,7 @@ function postLogin() {
     $("#nav-login").hide();
     $("#nav-logout").removeClass("hidden");
     $.ajax({
-        url: 'ajax/navbar',
+        url: 'ajax/navbar-tabs',
         data: { userName },
         type: 'GET',
         success: function (data) {
