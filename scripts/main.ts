@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 });
 function doLogin() {
-    userName = <string>$("user-name").val();
+    userName = <string>$("#user-name").val();
     var data = {
         "userName": $("#user-name").val(),
         "password": $("#password").val()

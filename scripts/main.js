@@ -3,7 +3,7 @@ $(document).ready(function () {
     $("#login-button").click(doLogin);
 });
 function doLogin() {
-    userName = $("user-name").val();
+    userName = $("#user-name").val();
     var data = {
         "userName": $("#user-name").val(),
         "password": $("#password").val()
