@@ -52,3 +52,12 @@ export class Branch {
     }
 }
 
+export class Flower {
+    name: string;
+    family: string;
+    price: number;
+    img : URL;
+    public constructor(init?: Partial<Flower>) {
+        Object.assign(this, init);
+    }
+}
