@@ -139,8 +139,12 @@ var flowers: Flower[] = [
     new Flower({
         "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Ageratum_houstonianum_%27Blue_Mink%27_%28Compositae%29_flowers.JPG/128px-Ageratum_houstonianum_%27Blue_Mink%27_%28Compositae%29_flowers.JPG"), "name": "Ageratum houstonianum ", "family": "Floss Flower", "price": 5
     }),
-    new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/d/de/Alchemilla_alpina0.jpg"), "name": "Alchemilla ", "family": "Lady's Mantle", "price": 2 }), new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Allium_roseum%2C_Pisa.JPG/128px-Allium_roseum%2C_Pisa.JPG"), "name": "Allium roseum ", "family": "Onion, Garlic", "price": 4 }),
-    new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Alstroemeria_aurea_%27Saturne%27.jpg/128px-Alstroemeria_aurea_%27Saturne%27.jpg"), "name": "Alstroemeria ", "family": "Peruvian LIly", "price": 1 }), new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Iceland_Plants_4911.JPG/128px-Iceland_Plants_4911.JPG"), "name": "Alyssum ", "family": "Sweet Alyssum", "price": 6 }),
+    new Flower({
+        "img": new URL("https://upload.wikimedia.org/wikipedia/commons/d/de/Alchemilla_alpina0.jpg"), "name": "Alchemilla ", "family": "Lady's Mantle", "price": 2
+    }),
+    new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Allium_roseum%2C_Pisa.JPG/128px-Allium_roseum%2C_Pisa.JPG"), "name": "Allium roseum ", "family": "Onion, Garlic", "price": 4 }),
+    new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Alstroemeria_aurea_%27Saturne%27.jpg/128px-Alstroemeria_aurea_%27Saturne%27.jpg"), "name": "Alstroemeria ", "family": "Peruvian LIly", "price": 1 }),
+    new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Iceland_Plants_4911.JPG/128px-Iceland_Plants_4911.JPG"), "name": "Alyssum ", "family": "Sweet Alyssum", "price": 6 }),
     new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/b/b3/Amaranthus_tricolor2.jpg"), "name": "Amaranthus ", "family": "Prince's Feather", "price": 10 }),
     new Flower({ "img": new URL("http://www.all-my-favourite-flower-names.com/images/800px-Amaryllis_hippeastrum_-_Candy_floss.jpg"), "name": "Amaryllis ", "family": "Hippeastrum", "price": 2 }),
     new Flower({ "img": new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Wood_anemone_flowers.jpg/128px-Wood_anemone_flowers.jpg"), "name": "Anemone ", "family": "Windflower", "price": 2 }),
