@@ -42,4 +42,10 @@ class Branch {
     }
 }
 exports.Branch = Branch;
+class Flower {
+    constructor(init) {
+        Object.assign(this, init);
+    }
+}
+exports.Flower = Flower;
 //# sourceMappingURL=types.js.map

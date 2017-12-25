@@ -1,5 +1,5 @@
 import { Person, Manager, MyWorker, Customer, Gender, Flower } from "./types";
-
+import { URL } from "url";
 
 export var persons: Person[] = [new Customer({
     "userName": "Shelba",
