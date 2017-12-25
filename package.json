@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/bootstrap": "^3.3.36",
     "@types/express": "^4.0.39",
+    "@types/jqueryui": "^1.12.0",
     "@types/node": "^8.0.58",
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",

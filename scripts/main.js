@@ -1,3 +1,4 @@
+// tslint:disable: typedef
 var userName;
 $(document).ready(function () {
     $("#login-button").click(doLogin);
@@ -10,18 +11,24 @@ function doLogin() {
         "password": $("#password").val()
     };
     $.ajax({
-        url: '/login',
+        url: "/login",
         data: data,
-        type: 'POST',
+        type: "POST",
         error: (xhr, status, err) => {
-            console.error(err);
+            switch (xhr.status) {
+                case 400:
+                    printError("User with corresponding user-name not found");
+                    break;
+                case 401:
+                    printError("Wrong Password");
+            }
         },
         success: function (data, status, xhr) {
             if (xhr.status === 200) {
                 postLogin();
             }
             else {
-                ;
+                console.log("status is " + xhr.status);
             }
         }
     });
@@ -31,11 +38,11 @@ function postLogin() {
     $("#nav-login").hide();
     $("#nav-logout").show();
     $.ajax({
-        url: 'ajax/navbar-tabs',
+        url: "ajax/navbar-tabs",
         data: { userName },
-        type: 'GET',
+        type: "GET",
         success: function (data) {
-            $('#nav-tabs').html(data);
+            $("#nav-tabs").html(data);
         }
     });
 }
@@ -43,6 +50,15 @@ function logout() {
     $("#nav-login").show();
     $("#nav-logout").hide();
     $("#nav-tabs").html("");
-    //TODO remove the rest of the page content
+    // todo remove the rest of the page content
+}
+function printError(msg) {
+    var alert = $("<div/>");
+    alert.addClass("alert alert-danger alert-dismissable");
+    alert.text(msg);
+    alert.hide();
+    $("#modal-error-msg").html("");
+    $("#modal-error-msg").append(alert);
+    alert.toggle("highlight");
 }
 //# sourceMappingURL=main.js.map
