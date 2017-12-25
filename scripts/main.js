@@ -1,6 +1,7 @@
 var userName;
 $(document).ready(function () {
     $("#login-button").click(doLogin);
+    $("#nav-logout").click(logout).hide();
 });
 function doLogin() {
     userName = $("#user-name").val();
@@ -28,14 +29,20 @@ function doLogin() {
 function postLogin() {
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
-    $("#nav-logout").removeClass("hidden");
+    $("#nav-logout").show();
     $.ajax({
         url: 'ajax/navbar-tabs',
         data: { userName },
         type: 'GET',
         success: function (data) {
-            $('#nav-placeholder').replaceWith(data);
+            $('#nav-tabs').html(data);
         }
     });
+}
+function logout() {
+    $("#nav-login").show();
+    $("#nav-logout").hide();
+    $("#nav-tabs").html("");
+    //TODO remove the rest of the page content
 }
 //# sourceMappingURL=main.js.map
