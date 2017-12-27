@@ -2,7 +2,7 @@
 
 import express = require("express");
 import * as data from "./data";
-import { Person, Customer, Manager, MyWorker } from "./types";
+import {Color, Person, Customer, Manager, MyWorker } from "./types";
 import { Response } from "express-serve-static-core";
 import { Request } from "express";
 var app = express();
@@ -14,7 +14,6 @@ app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
-
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
@@ -56,7 +55,7 @@ app.get("/", function (req, res) {
     res.redirect(301, "/login");
 });
 app.get("/login", function (req, res) {
-    res.render("login");
+    res.render("login", { flowers: data.flowers});
 });
 
 app.listen(8080);

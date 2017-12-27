@@ -43,7 +43,7 @@ app.get("/", function (req, res) {
     res.redirect(301, "/login");
 });
 app.get("/login", function (req, res) {
-    res.render("login");
+    res.render("login", { flowers: data.flowers });
 });
 app.listen(8080);
 console.log("8080 is the magic port");
