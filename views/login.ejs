@@ -37,7 +37,8 @@
 </head>
 
 <body>
-
+<!-- jsgrid script, cannot be moved to head -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">
             <img src="./img/logo-black2.jpg" height="50" alt="logo">
@@ -94,7 +95,7 @@
     </div>
 
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="tab-pane fade show active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
             <%- include("partials/about") %>
         </div>
     </div>

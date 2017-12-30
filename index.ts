@@ -22,9 +22,9 @@ app.set("view engine", "ejs");
 
 
 app.post("/login", function (req, res) {
-    var userName = req.body.userName;
+    var clientUserName = req.body.clientUserName;
     var password = req.body.password;
-    var user = Person.findByUserName(userName, data.persons);
+    var user = Person.findByUserName(clientUserName, data.persons);
     if (!user) {
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end();
@@ -40,8 +40,9 @@ app.post("/login", function (req, res) {
 
 });
 app.get(/\/ajax\/*/i, function (req: Request, res) {
+    var user = Person.findByUserName(req.query.clientUserName);
     res.render(req.url.substring(1, req.url.indexOf("?")),
-        { query: req.query, user: Person.findByUserName(req.query.ClientUserName), data: data });
+        { query: req.query, user: user, data: data });
 
 });
 

@@ -1,14 +1,16 @@
+<% var userType = user.__proto__.constructor.name %>
+
 <div class="tab-pane fade" id="nav-catalog" role="tabpanel" aria-labelledby="nav-catalog-tab">
-    <%- include("../partials/catalog", data.flowers) %>
+    <%- include("../partials/catalog",{flowers: data.flowers}) %>
 </div>
-<% if(typeof user === "MyWorker" || typeof user === "Manager"){ %>
+<% if(userType === "MyWorker" || userType === "Manager"){ %>
     <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
-        <%- include( "../partials/users", {isManager : typeof user === 'Manager'}) %>
+        <%- include( "../partials/users", {isManager : userType=== 'Manager'}) %>
     </div>
 <% } %>
 
-<% if(typeof user === "Manager"){ %>
+<% if(userType === "Manager"){ %>
     <div class="tab-pane fade" id="nav-branches" role="tabpanel" aria-labelledby="nav-branches-tab">
-        <%- include( "../partials/branches", {isManager : typeof user === 'Manager'}) %>
+        <%- include( "../partials/branches") %>
     </div>
 <% } %>

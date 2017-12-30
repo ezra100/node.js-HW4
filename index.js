@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({
 // set the view engine to ejs
 app.set("view engine", "ejs");
 app.post("/login", function (req, res) {
-    var userName = req.body.userName;
+    var clientUserName = req.body.clientUserName;
     var password = req.body.password;
-    var user = types_1.Person.findByUserName(userName, data.persons);
+    var user = types_1.Person.findByUserName(clientUserName, data.persons);
     if (!user) {
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end();
@@ -33,7 +33,8 @@ app.post("/login", function (req, res) {
     }
 });
 app.get(/\/ajax\/*/i, function (req, res) {
-    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: types_1.Person.findByUserName(req.query.ClientUserName), data: data });
+    var user = types_1.Person.findByUserName(req.query.clientUserName);
+    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: user, data: data });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {

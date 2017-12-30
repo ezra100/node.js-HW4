@@ -23,7 +23,8 @@ $(function () {
                 return $.ajax({
                     type: "GET",
                     url: "/users",
-                    data: Object.assign({}, filter, {clientUserName : userName})
+                    data: Object.assign({}, filter, {clientUserName : userName}),
+                    async : true
                 });
             },
             insertItem: function (item) {
@@ -65,5 +66,5 @@ $(function () {
     //load the grid when the tab is shown
     $('a[data-toggle="tab"][href="#nav-users]').on('shown.bs.tab', function (e) {
         $("#jsGrid").jsGrid("loadData");
-    })
+    });
 });
