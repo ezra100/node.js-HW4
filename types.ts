@@ -1,6 +1,6 @@
 import { read } from "fs";
 
-export enum Gender { Male, Female }
+export enum Gender { Male = 0, Female = 1 }
 
 export class Person {
     id: number;

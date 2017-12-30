@@ -1,11 +1,14 @@
 // tslint:disable: typedef
-var userName;
+
+var userName: string;
+
 $(document).ready(function () {
+
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
 });
 function doLogin() {
-    userName = $("#user-name").val();
+    userName = <string>$("#user-name").val();
     var data = {
         "userName": $("#user-name").val(),
         "password": $("#password").val()
@@ -13,46 +16,60 @@ function doLogin() {
     $.ajax({
         url: "/login",
         data: data,
+
         type: "POST",
         error: (xhr, status, err) => {
             switch (xhr.status) {
                 case 400:
-                    printError("User with corresponding user-name not found");
+                    printLoginError("User with corresponding user-name not found");
                     break;
                 case 401:
-                    printError("Wrong Password");
+                    printLoginError("Wrong Password");
             }
-        },
+        }
+        ,
         success: function (data, status, xhr) {
             if (xhr.status === 200) {
                 postLogin();
-            }
-            else {
+            } else {
                 console.log("status is " + xhr.status);
             }
         }
     });
 }
-function postLogin() {
+
+function postLogin(): void {
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
     $("#nav-logout").show();
     $.ajax({
         url: "ajax/navbar-tabs",
-        data: { userName },
+        data: {clientUserName: userName },
         type: "GET",
-        success: function (data) {
+
+        success: function (data: string): void {
             $("#nav-tabs").html(data);
         }
     });
+    $.ajax({
+        url: "ajax/tab-panes",
+        data: {clientUserName:  userName },
+        type: "GET",
+
+        success: function (data: string): void {
+            $("#nav-tabContent").append(data);
+        }
+    });
 }
-function logout() {
+
+function logout(): void {
     $("#nav-login").show();
     $("#nav-logout").hide();
     $("#nav-tabs").html("");
     // todo remove the rest of the page content
 }
-function printError(msg) {
+
+function printLoginError(msg: string) {
     var alert = $("<div/>");
     alert.addClass("alert alert-danger alert-dismissable");
     alert.text(msg);
@@ -61,4 +78,4 @@ function printError(msg) {
     $("#modal-error-msg").append(alert);
     alert.toggle("highlight");
 }
-//# sourceMappingURL=main.js.map
+

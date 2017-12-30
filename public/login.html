@@ -4,23 +4,36 @@
 <html lang="en">
 
 <head>
-    <title></title>
+    <title>Flowers++</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--#region bootstrap + jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
         crossorigin="anonymous">
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
         crossorigin="anonymous"></script>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <!-- #endregion  -->
+
+    <!--#region jsgrid -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" rel="stylesheet">
+    <!-- #endregion  -->
 
     <link href="./css/MyCss.css" rel="stylesheet">
     <script src="./scripts/main.js"></script>
+    <!--#region jQuery UI -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- #endregion  -->
+
+
 </head>
 
 <body>
@@ -35,6 +48,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div id="nav-tabs"></div>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                    aria-selected="true">Home</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                    aria-selected="false">Profile</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact"
+                    aria-selected="false">Contact</a>
+            </div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item" id="nav-login">
                     <button type="button" class="btn btn-dark btn-primary" data-toggle="modal" data-target="#loginModal">
@@ -53,61 +74,18 @@
         </div>
     </nav>
 
-    <div class="container">
-        <div class="col-4 productbox">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/WhiteGazania.JPG/128px-WhiteGazania.JPG" class="img-fluid rounded mx-auto">
-            <div class="producttitle">Product 2</div>
-            <table class="table table-sm">
-                <tbody>
-                    <tr>
-                        <th>Family</th>
-                        <td>sdafffffffffffffffffffffffffffffff</td>
-                    </tr>
-                    <tr>
-                        <th>Color</th>
-                        <td style="background-color:blue">Black</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="productprice">
-                <div class="float-right">
-                    <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
-                </div>
-                <div class="pricetext">£8.95</div>
-            </div>
-        </div>
-        <div class="col-4 productbox">
-            <img src="http://placehold.it/460x250/e67e22/ffffff&text=HTML5" class="img-responsive">
-            <div class="producttitle">Product 2</div>
-            <div class="productprice">
-                <div class="float-right">
-                    <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
-                </div>
-                <div class="pricetext">£8.95</div>
-            </div>
-        </div>
-        <div class="col-4 column productbox">
-            <img src="http://placehold.it/460x250/e67e22/ffffff&text=HTML5" class="img-responsive">
-            <div class="producttitle">Product 3</div>
-            <div class="productprice">
-                <div class="float-right">
-                    <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
-                </div>
-                <div class="pricetext">£8.95</div>
-            </div>
-        </div>
-        <div class="col-4 column productbox">
-            <img src="http://placehold.it/460x250/e67e22/ffffff&text=HTML5" class="img-responsive">
-            <div class="producttitle">Product 4</div>
-            <div class="productprice">
-                <div class="float-right">
-                    <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
-                </div>
-                <div class="pricetext">£8.95</div>
-            </div>
+
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">About</div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div id="jsGrid"></div>
+            <!-- jsgrid script, cannot be moved to head -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+            <script src="/scripts/jsgrid-load.js"> 
+            </script>
         </div>
     </div>
-
 
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">

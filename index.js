@@ -14,9 +14,6 @@ app.use(bodyParser.urlencoded({
 }));
 // set the view engine to ejs
 app.set("view engine", "ejs");
-app.use("/scripts", express.static(path.join(__dirname, "scripts")));
-app.use("/img", express.static(path.join(__dirname, "img")));
-app.use("/css", express.static(path.join(__dirname, "css")));
 app.post("/login", function (req, res) {
     var userName = req.body.userName;
     var password = req.body.password;
@@ -36,7 +33,7 @@ app.post("/login", function (req, res) {
     }
 });
 app.get(/\/ajax\/*/i, function (req, res) {
-    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: types_1.Person.findByUserName(req.query.userName) });
+    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: types_1.Person.findByUserName(req.query.ClientUserName), data: data });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {
@@ -45,6 +42,26 @@ app.get("/", function (req, res) {
 app.get("/login", function (req, res) {
     res.render("login", { flowers: data.flowers });
 });
+app.get("/users", function (req, res) {
+    var users = [{
+            "userName": "Paxton",
+            "firstName": "Paxton",
+            "lastName": "Eisak",
+            "email": "peisake@reddit.com",
+            "gender": 0,
+            "address": "81305 Chive Park",
+            "password": "1111",
+            "id": 14
+        }];
+    res.json(data.persons);
+});
+app.get("/favicon.ico", function (req, res) {
+    res.redirect("/img/logo-black.jpg");
+});
+function assignKeys(src) {
+    return src.map((obj, i, a) => Object.assign({}, obj, { "DT_RowId": "row_" + i.toString() }));
+}
+app.use("/", express.static(path.join(__dirname, "public")));
 app.listen(8080);
 console.log("8080 is the magic port");
 //# sourceMappingURL=index.js.map

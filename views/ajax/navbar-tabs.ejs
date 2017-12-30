@@ -1,15 +1,14 @@
-<div class="navbar-nav mx-1">
-    <a class="nav-item nav-link active" href="#">About
-        <span class="sr-only">(current)</span>
-    </a>
-    <a class="nav-item nav-link" href="#Catalog">Catalog</a>
+<div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-about-tab" data-toggle="tab" href="#nav-homaboute" role="tab" aria-controls="nav-about" aria-selected="true">About</a>
+                <a class="nav-item nav-link" id="nav-catalog-tab" data-toggle="tab" href="#nav-catalog" role="tab" aria-controls="nav-catalog"
+                    aria-selected="false">Catalog</a>
     <% if (typeof user === "MyWorker" || typeof user === "Manager") {%>
-        <a class="nav-item nav-link" href="#customer-management">Customer Management</a>
-    <% } %>
+                <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-users"
+                    aria-selected="false">Users</a> 
+   <% } %>
 
     <% if (typeof user === "Manager") {%>
-        <a class="nav-item nav-link" href="#branches-management">Branches Management</a>
+        <a class="nav-item nav-link" id="nav-branches-tab" data-toggle="tab" href="#nav-branches" role="tab" aria-controls="nav-branches"
+            aria-selected="false">Branches</a>         
     <% } %>
-            <a class="nav-item nav-link" href="#contact-us">Contact Us</a>
-
 </div>
