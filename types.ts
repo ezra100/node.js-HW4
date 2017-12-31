@@ -2,7 +2,7 @@ import { read } from "fs";
 
 export enum Gender { Male = 0, Female = 1 }
 
-export class Person {
+export class User {
     id: number;
     firstName: string;
     lastName: string;
@@ -12,26 +12,28 @@ export class Person {
     gender: Gender;
     address: string;
     static idCounter: number = 0;
-    static persons: Person[] = [];
-    public constructor(init?: Partial<Person>) {
-        console.assert(!Person.findByUserName(init.userName));
+    static persons: User[] = [];
+    public constructor(init?: Partial<User>) {
+       // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
-        this.id = Person.idCounter++;
-        Person.persons.push(this);
+        this.id = User.idCounter++;
+        User.persons.push(this);
     }
-
-    static findByUserName(userName: string, persons: Person[] = this.persons): Person {
+    compare(other: User): boolean {
+        return this.userName.toLowerCase() === other.userName.toLowerCase();
+    }
+    static findByUserName(userName: string, persons: User[] = this.persons): User {
         return persons.find(x =>
             (x.userName.toLowerCase() === userName.toLowerCase())
         );
     }
 }
 
-export class Customer extends Person {
+export class Customer extends User {
 
 }
 
-export class MyWorker extends Person {
+export class MyWorker extends User {
     branchID: number;
     public constructor(init?: Partial<MyWorker>) {
         super(init);

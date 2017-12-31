@@ -5,24 +5,27 @@ var Gender;
     Gender[Gender["Male"] = 0] = "Male";
     Gender[Gender["Female"] = 1] = "Female";
 })(Gender = exports.Gender || (exports.Gender = {}));
-class Person {
+class User {
     constructor(init) {
-        console.assert(!Person.findByUserName(init.userName));
+        // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
-        this.id = Person.idCounter++;
-        Person.persons.push(this);
+        this.id = User.idCounter++;
+        User.persons.push(this);
+    }
+    compare(other) {
+        return this.userName.toLowerCase() === other.userName.toLowerCase();
     }
     static findByUserName(userName, persons = this.persons) {
         return persons.find(x => (x.userName.toLowerCase() === userName.toLowerCase()));
     }
 }
-Person.idCounter = 0;
-Person.persons = [];
-exports.Person = Person;
-class Customer extends Person {
+User.idCounter = 0;
+User.persons = [];
+exports.User = User;
+class Customer extends User {
 }
 exports.Customer = Customer;
-class MyWorker extends Person {
+class MyWorker extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);

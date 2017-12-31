@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("./types");
 const url_1 = require("url");
-exports.persons = [new types_1.Customer({
+exports.users = [new types_1.Customer({
         "userName": "Shelba",
         "firstName": "Shelba",
         "lastName": "Tipper",
