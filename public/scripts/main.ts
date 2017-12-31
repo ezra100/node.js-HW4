@@ -80,7 +80,9 @@ function logout(): void {
     $("#nav-login").show();
     $("#nav-logout").hide();
     $("#nav-tabs").html("");
-    // todo remove the rest of the page content
+    var save = $("#nav-about").detach();
+    save.addClass("active show");
+    $("#nav-tabContent").empty().append(save);
 }
 
 function printLoginError(msg: string) {
@@ -152,7 +154,7 @@ function initJsGrid() {
 
             { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
 
-            { name: "address",title: "Address", type: "text", width: 200 },
+            { name: "address", title: "Address", type: "text", width: 200 },
             { type: "control" }
         ]
     });

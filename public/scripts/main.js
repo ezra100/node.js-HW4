@@ -66,7 +66,9 @@ function logout() {
     $("#nav-login").show();
     $("#nav-logout").hide();
     $("#nav-tabs").html("");
-    // todo remove the rest of the page content
+    var save = $("#nav-about").detach();
+    save.addClass("active show");
+    $("#nav-tabContent").empty().append(save);
 }
 function printLoginError(msg) {
     var alert = $("<div/>");
