@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 app.post("/login", function (req, res) {
     var clientUserName = req.body.clientUserName;
     var password = req.body.password;
-    var user = types_1.Person.findByUserName(clientUserName, data.persons);
+    var user = types_1.User.findByUserName(clientUserName, data.users);
     if (!user) {
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end();
@@ -33,7 +33,7 @@ app.post("/login", function (req, res) {
     }
 });
 app.get(/\/ajax\/*/i, function (req, res) {
-    var user = types_1.Person.findByUserName(req.query.clientUserName);
+    var user = types_1.User.findByUserName(req.query.clientUserName);
     res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: user, data: data });
 });
 // redirecting form the home page to login page
@@ -44,20 +44,60 @@ app.get("/login", function (req, res) {
     res.render("login", { flowers: data.flowers });
 });
 app.get("/users", function (req, res) {
-    var users = [{
-            "userName": "Paxton",
-            "firstName": "Paxton",
-            "lastName": "Eisak",
-            "email": "peisake@reddit.com",
-            "gender": 0,
-            "address": "81305 Chive Park",
-            "password": "1111",
-            "id": 14
-        }];
-    res.json(data.persons);
+    var users = data.users.filter((user) => {
+        for (var key in req.query.filter) {
+            if (req.query.filter[key] && req.query.filter[key] !== "" && req.query.filter[key] != user[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
+    res.json(users);
+});
+/**
+ * add user
+ */
+app.post("/users", function (req, res) {
+    var user = new types_1.User(req.body.item);
+    // check that the user doesn't exists yet
+    if (data.users.findIndex((u) => u.compare(user)) >= 0) {
+        res.write("User already exists");
+        res.status(400).end();
+        return;
+    }
+    data.users.push(user);
+    res.json(user);
+});
+/**
+ * update user
+ */
+app.put("/users", function (req, res) {
+    var user = new types_1.User(req.body.item);
+    var index = data.users.findIndex((u) => u.compare(user));
+    if (index < 0) {
+        res.write("User not found");
+        res.status(400).end();
+        return;
+    }
+    data.users[index] = user;
+    res.json(user);
+});
+/**
+ * delete user
+ */
+app.delete("/users", function (req, res) {
+    var user = new types_1.User(req.body.item);
+    var index = data.users.findIndex((u) => u.compare(user));
+    if (index < 0) {
+        res.write("User not found");
+        res.status(400).end();
+        return;
+    }
+    data.users.splice(index, 1);
+    res.json(user);
 });
 app.get("/favicon.ico", function (req, res) {
-    res.redirect("/img/logo-black.jpg");
+    res.sendFile(path.join(__dirname, "public/img/logo-black.jpg"));
 });
 function assignKeys(src) {
     return src.map((obj, i, a) => Object.assign({}, obj, { "DT_RowId": "row_" + i.toString() }));
