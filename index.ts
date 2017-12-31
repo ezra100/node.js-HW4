@@ -59,7 +59,8 @@ app.get("/login", function (req, res) {
 app.get("/users", function (req, res) {
     var users = data.users.filter((user) => {
         for (var key in req.query.filter) {
-            if (req.query.filter[key] && req.query.filter[key] !== "" && req.query.filter[key] != (<any>user)[key]) {
+            if (req.query.filter[key] && req.query.filter[key] !== ""
+                && req.query.filter[key] !== (<any>user)[key] && req.query.filter[key].toString() !== (<any>user)[key].toString()) {
                 return false;
             }
         }
