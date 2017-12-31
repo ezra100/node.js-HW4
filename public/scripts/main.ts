@@ -152,7 +152,7 @@ function initJsGrid() {
 
             { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
 
-            { name: "Address", type: "text", width: 200 },
+            { name: "address",title: "Address", type: "text", width: 200 },
             { type: "control" }
         ]
     });
