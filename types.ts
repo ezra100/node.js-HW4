@@ -3,6 +3,7 @@ import { read } from "fs";
 export enum Gender { Male = 0, Female = 1 }
 
 export class User {
+    className: string = "User";
     id: number;
     firstName: string;
     lastName: string;
@@ -14,7 +15,7 @@ export class User {
     static idCounter: number = 0;
     static persons: User[] = [];
     public constructor(init?: Partial<User>) {
-       // console.assert(!User.findByUserName(init.userName));
+        // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
         this.id = User.idCounter++;
         User.persons.push(this);
@@ -31,20 +32,28 @@ export class User {
 
 export class Customer extends User {
 
+    public constructor(init?: Partial<Customer>) {
+        super(init);
+        this.className = "Customer";
+    }
 }
 
 export class MyWorker extends User {
+
     branchID: number;
     public constructor(init?: Partial<MyWorker>) {
         super(init);
         Object.assign(this, init);
+        this.className = "MyWorker";
     }
 }
 
 export class Manager extends MyWorker {
+
     public constructor(init?: Partial<Manager>) {
         super(init);
         Object.assign(this, init);
+        this.className = "Manager";
     }
 }
 

@@ -7,6 +7,7 @@ var Gender;
 })(Gender = exports.Gender || (exports.Gender = {}));
 class User {
     constructor(init) {
+        this.className = "User";
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
         this.id = User.idCounter++;
@@ -23,12 +24,17 @@ User.idCounter = 0;
 User.persons = [];
 exports.User = User;
 class Customer extends User {
+    constructor(init) {
+        super(init);
+        this.className = "Customer";
+    }
 }
 exports.Customer = Customer;
 class MyWorker extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);
+        this.className = "MyWorker";
     }
 }
 exports.MyWorker = MyWorker;
@@ -36,6 +42,7 @@ class Manager extends MyWorker {
     constructor(init) {
         super(init);
         Object.assign(this, init);
+        this.className = "Manager";
     }
 }
 exports.Manager = Manager;
