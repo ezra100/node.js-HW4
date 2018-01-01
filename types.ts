@@ -1,6 +1,6 @@
 import { read } from "fs";
 
-export enum Gender { Male = 0, Female = 1 }
+export enum Gender { Male = 1, Female = 2 }
 
 export class User {
     className: string = "User";

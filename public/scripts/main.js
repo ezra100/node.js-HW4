@@ -90,8 +90,8 @@ function printLoginError(msg) {
 function initJsGrid() {
     var genders = [
         { "Name": "", Id: "" },
-        { "Name": "Male", Id: 0 },
-        { "Name": "Female", Id: 1 }
+        { "Name": "Male", Id: 1 },
+        { "Name": "Female", Id: 2 }
     ];
     $("#jsGrid").jsGrid({
         width: "100%",
