@@ -11,15 +11,8 @@
 
 
 var clientUserName: string;
-interface JQuery<TElement extends Node = HTMLElement> {
-    jsGrid(arg1: any, arg2?: any): any;
-}
+import "../../jsgrid";
 
-interface JsGridArgs {
-    item: any;
-    event: JQueryEventObject;
-    itemIndex: number;
-}
 
 $(document).ready(function () {
 
@@ -108,9 +101,9 @@ function printLoginError(msg: string) {
 function initJsGrid() {
 
     var genders = [
-        {"Name": "", Id : ""},
+        { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
-    { "Name": "Female", Id: 2 }];
+        { "Name": "Female", Id: 2 }];
     $("#jsGrid").jsGrid({
         width: "100%",
         filtering: true,
@@ -123,7 +116,7 @@ function initJsGrid() {
         height: "auto",
         pageButtonCount: 5,
         rowClick: null,
-        rowDoubleClick: (args: JsGridArgs) => { $("#jsGrid").jsGrid("editItem", args.item); },
+        rowDoubleClick: (args: jsGrid.JsGridArgs) => { $("#jsGrid").jsGrid("editItem", args.item); },
         deleteConfirm: "Do you really want to delete user?",
         controller: {
             loadData: function (filter: any) {
