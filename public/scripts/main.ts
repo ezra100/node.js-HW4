@@ -1,5 +1,15 @@
 // tslint:disable: typedef interface-name
 
+/**
+ * todo:
+ * some order in the code
+ * check the gender issue - when getting from the client it's converted into string and causes problems
+ * Tabs - dark ui
+ * implement Branches, About page
+ * add responsiveness to page
+ */
+
+
 var clientUserName: string;
 interface JQuery<TElement extends Node = HTMLElement> {
     jsGrid(arg1: any, arg2?: any): any;
