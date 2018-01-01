@@ -14,6 +14,81 @@ declare namespace jsGrid {
         event: JQueryEventObject;
         itemIndex: number;
     }
+    ////#region validation config
+    type ValidateConfig = ValidateConfigFunc | ValidateConfigOneParam | ValidateConfigPattern | ValidateConfigRange | ValidateConfigRequired;
+    interface ValidateConfigFunc {
+        /**
+         *  custom validation function
+         */
+        validator: ((value: any, item?: any, param?: any) => boolean);
+        /**
+         *   validation message or a function(value, item) returning validation message
+         */
+        // I guess this is optional
+        message?: string | ((value: any, item: any) => string);
+        /**
+         * a plain object with parameters to be passed to validation function
+         */
+        //I guess this is optional too
+        param?: any;
+    }
+    interface ValidateConfigRequired {
+        /**
+         *  built-in validator 
+         */
+        validator: "required";
+        /**
+       *   validation message or a function(value, item) returning validation message
+       */
+        // I guess this is optional
+        message?: string | ((value: any, item: any) => string);
+    }
+    interface ValidateConfigOneParam {
+        /**
+         *  built-in validator name or custom validation function
+         */
+        validator: "rangeLength" | "minLength" | "maxLength" | "min" | "max";
+        /**
+         *   validation message or a function(value, item) returning validation message
+         */
+        // I guess this is optional
+        message?: string | ((value: any, item: any) => string);
+        /**
+         * a plain object with parameters to be passed to validation function
+         */
+        param: number;
+    }
+    interface ValidateConfigRange {
+        /**
+         *  built-in validator name or custom validation function
+         */
+        validator: "range";
+        /**
+         *   validation message or a function(value, item) returning validation message
+         */
+        // I guess this is optional
+        message?: string | ((value: any, item: any) => string);
+        /**
+         * a plain object with parameters to be passed to validation function
+         */
+        param: [number, number];
+    }
+    interface ValidateConfigPattern {
+        /**
+         *  built-in validator name or custom validation function
+         */
+        validator: "pattern";
+        /**
+         *   validation message or a function(value, item) returning validation message
+         */
+        // I guess this is optional
+        message?: string | ((value: any, item: any) => string);
+        /**
+         * a plain object with parameters to be passed to validation function
+         */
+        param: RegExp;
+    }
+    //#endregion
     interface JsGridField {
         type: ("text" | "number" | "checkbox" | "select" | "textarea" | "control"),
         name: string,
@@ -46,7 +121,8 @@ declare namespace jsGrid {
 
         cellRenderer: (value: any, item: any) => string | Node | JQueryElement,
 
-        validate: string
+        validate: "required" | ((value: any, item: any, param?: any) => boolean) | ValidateConfig |
+        ("required" | ((value: any, item: any, param?: any) => boolean) | ValidateConfig)[];
     }
 
     interface JsGridConf {
