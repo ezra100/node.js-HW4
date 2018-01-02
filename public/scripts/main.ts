@@ -4,7 +4,6 @@
 
 
 var clientUserName: string;
-import "../../jsgrid";
 
 
 $(document).ready(function () {
