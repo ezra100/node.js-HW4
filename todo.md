@@ -1,5 +1,5 @@
 ### todo:
 * Implement Branches, About tabs
 * Check responsiveness of page
-* Tabs - dark ui
+* Tabs - dark ui - **Ezra**
 * Build an interface + factory method for the DB and refactor the router class to use the DB instead of current functions
