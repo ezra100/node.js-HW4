@@ -4,13 +4,13 @@
 
 .productbox {
     background-color: #ffffff;
-    padding: 10px;
-    margin-bottom: 10px;
-    -webkit-box-shadow: 0 8px 6px -6px #999;
-    -moz-box-shadow: 0 8px 6px -6px #999;
-    box-shadow: 0 8px 6px -6px #999;
+    padding: 7px;
+    margin: 7px;
+    -webkit-box-shadow: 4px 6px 12px 2px #999;
+    -moz-box-shadow: 4px 6px 12px 2px #999;
+    box-shadow: 4px 6px 12px 2px #999;
     display: inline-block;
-    width: 22rem
+    width: 15em
 }
 
 .grid {
