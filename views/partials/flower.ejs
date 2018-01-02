@@ -28,10 +28,11 @@ function invertColor(hex, bw) {
 }
 
 %>   
-   
-   <div class="col-3 productbox">
-    <img src="<%= flower.img %>" class="img-fluid rounded m-auto d-block">
-    <div class="producttitle"><%= flower.name %></div>
+
+   <div class="card productbox">
+    <img src="<%= flower.img %>" class="card-img-top">
+    <div class="card-body">
+    <p class="card-text"<%= flower.name %></p>
     <table class="table table-sm">
         <tbody>
             <tr>
@@ -51,5 +52,6 @@ function invertColor(hex, bw) {
             <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
         </div>
         <div class="pricetext">₪<%= flower.price %></div>
+    </div>
     </div>
 </div>
