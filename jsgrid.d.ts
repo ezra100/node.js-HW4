@@ -253,7 +253,6 @@ declare namespace jsGrid {
 
 }
 interface JQuery<TElement extends Node = HTMLElement> {
-    jsGrid(obj: any): void;
     jsGrid(conf: Partial<jsGrid.JsGridConf>): void;
     jsGrid(cmd: "cancelEdit" | "destroy" | "clearInsert" | "refresh" | "reset" | "showPrevPages" | "showNextPages"): void;
     jsGrid(cmd: "clearFilter" | "render"): Promise<any>;
@@ -272,6 +271,8 @@ interface JQuery<TElement extends Node = HTMLElement> {
     jsGrid(cmd: "updateItem", itemOrRow?: any, editedItem?: any): Promise<any>;
 
     jsGrid(arg1: string, arg2: string | Node | jsGrid.JQueryElement | number | any): Promise<any> | void | Object;
+    jsGrid(obj: any): void;
+
 }
 
 interface jsGrid {
