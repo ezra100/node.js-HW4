@@ -96,7 +96,9 @@ function initJsGrid() {
         pageSize: 10,
         height: "auto",
         pageButtonCount: 5,
-        rowClick: null,
+        // tslint:disable-next-line:no-empty
+        rowClick: () => { },
+        rowClass: "",
         rowDoubleClick: (args) => { $("#jsGrid").jsGrid("editItem", args.item); },
         deleteConfirm: "Do you really want to delete user?",
         controller: {
@@ -132,14 +134,16 @@ function initJsGrid() {
             }
         },
         fields: [
-            { name: "firstName", title: "First Name", type: "text", width: 150 },
-            { name: "lastName", title: "Last Name", type: "text", width: 150 },
-            { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
-            { name: "email", title: "Email", type: "text", width: 150 },
-            { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
-            { name: "address", title: "Address", type: "text", width: 200 },
-            { type: "control" }
+            { name: "firstName", title: "First Name", type: "text", width: 150, css: "" },
+            { name: "lastName", title: "Last Name", type: "text", width: 150, css: "" },
+            // user name can't be changed
+            { name: "userName", editing: false, title: "User Name", type: "text", width: 150, css: "" },
+            { name: "email", title: "Email", type: "text", width: 150, css: "" },
+            { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150, css: "" },
+            { name: "address", title: "Address", type: "text", width: 200, css: "" },
+            { type: "control", css: "" }
         ]
     });
+    $("#jsGrid >> table").addClass("table");
 }
 //# sourceMappingURL=main.js.map
