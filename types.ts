@@ -3,6 +3,7 @@ import { read } from "fs";
 export enum Gender { Male = 1, Female = 2 }
 
 export class User {
+    static readonly className: string = "User";
     className: string = "User";
     firstName: string;
     lastName: string;
@@ -24,6 +25,7 @@ export class User {
 }
 
 export class Customer extends User {
+    static readonly className: string = "Customer";
 
     public constructor(init?: Partial<Customer>) {
         super(init);
@@ -32,6 +34,7 @@ export class Customer extends User {
 }
 
 export class Employee extends User {
+    static readonly className: string = "Employee";
 
     branchID: number;
     public constructor(init?: Partial<Employee>) {
@@ -42,6 +45,7 @@ export class Employee extends User {
 }
 
 export class Manager extends Employee {
+    static readonly className: string = "Manager";
 
     public constructor(init?: Partial<Manager>) {
         super(init);

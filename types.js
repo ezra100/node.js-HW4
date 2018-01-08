@@ -18,6 +18,7 @@ class User {
         return this.userName.toLowerCase() === userName.toLowerCase();
     }
 }
+User.className = "User";
 exports.User = User;
 class Customer extends User {
     constructor(init) {
@@ -25,6 +26,7 @@ class Customer extends User {
         this.className = "Customer";
     }
 }
+Customer.className = "Customer";
 exports.Customer = Customer;
 class Employee extends User {
     constructor(init) {
@@ -33,6 +35,7 @@ class Employee extends User {
         this.className = "Employee";
     }
 }
+Employee.className = "Employee";
 exports.Employee = Employee;
 class Manager extends Employee {
     constructor(init) {
@@ -41,6 +44,7 @@ class Manager extends Employee {
         this.className = "Manager";
     }
 }
+Manager.className = "Manager";
 exports.Manager = Manager;
 class Branch {
     constructor(init) {
