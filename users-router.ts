@@ -9,7 +9,8 @@ import { helpers } from "./helpers";
 var db = DBFactory.getDB();
 
 router.get("/", function (req, res) {
-    var users = db.getUsers(req.query.filter);
+    var client = db.findUser(req.query.clientUserName);
+    var users = db.getUsers(client instanceof Manager ? [User] : [Customer], req.query.filter);
     res.json(users);
 });
 
@@ -19,7 +20,7 @@ router.get("/", function (req, res) {
  * add user
  */
 router.post("/", function (req, res) {
-    res.json( db.updateUser(req.body.item));
+    res.json(db.updateUser(req.body.item));
 
 
 });

@@ -50,7 +50,7 @@ function postLogin() {
             // load the grid when the tab is shown
             $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
                 $("#employees-grid").jsGrid("loadData");
-                $("#customers-grid").jsGrid("loadData");
+                $("#users-grid").jsGrid("loadData");
             });
         }
     });
@@ -101,7 +101,7 @@ function initCustomersGrid() {
     if (clientUserType === "Manager") {
         fields.splice(3, 0, { name: "password", title: "Password", type: "text", width: 150 });
     }
-    $("#customers-grid").jsGrid({
+    $("#users-grid").jsGrid({
         width: "100%",
         filtering: true,
         inserting: true,
@@ -115,7 +115,7 @@ function initCustomersGrid() {
         // tslint:disable-next-line:no-empty
         rowClick: () => { },
         rowClass: "",
-        rowDoubleClick: (args) => { $("#customers-grid").jsGrid("editItem", args.item); },
+        rowDoubleClick: (args) => { $("#users-grid").jsGrid("editItem", args.item); },
         deleteConfirm: "Do you really want to delete user?",
         controller: {
             loadData: function (filter) {

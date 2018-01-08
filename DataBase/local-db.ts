@@ -1,16 +1,21 @@
 import { users, flowers } from "./data";
 import { IDataBase } from "./IDataBase";
-import { User , Flower} from "../types";
+import { User, Flower } from "../types";
 
 export class LocalDB implements IDataBase {
     getFlowers(): Flower[] {
         return flowers;
     }
-    getUsers(filter: any): User[] {
-        if (filter.gender && typeof filter.gender !== "number") {
-            filter.gender = parseInt(filter.gender, 10);
+    getUsers(types?: any[], filter?: any): User[] {
+
+        if (!types) {
+            return users;
         }
+
         return users.filter((user) => {
+            if (types && !types.reduce((prev, value) => prev || user instanceof value, false)) {
+                return false;
+            }
             for (var key in filter) {
                 if (filter[key] && filter[key] !== "" && filter[key] !== (<any>user)[key]) {
                     return false;

@@ -5,11 +5,14 @@ class LocalDB {
     getFlowers() {
         return data_1.flowers;
     }
-    getUsers(filter) {
-        if (filter.gender && typeof filter.gender !== "number") {
-            filter.gender = parseInt(filter.gender, 10);
+    getUsers(types, filter) {
+        if (!types) {
+            return data_1.users;
         }
         return data_1.users.filter((user) => {
+            if (types && !types.reduce((prev, value) => prev || user instanceof value, false)) {
+                return false;
+            }
             for (var key in filter) {
                 if (filter[key] && filter[key] !== "" && filter[key] !== user[key]) {
                     return false;
