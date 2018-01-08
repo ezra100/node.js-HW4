@@ -4,11 +4,8 @@
  *  
  */
 
-declare namespace jsGrid {
+declare namespace JsGrid {
     type JQueryElement = JQuery<HTMLElement>;
-
-
-
     interface JsGridArgs {
         item: any;
         event: JQueryEventObject;
@@ -110,7 +107,7 @@ declare namespace jsGrid {
         sorter: boolean,
         items: any[],
         valueField: string,
-         textField: string,
+        textField: string,
         headerTemplate: () => string | Node | JQueryElement,
         itemTemplate: (value: any, item: any) => string | Node | JQueryElement,
         filterTemplate: () => string | Node | JQueryElement,
@@ -120,7 +117,7 @@ declare namespace jsGrid {
         filterValue: () => any,
         insertValue: () => any,
         editValue: () => any,
-
+        autosearch: boolean,
         cellRenderer: (value: any, item: any) => string | Node | JQueryElement,
 
         validate: "required" | ((value: any, item: any, param?: any) => boolean) | ValidateConfig |
@@ -255,31 +252,31 @@ declare namespace jsGrid {
 
 }
 interface JQuery<TElement extends Node = HTMLElement> {
-    jsGrid(conf: Partial<jsGrid.JsGridConf>): void;
+    jsGrid(conf: Partial<JsGrid.JsGridConf>): void;
     jsGrid(cmd: "cancelEdit" | "destroy" | "clearInsert" | "refresh" | "reset" | "showPrevPages" | "showNextPages"): void;
     jsGrid(cmd: "clearFilter" | "render"): Promise<any>;
     jsGrid(cmd: "getFilter" | "getSorting"): Object;
     jsGrid(cmd: "fieldOption", fieldNameOrIndex: string | number, optionName: string, optionValue: any): void;
     jsGrid(cmd: "fieldOption", fieldNameOrIndex: string | number, optionName: string): any;
 
-    jsGrid(cmd: "editItem", itemOrRow: string | Node | jsGrid.JQueryElement): void;
-    jsGrid(cmd: "deleteItem", itemOrRow: string | Node | jsGrid.JQueryElement): Promise<any>;
+    jsGrid(cmd: "editItem", itemOrRow: string | Node | JsGrid.JQueryElement): void;
+    jsGrid(cmd: "deleteItem", itemOrRow: string | Node | JsGrid.JQueryElement): Promise<any>;
     jsGrid(cmd: "insertItem" | "loadData" | "search", item: any): Promise<any>;
-    jsGrid(cmd: "rowByItem", item: any): jsGrid.JQueryElement;
-    jsGrid(cmd: "sort", confOrField: jsGrid.JsGridSortConfig | jsGrid.JsGridField, order?: "asc" | "desc"): Promise<any>;
+    jsGrid(cmd: "rowByItem", item: any): JsGrid.JQueryElement;
+    jsGrid(cmd: "sort", confOrField: JsGrid.JsGridSortConfig | JsGrid.JsGridField, order?: "asc" | "desc"): Promise<any>;
     jsGrid(cmd: "openPage", pageIndex: number): void;
     jsGrid(cmd: "option", optionName: string, optionValue: string): void;
     jsGrid(cmd: "option", optionName: string): string;
     jsGrid(cmd: "updateItem", itemOrRow?: any, editedItem?: any): Promise<any>;
 
-    jsGrid(arg1: string, arg2: string | Node | jsGrid.JQueryElement | number | any): Promise<any> | void | Object;
+    jsGrid(arg1: string, arg2: string | Node | JsGrid.JQueryElement | number | any): Promise<any> | void | Object;
     jsGrid(obj: any): void;
 
 }
 
 interface jsGrid {
     locale(l: string | any): void;
-    setDefaults(conf: Partial<jsGrid.JsGridConf>): void;
+    setDefaults(conf: Partial<JsGrid.JsGridConf>): void;
     setDefaults(fieldName: string, conf: any): void;
     /**
      * Current locale can be set for all grids on the page with the 
@@ -297,4 +294,6 @@ interface jsGrid {
      */
     locales: any;
     readonly sortStrategies: any;
+    Field: any;
 }
+declare var jsGrid: jsGrid;

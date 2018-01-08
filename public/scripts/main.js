@@ -61,7 +61,7 @@ function postLogin() {
         async: true,
         success: function (data) {
             $("#nav-tabContent").append(data);
-            initCustomersGrid();
+            initUsersGrid();
         }
     });
 }
@@ -82,24 +82,43 @@ function printLoginError(msg) {
     $("#modal-error-msg").append(alert);
     alert.toggle("highlight");
 }
-function initCustomersGrid() {
+function initUsersGrid() {
     var genders = [
         { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }
     ];
     var fields = [
-        { name: "firstName", title: "First Name", type: "text", width: 150 },
-        { name: "lastName", title: "Last Name", type: "text", width: 150 },
+        { name: "firstName", title: "First Name", type: "text", width: 90 },
+        { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
         { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
-        { name: "email", title: "Email", type: "text", width: 150 },
-        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
-        { name: "address", title: "Address", type: "text", width: 200 },
+        { name: "email", title: "Email", type: "text", width: 200 },
+        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 70 },
+        { name: "address", title: "Address", type: "text", width: 150 },
         { type: "control" }
     ];
     if (clientUserType === "Manager") {
         fields.splice(3, 0, { name: "password", title: "Password", type: "text", width: 150 });
+        fields.splice(fields.length - 1, 0, {
+            name: "className", title: "User Type", width: 100, type: "select", editing: clientUserType === "Manager",
+            // customer cannot be edited
+            items: [{ Name: null }, { Name: "Manager" }, { Name: "Customer" }, { Name: "Employee" }],
+            autosearch: true,
+            valueField: "Name",
+            textField: "Name",
+            editTemplate: function (value, item) {
+                if (value === "Customer") {
+                    return "Customer";
+                }
+                var select = $("<select/>");
+                select.append($("<option/>").attr("value", "Manager").text("Manager"));
+                select.append($("<option/>").attr("value", "Employee").text("Employee"));
+                select.val(value);
+                this.editControl = select;
+                return select;
+            }
+        });
     }
     $("#users-grid").jsGrid({
         width: "100%",
@@ -145,74 +164,6 @@ function initCustomersGrid() {
                 return $.ajax({
                     type: "DELETE",
                     url: "/users",
-                    data: { item }
-                });
-            }
-        },
-        fields: fields
-    });
-}
-function initEmployeesGrid() {
-    var genders = [
-        { "Name": "", Id: "" },
-        { "Name": "Male", Id: 1 },
-        { "Name": "Female", Id: 2 }
-    ];
-    var fields = [
-        { name: "firstName", title: "First Name", type: "text", width: 150 },
-        { name: "lastName", title: "Last Name", type: "text", width: 150 },
-        // user name can't be changed
-        { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
-        { name: "password", title: "Password", type: "text", width: 150 },
-        { name: "email", title: "Email", type: "text", width: 150 },
-        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
-        { name: "address", title: "Address", type: "text", width: 200 },
-        { type: "control" }
-    ];
-    $("#employees-grid").jsGrid({
-        width: "100%",
-        filtering: true,
-        inserting: true,
-        editing: true,
-        sorting: true,
-        paging: true,
-        autoload: false,
-        pageSize: 10,
-        height: "auto",
-        pageButtonCount: 5,
-        // tslint:disable-next-line:no-empty
-        rowClick: () => { },
-        rowClass: "",
-        rowDoubleClick: (args) => { $("#employees-grid").jsGrid("editItem", args.item); },
-        deleteConfirm: "Do you really want to delete user?",
-        controller: {
-            loadData: function (filter) {
-                var data = { filter: filter, clientUserName };
-                return $.ajax({
-                    type: "GET",
-                    url: "/employees",
-                    data: data,
-                    async: true
-                });
-            },
-            insertItem: function (item) {
-                return $.ajax({
-                    type: "POST",
-                    url: "/employees",
-                    data: { item }
-                });
-            },
-            updateItem: function (item) {
-                return $.ajax({
-                    type: "PUT",
-                    url: "/employees",
-                    data: { item }
-                });
-            },
-            deleteItem: function (item) {
-                return $.ajax({
-                    type: "DELETE",
-                    url: "/employees",
                     data: { item }
                 });
             }

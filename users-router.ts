@@ -17,18 +17,18 @@ router.get("/", function (req, res) {
 
 
 /**
- * add user
- */
-router.post("/", function (req, res) {
-    res.json(db.updateUser(req.body.item));
-
-
-});
-/**
  * update user
  */
 router.put("/", function (req, res) {
-    res.json(db.addUser(req.body.item));
+    var user = helpers.objectToUser(req.body.item);
+    res.json(db.updateUser(user));
+});
+/**
+ * add user
+ */
+router.post("/", function (req, res) {
+    var user = helpers.objectToUser(req.body.item);
+    res.json(db.addUser(user));
 });
 /**
  * delete user

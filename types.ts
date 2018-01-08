@@ -2,7 +2,7 @@ import { read } from "fs";
 
 export enum Gender { Male = 1, Female = 2 }
 
-export class User {
+export abstract class User {
     static readonly className: string = "User";
     className: string = "User";
     firstName: string;

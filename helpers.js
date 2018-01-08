@@ -8,8 +8,6 @@ var helpers;
             obj.gender = parseInt(obj.gender, 10);
         }
         switch (obj.className.toLowerCase()) {
-            case "user":
-                return new types_1.User(obj);
             case "manager":
                 return new types_1.Manager(obj);
             case "Employee":

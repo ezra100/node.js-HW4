@@ -69,7 +69,7 @@ function postLogin(): void {
         async: true,
         success: function (data: string): void {
             $("#nav-tabContent").append(data);
-            initCustomersGrid();
+            initUsersGrid();
         }
     });
 }
@@ -93,25 +93,52 @@ function printLoginError(msg: string) {
     alert.toggle("highlight");
 }
 
-function initCustomersGrid() {
+
+
+function initUsersGrid() {
+
+
 
     var genders: any[] = [
         { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }];
-    var fields: Partial<jsGrid.JsGridField>[] = [
-        { name: "firstName", title: "First Name", type: "text", width: 150 },
-        { name: "lastName", title: "Last Name", type: "text", width: 150 },
+    var fields: Partial<JsGrid.JsGridField>[] = [
+        { name: "firstName", title: "First Name", type: "text", width: 90 },
+        { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
         { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
-        { name: "email", title: "Email", type: "text", width: 150 },
-        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
-        { name: "address", title: "Address", type: "text", width: 200 },
+        { name: "email", title: "Email", type: "text", width: 200 },
+        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 70 },
+        { name: "address", title: "Address", type: "text", width: 150 },
         { type: "control" }
     ];
     if (clientUserType === "Manager") {
         fields.splice(3, 0,
             { name: "password", title: "Password", type: "text", width: 150 }
+        );
+        fields.splice(fields.length - 1, 0,
+            {
+                name: "className", title: "User Type", width: 100, type: "select", editing: clientUserType === "Manager",
+                // customer cannot be edited
+                items: [{ Name: null }, { Name: "Manager" }, { Name: "Customer" }, { Name: "Employee" }],
+                autosearch: true,
+                valueField: "Name",
+                textField: "Name",
+                editTemplate: function (value, item): JQuery<HTMLElement> | string {
+                    if (value === "Customer") {
+                        return "Customer";
+                    }
+                    var select = $("<select/>");
+                    select.append($("<option/>").attr("value", "Manager").text("Manager"));
+                    select.append($("<option/>").attr("value", "Employee").text("Employee"));
+
+                    select.val(value);
+                    this.editControl = select;
+                    return select;
+                }
+
+            },
         );
     }
     $("#users-grid").jsGrid({
@@ -128,7 +155,7 @@ function initCustomersGrid() {
         // tslint:disable-next-line:no-empty
         rowClick: () => { },
         rowClass: "",
-        rowDoubleClick: (args: jsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
+        rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
         deleteConfirm: "Do you really want to delete user?",
         controller: {
             loadData: function (filter: any) {
@@ -164,79 +191,5 @@ function initCustomersGrid() {
         },
         fields: fields
     });
-
-}
-
-function initEmployeesGrid
-    () {
-    var genders: any[] = [
-        { "Name": "", Id: "" },
-        { "Name": "Male", Id: 1 },
-        { "Name": "Female", Id: 2 }];
-    var fields: Partial<jsGrid.JsGridField>[] = [
-        { name: "firstName", title: "First Name", type: "text", width: 150 },
-        { name: "lastName", title: "Last Name", type: "text", width: 150 },
-        // user name can't be changed
-        { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
-        { name: "password", title: "Password", type: "text", width: 150 },
-
-        { name: "email", title: "Email", type: "text", width: 150 },
-        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
-        { name: "address", title: "Address", type: "text", width: 200 },
-        { type: "control" }
-    ];
-
-
-    $("#employees-grid").jsGrid({
-        width: "100%",
-        filtering: true,
-        inserting: true,
-        editing: true,
-        sorting: true,
-        paging: true,
-        autoload: false,
-        pageSize: 10,
-        height: "auto",
-        pageButtonCount: 5,
-        // tslint:disable-next-line:no-empty
-        rowClick: () => { },
-        rowClass: "",
-        rowDoubleClick: (args: jsGrid.JsGridArgs) => { $("#employees-grid").jsGrid("editItem", args.item); },
-        deleteConfirm: "Do you really want to delete user?",
-        controller: {
-            loadData: function (filter: any) {
-                var data = { filter: filter, clientUserName };
-                return $.ajax({
-                    type: "GET",
-                    url: "/employees",
-                    data: data,
-                    async: true
-                });
-            },
-            insertItem: function (item: any) {
-                return $.ajax({
-                    type: "POST",
-                    url: "/employees",
-                    data: { item }
-                });
-            },
-            updateItem: function (item: any) {
-                return $.ajax({
-                    type: "PUT",
-                    url: "/employees",
-                    data: { item }
-                });
-            },
-            deleteItem: function (item: any) {
-                return $.ajax({
-                    type: "DELETE",
-                    url: "/employees",
-                    data: { item }
-                });
-            }
-        },
-        fields: fields
-    });
-
 
 }

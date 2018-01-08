@@ -6,8 +6,6 @@ export namespace helpers {
             obj.gender = parseInt(obj.gender, 10);
         }
         switch (obj.className.toLowerCase()) {
-            case "user":
-                return new User(obj);
             case "manager":
                 return new Manager(obj);
             case "Employee":

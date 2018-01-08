@@ -5,6 +5,7 @@ const DBFactory_1 = require("./DataBase/DBFactory");
 const types_1 = require("./types");
 // tslint:disable:typedef
 exports.router = express.Router();
+const helpers_1 = require("./helpers");
 var db = DBFactory_1.DBFactory.getDB();
 exports.router.get("/", function (req, res) {
     var client = db.findUser(req.query.clientUserName);
@@ -12,16 +13,18 @@ exports.router.get("/", function (req, res) {
     res.json(users);
 });
 /**
- * add user
- */
-exports.router.post("/", function (req, res) {
-    res.json(db.updateUser(req.body.item));
-});
-/**
  * update user
  */
 exports.router.put("/", function (req, res) {
-    res.json(db.addUser(req.body.item));
+    var user = helpers_1.helpers.objectToUser(req.body.item);
+    res.json(db.updateUser(user));
+});
+/**
+ * add user
+ */
+exports.router.post("/", function (req, res) {
+    var user = helpers_1.helpers.objectToUser(req.body.item);
+    res.json(db.addUser(user));
 });
 /**
  * delete user
