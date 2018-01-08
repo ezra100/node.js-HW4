@@ -1,6 +1,6 @@
 // tslint:disable:max-line-length
 
-import { User, Manager, MyWorker, Customer, Gender, Flower, Color } from "./types";
+import { User, Manager, Employee, Customer, Gender, Flower, Color } from "../types";
 import { URL } from "url";
 
 export var users: User[] = [new Customer({
@@ -44,7 +44,7 @@ export var users: User[] = [new Customer({
     "gender": Gender.Female,
     "address": "1 Lien Place",
     "password": "asdf1234"
-}), new MyWorker({
+}), new Employee({
     "userName": "Aldo",
 
     "branchID": 5,
@@ -54,7 +54,7 @@ export var users: User[] = [new Customer({
     "gender": Gender.Male,
     "address": "14203 Thierer Crossing",
     "password": "asdf4"
-}), new MyWorker({
+}), new Employee({
     "userName": "Raimund",
 
     "branchID": 3,
@@ -64,7 +64,7 @@ export var users: User[] = [new Customer({
     "gender": Gender.Male,
     "address": "30239 Gale Place",
     "password": "fff"
-}), new MyWorker({
+}), new Employee({
     "userName": "Niki",
     "branchID": 2,
     "firstName": "Niki",
@@ -91,7 +91,7 @@ export var users: User[] = [new Customer({
     "gender": Gender.Male,
     "address": "3179 Cascade Court",
     "password": "aaa123"
-}), new MyWorker({
+}), new Employee({
     "branchID": 4,
     "userName": "Erich",
     "firstName": "Erich",
@@ -124,7 +124,7 @@ export var users: User[] = [new Customer({
     "gender": Gender.Female,
     "address": "45 Sloan Lane",
     "password": "456852"
-}), new MyWorker({
+}), new Employee({
     "userName": "Paxton",
 
     "firstName": "Paxton",

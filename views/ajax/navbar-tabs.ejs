@@ -3,9 +3,13 @@
     <a class="nav-item nav-link active" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="true">About</a>
         <a class="nav-item nav-link" id="nav-catalog-tab" data-toggle="tab" href="#nav-catalog" role="tab" aria-controls="nav-catalog"
             aria-selected="false">Catalog</a>
-    <% if (userType === "MyWorker" || userType === "Manager") {%>
+    <% if (userType === "Employee" || userType === "Manager") {%>
                 <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-users"
                     aria-selected="false">Users</a> 
+   <% } %>
+     <% if (userType === "Manager") {%>
+                <a class="nav-item nav-link" id="nav-employees-tab" data-toggle="tab" href="#nav-employees" role="tab" aria-controls="nav-employees"
+                    aria-selected="false">Employees</a> 
    <% } %>
 
     <% if (userType === "Manager") {%>

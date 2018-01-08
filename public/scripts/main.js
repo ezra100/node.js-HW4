@@ -1,5 +1,6 @@
 // tslint:disable: typedef interface-name
 var clientUserName;
+var clientUserType;
 $(document).ready(function () {
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
@@ -26,6 +27,7 @@ function doLogin() {
         },
         success: function (data, status, xhr) {
             if (xhr.status === 200) {
+                clientUserType = data.userType;
                 postLogin();
             }
             else {
@@ -47,7 +49,8 @@ function postLogin() {
             $("#nav-tabs").html(data);
             // load the grid when the tab is shown
             $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
-                $("#jsGrid").jsGrid("loadData");
+                $("#employees-grid").jsGrid("loadData");
+                $("#customers-grid").jsGrid("loadData");
             });
         }
     });
@@ -58,7 +61,7 @@ function postLogin() {
         async: true,
         success: function (data) {
             $("#nav-tabContent").append(data);
-            initJsGrid();
+            initCustomersGrid();
         }
     });
 }
@@ -79,13 +82,26 @@ function printLoginError(msg) {
     $("#modal-error-msg").append(alert);
     alert.toggle("highlight");
 }
-function initJsGrid() {
+function initCustomersGrid() {
     var genders = [
         { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }
     ];
-    $("#jsGrid").jsGrid({
+    var fields = [
+        { name: "firstName", title: "First Name", type: "text", width: 150 },
+        { name: "lastName", title: "Last Name", type: "text", width: 150 },
+        // user name can't be changed
+        { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
+        { name: "email", title: "Email", type: "text", width: 150 },
+        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
+        { name: "address", title: "Address", type: "text", width: 200 },
+        { type: "control" }
+    ];
+    if (clientUserType === "Manager") {
+        fields.splice(3, 0, { name: "password", title: "Password", type: "text", width: 150 });
+    }
+    $("#customers-grid").jsGrid({
         width: "100%",
         filtering: true,
         inserting: true,
@@ -99,7 +115,7 @@ function initJsGrid() {
         // tslint:disable-next-line:no-empty
         rowClick: () => { },
         rowClass: "",
-        rowDoubleClick: (args) => { $("#jsGrid").jsGrid("editItem", args.item); },
+        rowDoubleClick: (args) => { $("#customers-grid").jsGrid("editItem", args.item); },
         deleteConfirm: "Do you really want to delete user?",
         controller: {
             loadData: function (filter) {
@@ -133,17 +149,75 @@ function initJsGrid() {
                 });
             }
         },
-        fields: [
-            { name: "firstName", title: "First Name", type: "text", width: 150, css: "" },
-            { name: "lastName", title: "Last Name", type: "text", width: 150, css: "" },
-            // user name can't be changed
-            { name: "userName", editing: false, title: "User Name", type: "text", width: 150, css: "" },
-            { name: "email", title: "Email", type: "text", width: 150, css: "" },
-            { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150, css: "" },
-            { name: "address", title: "Address", type: "text", width: 200, css: "" },
-            { type: "control", css: "" }
-        ]
+        fields: fields
     });
-    $("#jsGrid >> table").addClass("table");
+}
+function initEmployeesGrid() {
+    var genders = [
+        { "Name": "", Id: "" },
+        { "Name": "Male", Id: 1 },
+        { "Name": "Female", Id: 2 }
+    ];
+    var fields = [
+        { name: "firstName", title: "First Name", type: "text", width: 150 },
+        { name: "lastName", title: "Last Name", type: "text", width: 150 },
+        // user name can't be changed
+        { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
+        { name: "password", title: "Password", type: "text", width: 150 },
+        { name: "email", title: "Email", type: "text", width: 150 },
+        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 150 },
+        { name: "address", title: "Address", type: "text", width: 200 },
+        { type: "control" }
+    ];
+    $("#employees-grid").jsGrid({
+        width: "100%",
+        filtering: true,
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: false,
+        pageSize: 10,
+        height: "auto",
+        pageButtonCount: 5,
+        // tslint:disable-next-line:no-empty
+        rowClick: () => { },
+        rowClass: "",
+        rowDoubleClick: (args) => { $("#employees-grid").jsGrid("editItem", args.item); },
+        deleteConfirm: "Do you really want to delete user?",
+        controller: {
+            loadData: function (filter) {
+                var data = { filter: filter, clientUserName };
+                return $.ajax({
+                    type: "GET",
+                    url: "/employees",
+                    data: data,
+                    async: true
+                });
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: "/employees",
+                    data: { item }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "/employees",
+                    data: { item }
+                });
+            },
+            deleteItem: function (item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: "/employees",
+                    data: { item }
+                });
+            }
+        },
+        fields: fields
+    });
 }
 //# sourceMappingURL=main.js.map

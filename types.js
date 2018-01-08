@@ -10,18 +10,14 @@ class User {
         this.className = "User";
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
-        this.id = User.idCounter++;
-        User.persons.push(this);
     }
     compare(other) {
         return this.userName.toLowerCase() === other.userName.toLowerCase();
     }
-    static findByUserName(userName, persons = this.persons) {
-        return persons.find(x => (x.userName.toLowerCase() === userName.toLowerCase()));
+    compareByUserName(userName) {
+        return this.userName.toLowerCase() === userName.toLowerCase();
     }
 }
-User.idCounter = 0;
-User.persons = [];
 exports.User = User;
 class Customer extends User {
     constructor(init) {
@@ -30,15 +26,15 @@ class Customer extends User {
     }
 }
 exports.Customer = Customer;
-class MyWorker extends User {
+class Employee extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);
-        this.className = "MyWorker";
+        this.className = "Employee";
     }
 }
-exports.MyWorker = MyWorker;
-class Manager extends MyWorker {
+exports.Employee = Employee;
+class Manager extends Employee {
     constructor(init) {
         super(init);
         Object.assign(this, init);

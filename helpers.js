@@ -12,8 +12,8 @@ var helpers;
                 return new types_1.User(obj);
             case "manager":
                 return new types_1.Manager(obj);
-            case "myworker":
-                return new types_1.MyWorker(obj);
+            case "Employee":
+                return new types_1.Employee(obj);
             case "customer":
                 return new types_1.Customer(obj);
         }

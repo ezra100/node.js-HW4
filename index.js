@@ -2,12 +2,12 @@
 // tslint:disable:typedef
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const data = require("./data");
-const types_1 = require("./types");
+const DBFactory_1 = require("./DataBase/DBFactory");
 var app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const users = require("./users-router");
+var db = DBFactory_1.DBFactory.getDB();
 // to get access for the post method fields https://stackoverflow.com/a/12008719/4483033
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({
@@ -21,31 +21,30 @@ app.get("/favicon.ico", function (req, res) {
 app.post("/login", function (req, res) {
     var clientUserName = req.body.clientUserName;
     var password = req.body.password;
-    var user = types_1.User.findByUserName(clientUserName, data.users);
+    var user = db.findUser(clientUserName);
     if (!user) {
-        res.writeHead(400, { "Content-Type": "text/plain" });
+        res.status(400);
         res.end();
         return;
     }
     if (user.password === password) {
-        res.writeHead(200, { "Content-Type": "text/plain" });
-        res.end();
+        res.status(200).json({ userType: user.className });
     }
     else {
-        res.writeHead(401, { "Content-Type": "text/plain" });
+        res.status(401);
         res.end();
     }
 });
 app.get(/\/ajax\/*/i, function (req, res) {
-    var user = types_1.User.findByUserName(req.query.clientUserName);
-    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: user, data: data });
+    var user = db.findUser(req.query.clientUserName);
+    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: user, data: { flowers: db.getFlowers() } });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {
     res.redirect(301, "/login");
 });
 app.get("/login", function (req, res) {
-    res.render("login", { flowers: data.flowers });
+    res.render("login", { flowers: db.getFlowers() });
 });
 app.use("/users", users.router);
 app.use("/", express.static(path.join(__dirname, "public")));

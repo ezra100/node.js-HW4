@@ -4,29 +4,22 @@ export enum Gender { Male = 1, Female = 2 }
 
 export class User {
     className: string = "User";
-    id: number;
     firstName: string;
     lastName: string;
-    userName: string;
+    userName: string; // key/id field
     password: string;
     email: string;
     gender: Gender;
     address: string;
-    static idCounter: number = 0;
-    static persons: User[] = [];
     public constructor(init?: Partial<User>) {
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
-        this.id = User.idCounter++;
-        User.persons.push(this);
     }
     compare(other: User): boolean {
         return this.userName.toLowerCase() === other.userName.toLowerCase();
     }
-    static findByUserName(userName: string, persons: User[] = this.persons): User {
-        return persons.find(x =>
-            (x.userName.toLowerCase() === userName.toLowerCase())
-        );
+    compareByUserName(userName: string): boolean {
+        return this.userName.toLowerCase() === userName.toLowerCase();
     }
 }
 
@@ -38,17 +31,17 @@ export class Customer extends User {
     }
 }
 
-export class MyWorker extends User {
+export class Employee extends User {
 
     branchID: number;
-    public constructor(init?: Partial<MyWorker>) {
+    public constructor(init?: Partial<Employee>) {
         super(init);
         Object.assign(this, init);
-        this.className = "MyWorker";
+        this.className = "Employee";
     }
 }
 
-export class Manager extends MyWorker {
+export class Manager extends Employee {
 
     public constructor(init?: Partial<Manager>) {
         super(init);

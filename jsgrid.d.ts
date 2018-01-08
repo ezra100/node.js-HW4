@@ -108,7 +108,9 @@ declare namespace jsGrid {
         editing: boolean,
         sorting: boolean,
         sorter: boolean,
-
+        items: any[],
+        valueField: string,
+         textField: string,
         headerTemplate: () => string | Node | JQueryElement,
         itemTemplate: (value: any, item: any) => string | Node | JQueryElement,
         filterTemplate: () => string | Node | JQueryElement,

@@ -1,4 +1,4 @@
-import { User, Manager, MyWorker, Customer } from "./types";
+import { User, Manager, Employee, Customer } from "./types";
 
 export namespace helpers {
     export function objectToUser(obj: any): User {
@@ -10,8 +10,8 @@ export namespace helpers {
                 return new User(obj);
             case "manager":
                 return new Manager(obj);
-            case "myworker":
-                return new MyWorker(obj);
+            case "Employee":
+                return new Employee(obj);
             case "customer":
                 return new Customer(obj);
         }
