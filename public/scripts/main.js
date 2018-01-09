@@ -236,4 +236,18 @@ function initBranchesGrid() {
         fields: fields
     });
 }
+function contactFormSubmit(e) {
+    e.preventDefault();
+    var img = $("<img/>");
+    img.attr("src", "/img/contact.jpg");
+    img.attr({ "height": "400px", "alt": "Double click me to send another form" });
+    img.dblclick(() => {
+        img.remove();
+        $("#contact-form").show();
+    });
+    $("#nav-contact-us").append(img);
+    $("#contact-form").find("input, textarea").val("");
+    $("#contact-form").hide();
+    return false;
+}
 //# sourceMappingURL=main.js.map

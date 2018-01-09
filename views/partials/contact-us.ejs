@@ -1,1 +1,29 @@
-todotodotodo
+<div class="container my-5">
+<form id="contact-form" onsubmit="return contactFormSubmit(event)" action="javascript;;">
+ <div class="form-group">
+      <label for="validationCustom01">First name</label>
+      <input type="text" class="form-control" id="validationCustom01" placeholder="First name"  required>
+    </div>
+    <div class="form-group">
+      <label for="validationCustom02">Last name</label>
+      <input type="text" class="form-control" id="validationCustom02" placeholder="Last name" required>
+    </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+
+ <select class="custom-select my-2" style="height:unset" required>
+  <option selected>Select subject</option>
+  <option value="1">Regarding a placed order</option>
+  <option value="2">Placing an order</option>
+  <option value="3">Complaints</option>
+</select>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Your Message</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+  </div>
+  <button type="submit"  class="btn btn-primary">Submit</button>
+</form>
+<div>
