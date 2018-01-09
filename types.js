@@ -7,7 +7,7 @@ var Gender;
 })(Gender = exports.Gender || (exports.Gender = {}));
 class User {
     constructor(init) {
-        this.className = "User";
+        this.className = User.name;
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
     }
@@ -23,16 +23,24 @@ exports.User = User;
 class Customer extends User {
     constructor(init) {
         super(init);
-        this.className = "Customer";
+        this.className = Customer.name;
     }
 }
 Customer.className = "Customer";
 exports.Customer = Customer;
+class Provider extends User {
+    constructor(init) {
+        super(init);
+        Object.assign(this, init);
+        this.className = Provider.name;
+    }
+}
+exports.Provider = Provider;
 class Employee extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);
-        this.className = "Employee";
+        this.className = Employee.name;
     }
 }
 Employee.className = "Employee";
@@ -41,7 +49,7 @@ class Manager extends Employee {
     constructor(init) {
         super(init);
         Object.assign(this, init);
-        this.className = "Manager";
+        this.className = Manager.name;
     }
 }
 Manager.className = "Manager";

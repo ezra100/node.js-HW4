@@ -107,7 +107,7 @@ function initUsersGrid() {
         { name: "firstName", title: "First Name", type: "text", width: 90 },
         { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
-        { name: "userName", editing: false, title: "User Name", type: "text", width: 150 },
+        { name: "userName", editing: false, title: "User Name", type: "text", width: 120 },
         { name: "email", title: "Email", type: "text", width: 200 },
         { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 70 },
         { name: "address", title: "Address", type: "text", width: 150 },
@@ -115,19 +115,19 @@ function initUsersGrid() {
     ];
     if (clientUserType === "Manager") {
         fields.splice(3, 0,
-            { name: "password", title: "Password", type: "text", width: 150 }
+            { name: "password", title: "Password", type: "text", width: 100 }
         );
         fields.splice(fields.length - 1, 0,
             {
                 name: "className", title: "User Type", width: 100, type: "select", editing: clientUserType === "Manager",
                 // customer cannot be edited
-                items: [{ Name: null }, { Name: "Manager" }, { Name: "Customer" }, { Name: "Employee" }],
+                items: [{ Name: null }, { Name: "Manager" }, { Name: "Customer" }, { Name: "Employee" }, { Name: "Provider" }],
                 autosearch: true,
                 valueField: "Name",
                 textField: "Name",
                 editTemplate: function (value, item): JQuery<HTMLElement> | string {
-                    if (value === "Customer") {
-                        return "Customer";
+                    if (value === "Customer" || value === "Provider") {
+                        return value;
                     }
                     var select = $("<select/>");
                     select.append($("<option/>").attr("value", "Manager").text("Manager"));

@@ -4,7 +4,7 @@ export enum Gender { Male = 1, Female = 2 }
 
 export abstract class User {
     static readonly className: string = "User";
-    className: string = "User";
+    className: string = User.name;
     firstName: string;
     lastName: string;
     userName: string; // key/id field
@@ -29,7 +29,17 @@ export class Customer extends User {
 
     public constructor(init?: Partial<Customer>) {
         super(init);
-        this.className = "Customer";
+        this.className = Customer.name;
+    }
+}
+
+export class Provider extends User {
+
+    branchID: number;
+    public constructor(init?: Partial<Provider>) {
+        super(init);
+        Object.assign(this, init);
+        this.className = Provider.name;
     }
 }
 
@@ -40,7 +50,7 @@ export class Employee extends User {
     public constructor(init?: Partial<Employee>) {
         super(init);
         Object.assign(this, init);
-        this.className = "Employee";
+        this.className = Employee.name;
     }
 }
 
@@ -50,13 +60,14 @@ export class Manager extends Employee {
     public constructor(init?: Partial<Manager>) {
         super(init);
         Object.assign(this, init);
-        this.className = "Manager";
+        this.className = Manager.name;
     }
 }
 
 export class Branch {
     id: number;
     address: string;
+    active: boolean;
     public constructor(init?: Partial<Branch>) {
         Object.assign(this, init);
     }

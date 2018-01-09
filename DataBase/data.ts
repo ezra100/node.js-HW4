@@ -1,9 +1,9 @@
 // tslint:disable:max-line-length
 
-import { User, Manager, Employee, Customer, Gender, Flower, Color } from "../types";
+import { Provider, User, Manager, Employee, Customer, Gender, Flower, Color } from "../types";
 import { URL } from "url";
 
-export var users: User[] = [new Customer({
+export var users: User[] = [new Provider({
     "userName": "Shelba",
     "firstName": "Shelba",
     "lastName": "Tipper",
