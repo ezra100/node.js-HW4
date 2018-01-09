@@ -1,16 +1,26 @@
-<% var userType = user.__proto__.constructor.name %>
+<% 
+function toTitle(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace("-", " ");
+}
+
+var userType = user.__proto__.constructor.name
+    var tabs = ["about","catalog"];
+    if (userType === "Employee" || userType === "Manager"){
+        tabs.push("users");
+    }
+    if (userType === "Manager"){
+        tabs.push("branches");
+    }
+    tabs.push("contact-us")
+
+ %>
 <div class="nav nav-pills" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="true">About</a>
-        <a class="nav-item nav-link" id="nav-catalog-tab" data-toggle="tab" href="#nav-catalog" role="tab" aria-controls="nav-catalog"
-            aria-selected="false">Catalog</a>
-    <% if (userType === "Employee" || userType === "Manager") {%>
-                <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-users"
-                    aria-selected="false">Users</a> 
-   <% } %>
 
-
-    <% if (userType === "Manager") {%>
-        <a class="nav-item nav-link" id="nav-branches-tab" data-toggle="tab" href="#nav-branches" role="tab" aria-controls="nav-branches"
-            aria-selected="false">Branches</a>         
+    <% for(var tab of tabs){ %>
+    
+    <a class="nav-item nav-link <%- tab === "about"?"active":"" %> " id="nav-<%- tab %>-tab" data-toggle="tab" href="#nav-<%- tab %>" role="tab" aria-controls="nav-<%- tab %>" aria-selected="<%- tab === "about" %>">
+        <%- toTitle(tab) %>
+    </a>
     <% } %>
 </div>
