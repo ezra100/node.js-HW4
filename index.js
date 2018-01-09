@@ -7,6 +7,7 @@ var app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const users = require("./users-router");
+const branchesRouter = require("./branches-router");
 var db = DBFactory_1.DBFactory.getDB();
 // to get access for the post method fields https://stackoverflow.com/a/12008719/4483033
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -16,7 +17,7 @@ app.use(bodyParser.urlencoded({
 // set the view engine to ejs
 app.set("view engine", "ejs");
 app.get("/favicon.ico", function (req, res) {
-    res.sendFile(path.join(__dirname, "public/img/logo-black.jpg"));
+    res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
 app.post("/login", function (req, res) {
     var clientUserName = req.body.clientUserName;
@@ -47,6 +48,7 @@ app.get("/login", function (req, res) {
     res.render("login", { flowers: db.getFlowers() });
 });
 app.use("/users", users.router);
+app.use("/branches", branchesRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 app.listen(8080);
 console.log("8080 is the magic port");

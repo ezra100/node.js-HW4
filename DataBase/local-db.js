@@ -5,6 +5,7 @@ class LocalDB {
     getFlowers() {
         return data_1.flowers;
     }
+    //#region users
     getUsers(types, filter) {
         if (!types) {
             return data_1.users;
@@ -50,6 +51,44 @@ class LocalDB {
         }
         data_1.users.splice(index, 1);
         return user;
+    }
+    //#endregion
+    //#region branches
+    getBranches(filter) {
+        return data_1.branches.filter((branch) => {
+            for (var key in filter) {
+                if (filter[key] && filter[key] !== "" && filter[key] !== branch[key]) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+    addBranch(branch) {
+        if (data_1.branches.findIndex((b) => branch.id === b.id) >= 0) {
+            console.error("User" + branch.id + ":" + branch.name + " already exists");
+            return null;
+        }
+        data_1.branches.push(branch);
+        return branch;
+    }
+    updateBranch(branch) {
+        var index = data_1.branches.findIndex((b) => b.id === branch.id);
+        if (index < 0) {
+            console.error("Branch not found");
+            return null;
+        }
+        data_1.branches[index] = branch;
+        return branch;
+    }
+    deleteBranch(branch) {
+        var index = data_1.branches.findIndex((b) => b.id === branch.id);
+        if (index < 0) {
+            console.error("Branch not found");
+            return null;
+        }
+        data_1.branches.splice(index, 1);
+        return branch;
     }
 }
 exports.LocalDB = LocalDB;

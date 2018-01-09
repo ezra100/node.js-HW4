@@ -86,6 +86,7 @@ declare namespace JsGrid {
         param: RegExp;
     }
     //#endregion
+    
     interface JsGridField {
         type: ("text" | "number" | "checkbox" | "select" | "textarea" | "control"),
         name: string,

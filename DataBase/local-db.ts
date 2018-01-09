@@ -1,11 +1,13 @@
-import { users, flowers } from "./data";
+import { branches, users, flowers } from "./data";
 import { IDataBase } from "./IDataBase";
-import { User, Flower } from "../types";
+import { User, Flower, Branch } from "../types";
 
 export class LocalDB implements IDataBase {
+
     getFlowers(): Flower[] {
         return flowers;
     }
+    //#region users
     getUsers(types?: any[], filter?: any): User[] {
 
         if (!types) {
@@ -54,5 +56,44 @@ export class LocalDB implements IDataBase {
         users.splice(index, 1);
         return user;
     }
+    //#endregion
 
+    //#region branches
+    getBranches(filter: any): Branch[] {
+        return branches.filter((branch) => {
+            for (var key in filter) {
+                if (filter[key] && filter[key] !== "" && filter[key] !== (<any>branch)[key]) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+    addBranch(branch: Branch): Branch {
+        if (branches.findIndex((b) => branch.id === b.id) >= 0) {
+            console.error("User" + branch.id + ":" + branch.name + " already exists");
+            return null;
+        }
+        branches.push(branch);
+        return branch;
+    }
+    updateBranch(branch: Branch): Branch {
+        var index: number = branches.findIndex((b: Branch) => b.id === branch.id);
+        if (index < 0) {
+            console.error("Branch not found");
+            return null;
+        }
+        branches[index] = branch;
+        return branch;
+    }
+    deleteBranch(branch: Branch): Branch {
+        var index: number = branches.findIndex((b: Branch) => b.id === branch.id);
+        if (index < 0) {
+            console.error("Branch not found");
+            return null;
+        }
+        branches.splice(index, 1);
+        return branch;
+    }
+    //#endregion
 }

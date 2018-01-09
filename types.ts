@@ -68,8 +68,14 @@ export class Branch {
     id: number;
     address: string;
     active: boolean;
+    name: string;
+    static id: number = 0;
     public constructor(init?: Partial<Branch>) {
+        if (init.active !== false) {
+            init.active = true;
+        }
         Object.assign(this, init);
+        this.id = Branch.id++;
     }
 }
 

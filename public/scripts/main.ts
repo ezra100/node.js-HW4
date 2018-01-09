@@ -57,8 +57,10 @@ function postLogin(): void {
             $("#nav-tabs").html(data);
             // load the grid when the tab is shown
             $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
-                $("#employees-grid").jsGrid("loadData");
                 $("#users-grid").jsGrid("loadData");
+            });
+            $("a[data-toggle=\"tab\"][href=\"#nav-branches\"]").on("shown.bs.tab", function (e) {
+                $("#branches-grid").jsGrid("loadData");
             });
         }
     });
@@ -70,6 +72,7 @@ function postLogin(): void {
         success: function (data: string): void {
             $("#nav-tabContent").append(data);
             initUsersGrid();
+            initBranchesGrid();
         }
     });
 }
@@ -96,20 +99,20 @@ function printLoginError(msg: string) {
 
 
 function initUsersGrid() {
-
-
-
     var genders: any[] = [
         { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }];
-    var fields: Partial<JsGrid.JsGridField>[] = [
+    var fields: (Partial<JsGrid.JsGridField> | any)[] = [
         { name: "firstName", title: "First Name", type: "text", width: 90 },
         { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
         { name: "userName", editing: false, title: "User Name", type: "text", width: 120 },
         { name: "email", title: "Email", type: "text", width: 200 },
-        { name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id", textField: "Name", width: 70 },
+        {
+            name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id",
+            textField: "Name", valueType: "number", width: 70
+        },
         { name: "address", title: "Address", type: "text", width: 150 },
         { type: "control" }
     ];
@@ -125,7 +128,7 @@ function initUsersGrid() {
                 autosearch: true,
                 valueField: "Name",
                 textField: "Name",
-                editTemplate: function (value, item): JQuery<HTMLElement> | string {
+                editTemplate: function (value: string, item: any): JQuery<HTMLElement> | string {
                     if (value === "Customer" || value === "Provider") {
                         return value;
                     }
@@ -156,7 +159,7 @@ function initUsersGrid() {
         rowClick: () => { },
         rowClass: "",
         rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
-        deleteConfirm: "Do you really want to delete user?",
+        deleteConfirm: (item: any) => "Do you really want to delete " + item.userName + "?",
         controller: {
             loadData: function (filter: any) {
                 var data = { filter: filter, clientUserName };
@@ -185,6 +188,70 @@ function initUsersGrid() {
                 return $.ajax({
                     type: "DELETE",
                     url: "/users",
+                    data: { item }
+                });
+            }
+        },
+        fields: fields
+    });
+
+}
+
+function initBranchesGrid() {
+
+    var fields: (Partial<JsGrid.JsGridField> | any)[] = [
+        { name: "id", title: "ID", editable: false, type: "number", align: "center" },
+        { name: "name", title: "Branch Name", type: "string" },
+        { name: "address", title: "Address", type: "string" },
+        { name: "active", title: "Active", type: "checkbox" },
+
+        { type: "control", deleteButton: false }
+    ];
+
+    $("#branches-grid").jsGrid({
+        width: "100%",
+        filtering: true,
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: false,
+        pageSize: 10,
+        height: "auto",
+        pageButtonCount: 5,
+        // tslint:disable-next-line:no-empty
+        rowClick: () => { },
+        rowClass: "",
+        rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#branches-grid").jsGrid("editItem", args.item); },
+        deleteConfirm: (item: any) => "Do you really want to delete " + item.name + "?",
+        controller: {
+            loadData: function (filter: any) {
+                var data = { filter: filter, clientUserName };
+                return $.ajax({
+                    type: "GET",
+                    url: "/branches",
+                    data: data,
+                    async: true
+                });
+            },
+            insertItem: function (item: any) {
+                return $.ajax({
+                    type: "POST",
+                    url: "/branches",
+                    data: { item }
+                });
+            },
+            updateItem: function (item: any) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "/branches",
+                    data: { item }
+                });
+            },
+            deleteItem: function (item: any) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: "/branches",
                     data: { item }
                 });
             }

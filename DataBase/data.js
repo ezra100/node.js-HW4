@@ -3,7 +3,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("../types");
 const url_1 = require("url");
-exports.users = [new types_1.Provider({
+exports.users = [
+    new types_1.Provider({
         "userName": "Shelba",
         "firstName": "Shelba",
         "lastName": "Tipper",
@@ -129,7 +130,8 @@ exports.users = [new types_1.Provider({
         "gender": types_1.Gender.Male,
         "address": "81305 Chive Park",
         "password": "1111"
-    })];
+    })
+];
 exports.flowers = [
     new types_1.Flower({
         "img": new url_1.URL("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Aconitum_degenii.jpg/128px-Aconitum_degenii.jpg"),
@@ -214,6 +216,30 @@ exports.flowers = [
         "family": "	Brassicaceae",
         "price": 1,
         "colorDesc": types_1.Color.yellow
+    })
+];
+exports.branches = [
+    new types_1.Branch({
+        "name": "Corry",
+        "address": "2 Summer Ridge Center"
+    }), new types_1.Branch({
+        "name": "Morningstar",
+        "address": "39941 Sommers Center"
+    }), new types_1.Branch({
+        "name": "Mallard",
+        "address": "541 Union Center"
+    }), new types_1.Branch({
+        "name": "Northfield",
+        "address": "17 Kennedy Way"
+    }), new types_1.Branch({
+        "name": "Waxwing",
+        "address": "19112 Buell Trail"
+    }), new types_1.Branch({
+        "name": "Raven",
+        "address": "5 Pawling Way"
+    }), new types_1.Branch({
+        "name": "Arizona",
+        "address": "04 Little Fleur Trail"
     })
 ];
 //# sourceMappingURL=data.js.map

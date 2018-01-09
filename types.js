@@ -56,9 +56,14 @@ Manager.className = "Manager";
 exports.Manager = Manager;
 class Branch {
     constructor(init) {
+        if (init.active !== false) {
+            init.active = true;
+        }
         Object.assign(this, init);
+        this.id = Branch.id++;
     }
 }
+Branch.id = 0;
 exports.Branch = Branch;
 class Flower {
     constructor(init) {

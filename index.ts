@@ -9,7 +9,7 @@ var app = express();
 import path = require("path");
 import bodyParser = require("body-parser");
 import users = require("./users-router");
-
+import branchesRouter = require("./branches-router");
 var db = DBFactory.getDB();
 // to get access for the post method fields https://stackoverflow.com/a/12008719/4483033
 app.use(bodyParser.json());       // to support JSON-encoded bodies
@@ -22,7 +22,7 @@ app.set("view engine", "ejs");
 
 
 app.get("/favicon.ico", function (req, res) {
-    res.sendFile(path.join(__dirname, "public/img/logo-black.jpg"));
+    res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
 
 app.post("/login", function (req, res) {
@@ -45,7 +45,7 @@ app.post("/login", function (req, res) {
 app.get(/\/ajax\/*/i, function (req: Request, res) {
     var user = db.findUser(req.query.clientUserName);
     res.render(req.url.substring(1, req.url.indexOf("?")),
-        { query: req.query, user: user, data: {flowers : db.getFlowers()} });
+        { query: req.query, user: user, data: { flowers: db.getFlowers() } });
 
 });
 
@@ -62,6 +62,7 @@ app.get("/login", function (req, res) {
 
 
 app.use("/users", users.router);
+app.use("/branches", branchesRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.listen(8080);
