@@ -1,6 +1,6 @@
 import express = require("express");
 import { DBFactory } from "./DataBase/DBFactory";
-import { User, Customer, Manager, Employee } from "./types";
+import { User, Customer, Manager, Employee, Provider } from "./types";
 import path = require("path");
 // tslint:disable:typedef
 export var router = express.Router();
@@ -10,7 +10,9 @@ var db = DBFactory.getDB();
 
 router.get("/", function (req, res) {
     var client = db.findUser(req.query.clientUserName);
-    var users = db.getUsers(client instanceof Manager ? [User] : [Customer], req.query.filter);
+    var filter = req.query.filter;
+    filter.gender = parseInt(filter.gender, 10);
+    var users = db.getUsers(client instanceof Manager ? [User] : [Customer, Provider], filter);
     res.json(users);
 });
 
