@@ -1,7 +1,7 @@
 // tslint:disable: typedef interface-name
 var clientUserName;
 var clientUserType;
-$(document).ready(function () {
+$(function () {
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
 });
@@ -238,15 +238,22 @@ function initBranchesGrid() {
 }
 function contactFormSubmit(e) {
     e.preventDefault();
-    var img = $("<img/>");
-    img.attr("src", "/img/contact.jpg");
-    img.attr({ "height": "400px", "alt": "Double click me to send another form" });
-    img.dblclick(() => {
-        img.remove();
+    var firstName = $("#contact-form").find("#first-name").val();
+    var div = $("<div/>");
+    var thanksH = $("<h3/>");
+    thanksH.text("thanks for contacting us," + firstName + "!");
+    var subThanks = $("<p/>");
+    subThanks.text("We appreciate you contacting us. One of our colleagues will get back to you shortly.");
+    var button = $("<button/>");
+    button.text("Submit another form");
+    button.click(() => {
+        div.remove();
         $("#contact-form").show();
+        // reset form:
+        $("#contact-form")[0].reset();
     });
-    $("#nav-contact-us").append(img);
-    $("#contact-form").find("input, textarea").val("");
+    div.append(thanksH, subThanks, button);
+    $("#nav-contact-us").append(div);
     $("#contact-form").hide();
     return false;
 }
