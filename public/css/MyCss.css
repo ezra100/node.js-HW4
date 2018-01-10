@@ -37,3 +37,39 @@
 td.jsgrid-cell {
     overflow: hidden;
 }
+
+#about {
+    font-family: "Times New Roman", Georgia, Serif;
+}
+
+#about h1 {
+    color: darkblue;
+    text-align: center;
+}
+
+#about h2 {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+#haveFun {
+    background: lightblue;
+}
+
+#about img {
+    opacity: 0.8;
+}
+
+#imageDiv {
+    float: left;
+}
+
+#textDiv {
+    width: 85%;
+}
+
+#about, #page {
+    margin: auto;
+    margin-top: 100px;
+}
