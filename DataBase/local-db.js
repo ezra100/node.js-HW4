@@ -15,8 +15,31 @@ class LocalDB {
                 return false;
             }
             for (var key in filter) {
-                if (filter[key] && filter[key] !== "" && filter[key] !== user[key]) {
-                    return false;
+                if (filter[key] === "") {
+                    continue;
+                }
+                switch (typeof user[key]) {
+                    case "string":
+                        var regex = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
+                        if (!regex.test(user[key])) {
+                            return false;
+                        }
+                        break;
+                    case "boolean":
+                        if (typeof filter[key] === "string") {
+                            filter[key] = (filter[key] === "true");
+                        }
+                        if (filter[key] !== user[key]) {
+                            return false;
+                        }
+                        break;
+                    case "number":
+                        if (key === "gender" && filter[key] === "0") {
+                            break;
+                        }
+                        if (parseFloat(filter[key]) !== user[key]) {
+                            return false;
+                        }
                 }
             }
             return true;
@@ -57,8 +80,28 @@ class LocalDB {
     getBranches(filter) {
         return data_1.branches.filter((branch) => {
             for (var key in filter) {
-                if (filter[key] && filter[key] !== "" && filter[key] !== branch[key]) {
-                    return false;
+                if (filter[key] === "") {
+                    continue;
+                }
+                switch (typeof branch[key]) {
+                    case "string":
+                        var regex = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
+                        if (!regex.test(branch[key])) {
+                            return false;
+                        }
+                        break;
+                    case "boolean":
+                        if (typeof filter[key] === "string") {
+                            filter[key] = (filter[key] === "true");
+                        }
+                        if (filter[key] !== branch[key]) {
+                            return false;
+                        }
+                        break;
+                    case "number":
+                        if (parseFloat(filter[key]) !== branch[key]) {
+                            return false;
+                        }
                 }
             }
             return true;

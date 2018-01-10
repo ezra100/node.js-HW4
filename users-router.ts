@@ -11,7 +11,6 @@ var db = DBFactory.getDB();
 router.get("/", function (req, res) {
     var client = db.findUser(req.query.clientUserName);
     var filter = req.query.filter;
-    filter.gender = parseInt(filter.gender, 10);
     var users = db.getUsers(client instanceof Manager ? [User] : [Customer, Provider], filter);
     res.json(users);
 });

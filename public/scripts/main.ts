@@ -200,8 +200,8 @@ function initBranchesGrid() {
 
     var fields: (Partial<JsGrid.JsGridField> | any)[] = [
         { name: "id", title: "ID", editable: false, type: "number", align: "center" },
-        { name: "name", title: "Branch Name", type: "string" },
-        { name: "address", title: "Address", type: "string" },
+        { name: "name", title: "Branch Name", type: "text" },
+        { name: "address", title: "Address", type: "text" },
         { name: "active", title: "Active", type: "checkbox" },
 
         { type: "control", deleteButton: false }

@@ -9,6 +9,7 @@ import { helpers } from "./helpers";
 var db = DBFactory.getDB();
 
 router.get("/", function (req, res) {
+    var filter = req.query.filter;
     var branches = db.getBranches(req.query.filter);
     res.json(branches);
 });

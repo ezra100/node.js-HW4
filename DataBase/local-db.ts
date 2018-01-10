@@ -1,6 +1,6 @@
 import { branches, users, flowers } from "./data";
 import { IDataBase } from "./IDataBase";
-import { User, Flower, Branch } from "../types";
+import { User, Flower, Branch, Customer, Manager, Provider } from "../types";
 
 export class LocalDB implements IDataBase {
 
@@ -19,8 +19,32 @@ export class LocalDB implements IDataBase {
                 return false;
             }
             for (var key in filter) {
-                if (filter[key] && filter[key] !== "" && filter[key] !== (<any>user)[key]) {
-                    return false;
+                if (filter[key] === "") {
+                    continue;
+                }
+                switch (typeof (<any>user)[key]) {
+                    case "string":
+                        var regex: RegExp = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
+                        if (!regex.test((<any>user)[key])) {
+                            return false;
+                        }
+                        break;
+                    case "boolean":
+                        if (typeof filter[key] === "string") {
+                            filter[key] = (filter[key] === "true");
+                        }
+                        if (filter[key] !== (<any>user)[key]) {
+                            return false;
+                        }
+                        break;
+                    case "number":
+                        // exception for 'gender' since it's an enum
+                        if (key === "gender" && filter[key] === "0") {
+                            break;
+                        }
+                        if (parseFloat(filter[key]) !== (<any>user)[key]) {
+                            return false;
+                        }
                 }
             }
             return true;
@@ -61,9 +85,30 @@ export class LocalDB implements IDataBase {
     //#region branches
     getBranches(filter: any): Branch[] {
         return branches.filter((branch) => {
+
             for (var key in filter) {
-                if (filter[key] && filter[key] !== "" && filter[key] !== (<any>branch)[key]) {
-                    return false;
+                if (filter[key] === "") {
+                    continue;
+                }
+                switch (typeof (<any>branch)[key]) {
+                    case "string":
+                        var regex: RegExp = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
+                        if (!regex.test((<any>branch)[key])) {
+                            return false;
+                        }
+                        break;
+                    case "boolean":
+                        if (typeof filter[key] === "string") {
+                            filter[key] = (filter[key] === "true");
+                        }
+                        if (filter[key] !== (<any>branch)[key]) {
+                            return false;
+                        }
+                        break;
+                    case "number":
+                        if (parseFloat(filter[key]) !== (<any>branch)[key]) {
+                            return false;
+                        }
                 }
             }
             return true;

@@ -7,6 +7,7 @@ const types_1 = require("./types");
 exports.router = express.Router();
 var db = DBFactory_1.DBFactory.getDB();
 exports.router.get("/", function (req, res) {
+    var filter = req.query.filter;
     var branches = db.getBranches(req.query.filter);
     res.json(branches);
 });

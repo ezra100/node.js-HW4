@@ -87,7 +87,7 @@ function printLoginError(msg) {
 }
 function initUsersGrid() {
     var genders = [
-        { "Name": "", Id: "" },
+        { "Name": "", Id: null },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }
     ];
@@ -180,8 +180,8 @@ function initUsersGrid() {
 function initBranchesGrid() {
     var fields = [
         { name: "id", title: "ID", editable: false, type: "number", align: "center" },
-        { name: "name", title: "Branch Name", type: "string" },
-        { name: "address", title: "Address", type: "string" },
+        { name: "name", title: "Branch Name", type: "text" },
+        { name: "address", title: "Address", type: "text" },
         { name: "active", title: "Active", type: "checkbox" },
         { type: "control", deleteButton: false }
     ];
@@ -241,7 +241,7 @@ function contactFormSubmit(e) {
     var firstName = $("#contact-form").find("#first-name").val();
     var div = $("<div/>");
     var thanksH = $("<h3/>");
-    thanksH.text("thanks for contacting us," + firstName + "!");
+    thanksH.text("thanks for contacting us, " + firstName + "!");
     var subThanks = $("<p/>");
     subThanks.text("We appreciate you contacting us. One of our colleagues will get back to you shortly.");
     var button = $("<button/>");
