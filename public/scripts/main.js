@@ -40,26 +40,19 @@ function postLogin() {
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
     $("#nav-logout").show();
-    $.ajax({
-        url: "ajax/navbar-tabs",
-        data: { clientUserName: clientUserName },
-        type: "GET",
-        async: true,
-        success: function (data) {
-            $("#nav-tabs").html(data);
-            // load the grid when the tab is shown
-            $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
-                $("#users-grid").jsGrid("loadData");
-            });
-            $("a[data-toggle=\"tab\"][href=\"#nav-branches\"]").on("shown.bs.tab", function (e) {
-                $("#branches-grid").jsGrid("loadData");
-            });
-        }
+    $("#nav-tabs").load("ajax/navbar-tabs", { clientUserName: clientUserName }, function () {
+        // load the grid when the tab is shown
+        $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
+            $("#users-grid").jsGrid("loadData");
+        });
+        $("a[data-toggle=\"tab\"][href=\"#nav-branches\"]").on("shown.bs.tab", function (e) {
+            $("#branches-grid").jsGrid("loadData");
+        });
     });
     $.ajax({
         url: "ajax/tab-panes",
         data: { clientUserName: clientUserName },
-        type: "GET",
+        type: "POST",
         async: true,
         success: function (data) {
             $("#nav-tabContent").append(data);
@@ -87,7 +80,7 @@ function printLoginError(msg) {
 }
 function initUsersGrid() {
     var genders = [
-        { "Name": "", Id: null },
+        { "Name": "", Id: "" },
         { "Name": "Male", Id: 1 },
         { "Name": "Female", Id: 2 }
     ];

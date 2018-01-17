@@ -34,6 +34,7 @@ class LocalDB {
                         }
                         break;
                     case "number":
+                        // exception for 'gender' since it's an enum
                         if (key === "gender" && filter[key] === "0") {
                             break;
                         }

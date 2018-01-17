@@ -47,26 +47,20 @@ function postLogin(): void {
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
     $("#nav-logout").show();
-    $.ajax({
-        url: "ajax/navbar-tabs",
-        data: { clientUserName: clientUserName },
-        type: "GET",
-        async: true,
-        success: function (data: string): void {
-            $("#nav-tabs").html(data);
-            // load the grid when the tab is shown
-            $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
-                $("#users-grid").jsGrid("loadData");
-            });
-            $("a[data-toggle=\"tab\"][href=\"#nav-branches\"]").on("shown.bs.tab", function (e) {
-                $("#branches-grid").jsGrid("loadData");
-            });
-        }
+    $("#nav-tabs").load("ajax/navbar-tabs", { clientUserName: clientUserName }, function (): void {
+        // load the grid when the tab is shown
+        $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
+            $("#users-grid").jsGrid("loadData");
+        });
+        $("a[data-toggle=\"tab\"][href=\"#nav-branches\"]").on("shown.bs.tab", function (e) {
+            $("#branches-grid").jsGrid("loadData");
+        });
     });
+
     $.ajax({
         url: "ajax/tab-panes",
         data: { clientUserName: clientUserName },
-        type: "GET",
+        type: "POST",
         async: true,
         success: function (data: string): void {
             $("#nav-tabContent").append(data);
@@ -160,6 +154,8 @@ function initUsersGrid() {
         rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
         deleteConfirm: (item: any) => "Do you really want to delete " + item.userName + "?",
         controller: {
+            // todo - for each method (except for load which has a built in flag) add a flag that will inidcate the progress of the
+            /// operation
             loadData: function (filter: any) {
                 var data = { filter: filter, clientUserName };
                 return $.ajax({
@@ -224,6 +220,7 @@ function initBranchesGrid() {
         rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#branches-grid").jsGrid("editItem", args.item); },
         deleteConfirm: (item: any) => "Do you really want to delete " + item.name + "?",
         controller: {
+            // todo - same as above
             loadData: function (filter: any) {
                 var data = { filter: filter, clientUserName };
                 return $.ajax({

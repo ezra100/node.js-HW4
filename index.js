@@ -36,9 +36,9 @@ app.post("/login", function (req, res) {
         res.end();
     }
 });
-app.get(/\/ajax\/*/i, function (req, res) {
-    var user = db.findUser(req.query.clientUserName);
-    res.render(req.url.substring(1, req.url.indexOf("?")), { query: req.query, user: user, data: { flowers: db.getFlowers() } });
+app.post(/\/ajax\/*/i, function (req, res) {
+    var user = db.findUser(req.body.clientUserName);
+    res.render(req.url.substring(1), { query: req.body, user: user, data: { flowers: db.getFlowers() } });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {
