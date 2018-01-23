@@ -122,6 +122,7 @@ function initUsersGrid() {
                 textField: "Name",
                 editTemplate: function (value: string, item: any): JQuery<HTMLElement> | string {
                     if (value === "Customer" || value === "Provider") {
+                        this.editControl = $("<span/>").text(value);
                         return value;
                     }
                     var select = $("<select/>");
@@ -153,8 +154,6 @@ function initUsersGrid() {
         rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
         deleteConfirm: (item: any) => "Do you really want to delete " + item.userName + "?",
         controller: {
-            // todo - for each method (except for load which has a built in flag) add a flag that will inidcate the progress of the
-            /// operation
             loadData: function (filter: any) {
                 indicate("users-indicator", "loading");
                 var data = { filter: filter, clientUserName };

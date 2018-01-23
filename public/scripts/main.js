@@ -107,6 +107,7 @@ function initUsersGrid() {
             textField: "Name",
             editTemplate: function (value, item) {
                 if (value === "Customer" || value === "Provider") {
+                    this.editControl = $("<span/>").text(value);
                     return value;
                 }
                 var select = $("<select/>");
@@ -135,8 +136,6 @@ function initUsersGrid() {
         rowDoubleClick: (args) => { $("#users-grid").jsGrid("editItem", args.item); },
         deleteConfirm: (item) => "Do you really want to delete " + item.userName + "?",
         controller: {
-            // todo - for each method (except for load which has a built in flag) add a flag that will inidcate the progress of the
-            /// operation
             loadData: function (filter) {
                 indicate("users-indicator", "loading");
                 var data = { filter: filter, clientUserName };
@@ -145,6 +144,7 @@ function initUsersGrid() {
                     url: "/users",
                     data: data,
                     async: true,
+                    timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");
                     },
@@ -159,6 +159,7 @@ function initUsersGrid() {
                     type: "POST",
                     url: "/users",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");
                     },
@@ -173,6 +174,7 @@ function initUsersGrid() {
                     type: "PUT",
                     url: "/users",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");
                     },
@@ -187,6 +189,7 @@ function initUsersGrid() {
                     type: "DELETE",
                     url: "/users",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");
                     },
@@ -233,6 +236,7 @@ function initBranchesGrid() {
                     url: "/branches",
                     data: data,
                     async: true,
+                    timeout: 5000,
                     success: () => {
                         indicate("branches-indicator", "success");
                     },
@@ -247,6 +251,7 @@ function initBranchesGrid() {
                     type: "POST",
                     url: "/branches",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("branches-indicator", "success");
                     },
@@ -261,6 +266,7 @@ function initBranchesGrid() {
                     type: "PUT",
                     url: "/branches",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("branches-indicator", "success");
                     },
@@ -275,6 +281,7 @@ function initBranchesGrid() {
                     type: "DELETE",
                     url: "/branches",
                     data: { item },
+                    timeout: 5000,
                     success: () => {
                         indicate("branches-indicator", "success");
                     },
