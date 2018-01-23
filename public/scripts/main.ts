@@ -83,10 +83,9 @@ function printLoginError(msg: string) {
     var alert = $("<div/>");
     alert.addClass("alert alert-danger alert-dismissable");
     alert.text(msg);
-    alert.hide();
     $("#modal-error-msg").html("");
     $("#modal-error-msg").append(alert);
-    alert.toggle("highlight");
+    alert.effect("bounce");
 }
 
 
@@ -157,33 +156,68 @@ function initUsersGrid() {
             // todo - for each method (except for load which has a built in flag) add a flag that will inidcate the progress of the
             /// operation
             loadData: function (filter: any) {
+                indicate("users-indicator", "loading");
                 var data = { filter: filter, clientUserName };
                 return $.ajax({
                     type: "GET",
                     url: "/users",
                     data: data,
-                    async: true
+                    async: true,
+                    timeout: 5000,
+                    success: () => {
+                        indicate("users-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("users-indicator", "error");
+                    }
                 });
             },
             insertItem: function (item: any) {
+                indicate("users-indicator", "loading");
+
                 return $.ajax({
                     type: "POST",
                     url: "/users",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("users-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("users-indicator", "error");
+                    }
                 });
             },
             updateItem: function (item: any) {
+                indicate("users-indicator", "loading");
+
                 return $.ajax({
                     type: "PUT",
                     url: "/users",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("users-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("users-indicator", "error");
+                    }
                 });
             },
             deleteItem: function (item: any) {
+                indicate("users-indicator", "loading");
+
                 return $.ajax({
                     type: "DELETE",
                     url: "/users",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("users-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("users-indicator", "error");
+                    }
                 });
             }
         },
@@ -222,39 +256,107 @@ function initBranchesGrid() {
         controller: {
             // todo - same as above
             loadData: function (filter: any) {
+                indicate("branches-indicator", "loading");
                 var data = { filter: filter, clientUserName };
                 return $.ajax({
                     type: "GET",
                     url: "/branches",
                     data: data,
-                    async: true
+                    async: true,
+                    timeout: 5000,
+                    success: () => {
+                        indicate("branches-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("branches-indicator", "error");
+                    }
+
                 });
             },
             insertItem: function (item: any) {
+                indicate("branches-indicator", "loading");
+
                 return $.ajax({
                     type: "POST",
                     url: "/branches",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("branches-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("branches-indicator", "error");
+                    }
                 });
             },
             updateItem: function (item: any) {
+                indicate("branches-indicator", "loading");
+
                 return $.ajax({
                     type: "PUT",
                     url: "/branches",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("branches-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("branches-indicator", "error");
+                    }
                 });
             },
             deleteItem: function (item: any) {
+                indicate("branches-indicator", "loading");
+
                 return $.ajax({
                     type: "DELETE",
                     url: "/branches",
-                    data: { item }
+                    data: { item },
+                    timeout: 5000,
+                    success: () => {
+                        indicate("branches-indicator", "success");
+                    },
+                    error: () => {
+                        indicate("branches-indicator", "error");
+                    }
                 });
             }
         },
         fields: fields
     });
 
+}
+
+function indicate(id: string, command: "hide" | "success" | "loading" | "error"): void {
+    var alert: JQuery<HTMLElement> = $("<div/>").addClass("py-1 my-1 text-center");
+    switch (command) {
+        case "hide":
+            $("#" + id).hide("fade");
+            break;
+        case "success":
+            alert.addClass("alert alert-success alert-dismissable fade show")
+                .html(
+                `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>`
+                )
+                .prepend("Success!");
+            $("#" + id).html("").append(alert);
+            break;
+        case "loading":
+            var loadingAnimation = $("<span/>").addClass("glyphicon glyphicon-refresh glyphicon-refresh-animate");
+            alert.addClass("alert alert-info").prepend("Loading...").prepend(loadingAnimation);
+            $("#" + id).html("").append(alert);
+            break;
+        case "error":
+            alert.addClass("alert alert-danger alert-dismissable fade show").html(
+                `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>`
+            ).prepend("Error!");
+            $("#" + id).html("").append(alert);
+            break;
+    }
 }
 
 function contactFormSubmit(e: Event): boolean {
@@ -278,4 +380,11 @@ function contactFormSubmit(e: Event): boolean {
     $("#nav-contact-us").append(div);
     $("#contact-form").hide();
     return false;
+}
+
+function loadBranches() {
+    $("#branches-grid").jsGrid("loadData");
+}
+function loadUsers() {
+    $("#users-grid").jsGrid("loadData");
 }
