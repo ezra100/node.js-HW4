@@ -67,15 +67,22 @@ export class Manager extends Employee {
 export class Branch {
     id: number;
     address: string;
-    active: boolean;
+    // ture by default
+    active: boolean = true;
     name: string;
     static id: number = 0;
-    public constructor(init?: Partial<Branch>) {
-        if (init.active !== false) {
-            init.active = true;
+    public constructor(init?: any) {
+        if (typeof init.active === "string" || init.active instanceof String) {
+            init.active = init.active === "true";
+        }
+        if (typeof init.id === "string" || init.id instanceof String) {
+            init.id = parseInt(init.id, 10);
         }
         Object.assign(this, init);
-        this.id = Branch.id++;
+        // if there's no id, assign a new id
+        if (this.id === undefined) {
+            this.id = Branch.id++;
+        }
     }
 }
 

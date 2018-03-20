@@ -56,11 +56,19 @@ Manager.className = "Manager";
 exports.Manager = Manager;
 class Branch {
     constructor(init) {
-        if (init.active !== false) {
-            init.active = true;
+        // ture by default
+        this.active = true;
+        if (typeof init.active === "string" || init.active instanceof String) {
+            init.active = init.active === "true";
+        }
+        if (typeof init.id === "string" || init.id instanceof String) {
+            init.id = parseInt(init.id, 10);
         }
         Object.assign(this, init);
-        this.id = Branch.id++;
+        // if there's no id, assign a new id
+        if (this.id === undefined) {
+            this.id = Branch.id++;
+        }
     }
 }
 Branch.id = 0;

@@ -228,7 +228,7 @@ function initUsersGrid() {
 function initBranchesGrid() {
 
     var fields: (Partial<JsGrid.JsGridField> | any)[] = [
-        { name: "id", title: "ID", editable: false, type: "number", align: "center" },
+        { name: "id", title: "ID", editing: false, type: "number", align: "center" },
         { name: "name", title: "Branch Name", type: "text" },
         { name: "address", title: "Address", type: "text" },
         { name: "active", title: "Active", type: "checkbox" },
