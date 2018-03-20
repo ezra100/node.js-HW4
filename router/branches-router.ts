@@ -1,10 +1,10 @@
 import express = require("express");
-import { DBFactory } from "./DataBase/DBFactory";
-import { Branch, Customer, Manager, Employee } from "./types";
+import { DBFactory } from "../DataBase/DBFactory";
+import { Branch, Customer, Manager, Employee } from "../types";
 import path = require("path");
 // tslint:disable:typedef
 export var router = express.Router();
-import { helpers } from "./helpers";
+import { helpers } from "../helpers";
 
 var db = DBFactory.getDB();
 

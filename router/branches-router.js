@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const DBFactory_1 = require("./DataBase/DBFactory");
-const types_1 = require("./types");
+const DBFactory_1 = require("../DataBase/DBFactory");
+const types_1 = require("../types");
 // tslint:disable:typedef
 exports.router = express.Router();
 var db = DBFactory_1.DBFactory.getDB();
