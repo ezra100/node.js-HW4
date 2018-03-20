@@ -122,7 +122,7 @@ function initUsersGrid() {
                 textField: "Name",
                 editTemplate: function (value: string, item: any): JQuery<HTMLElement> | string {
                     if (value === "Customer" || value === "Provider") {
-                        this.editControl = $("<span/>").text(value);
+                        this.editControl = $("<span/>").text(value).val(value);
                         return value;
                     }
                     var select = $("<select/>");

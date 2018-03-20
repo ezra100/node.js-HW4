@@ -1,4 +1,4 @@
-import { User, Manager, Employee, Customer } from "./types";
+import { User, Manager, Employee, Customer, Provider } from "./types";
 
 export namespace helpers {
     export function objectToUser(obj: any): User {
@@ -8,10 +8,12 @@ export namespace helpers {
         switch (obj.className.toLowerCase()) {
             case "manager":
                 return new Manager(obj);
-            case "Employee":
+            case "employee":
                 return new Employee(obj);
             case "customer":
                 return new Customer(obj);
+            case "provider":
+                return new Provider(obj);
         }
     }
 

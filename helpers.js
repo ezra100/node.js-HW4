@@ -10,10 +10,12 @@ var helpers;
         switch (obj.className.toLowerCase()) {
             case "manager":
                 return new types_1.Manager(obj);
-            case "Employee":
+            case "employee":
                 return new types_1.Employee(obj);
             case "customer":
                 return new types_1.Customer(obj);
+            case "provider":
+                return new types_1.Provider(obj);
         }
     }
     helpers.objectToUser = objectToUser;
