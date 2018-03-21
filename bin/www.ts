@@ -6,8 +6,12 @@
  */
 
 import * as  app from "../app";
-import * as debug from "debug";
+import * as debugModule from "debug";
 import * as http from "http";
+
+let debug =debugModule("hw5:server");
+// since we cannot add an enviroment variable in VSCode we'll just enable it form here
+debug.enabled = true;
 
 /**
  * Get port from environment and store in Express.
