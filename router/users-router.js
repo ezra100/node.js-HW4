@@ -1,36 +1,52 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const DBFactory_1 = require("../DataBase/DBFactory");
+const mongoDB_1 = require("../DataBase/mongoDB");
 const types_1 = require("../types");
 // tslint:disable:typedef
 exports.router = express.Router();
 const helpers_1 = require("../helpers");
-var db = DBFactory_1.DBFactory.getDB();
+var db = new mongoDB_1.MongoDB();
 exports.router.get("/", function (req, res) {
-    var client = db.findUser(req.query.clientUserName);
-    var filter = req.query.filter;
-    var users = db.getUsers(client instanceof types_1.Manager ? [types_1.User] : [types_1.Customer, types_1.Provider], filter);
-    res.json(users);
+    return __awaiter(this, void 0, void 0, function* () {
+        var client = yield db.findUser(req.query.clientUserName);
+        var filter = req.query.filter;
+        var usersPromise = db.getUsers(client instanceof types_1.Manager ? [types_1.User] : [types_1.Customer, types_1.Provider], filter);
+        res.json(yield usersPromise);
+    });
 });
 /**
  * update user
  */
 exports.router.put("/", function (req, res) {
-    var user = helpers_1.helpers.objectToUser(req.body.item);
-    res.json(db.updateUser(user));
+    return __awaiter(this, void 0, void 0, function* () {
+        var user = helpers_1.helpers.objectToUser(req.body.item);
+        res.json(yield db.updateUser(user));
+    });
 });
 /**
  * add user
  */
 exports.router.post("/", function (req, res) {
-    var user = helpers_1.helpers.objectToUser(req.body.item);
-    res.json(db.addUser(user));
+    return __awaiter(this, void 0, void 0, function* () {
+        var user = helpers_1.helpers.objectToUser(req.body.item);
+        res.json(yield db.addUser(user));
+    });
 });
 /**
  * delete user
  */
 exports.router.delete("/", function (req, res) {
-    res.json(db.deleteUser(req.body.item));
+    return __awaiter(this, void 0, void 0, function* () {
+        res.json(yield db.deleteUser(req.body.item));
+    });
 });
 //# sourceMappingURL=users-router.js.map

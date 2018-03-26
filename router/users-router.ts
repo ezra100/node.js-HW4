@@ -1,18 +1,19 @@
 import express = require("express");
 import { DBFactory } from "../DataBase/DBFactory";
+import {MongoDB} from "../DataBase/mongoDB";
 import { User, Customer, Manager, Employee, Provider } from "../types";
 import path = require("path");
 // tslint:disable:typedef
 export var router = express.Router();
 import { helpers } from "../helpers";
 
-var db = DBFactory.getDB();
+var db = new MongoDB();
 
-router.get("/", function (req, res) {
-    var client = db.findUser(req.query.clientUserName);
+router.get("/",async function (req, res) {
+    var client = await db.findUser(req.query.clientUserName);
     var filter = req.query.filter;
-    var users = db.getUsers(client instanceof Manager ? [User] : [Customer, Provider], filter);
-    res.json(users);
+    var usersPromise : Promise<User[]> = db.getUsers(client.className === Manager.className ? null : [Customer, Provider], filter);
+    res.json(await usersPromise);
 });
 
 
@@ -20,21 +21,21 @@ router.get("/", function (req, res) {
 /**
  * update user
  */
-router.put("/", function (req, res) {
+router.put("/", async function (req, res) {
     var user = helpers.objectToUser(req.body.item);
-    res.json(db.updateUser(user));
+    res.json(await db.updateUser(user));
 });
 /**
  * add user
  */
-router.post("/", function (req, res) {
+router.post("/", async function (req, res) {
     var user = helpers.objectToUser(req.body.item);
-    res.json(db.addUser(user));
+    res.json(await db.addUser(user));
 });
 /**
  * delete user
  */
-router.delete("/", function (req, res) {
-    res.json(db.deleteUser(req.body.item));
+router.delete("/", async function (req, res) {
+    res.json(await db.deleteUser(req.body.item));
 });
 

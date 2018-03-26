@@ -3,7 +3,10 @@ import { read } from "fs";
 export enum Gender { Male = 1, Female = 2 }
 
 export abstract class User {
-    static readonly className: string = "User";
+    save(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static readonly className: string = User.className;
     className: string = User.name;
     firstName: string;
     lastName: string;
@@ -55,7 +58,7 @@ export class Employee extends User {
 }
 
 export class Manager extends Employee {
-    static readonly className: string = "Manager";
+    static readonly className: string = Manager.name;
 
     public constructor(init?: Partial<Manager>) {
         super(init);

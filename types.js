@@ -11,6 +11,9 @@ class User {
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
     }
+    save(arg0) {
+        throw new Error("Method not implemented.");
+    }
     compare(other) {
         return this.userName.toLowerCase() === other.userName.toLowerCase();
     }
@@ -18,7 +21,7 @@ class User {
         return this.userName.toLowerCase() === userName.toLowerCase();
     }
 }
-User.className = "User";
+User.className = User.className;
 exports.User = User;
 class Customer extends User {
     constructor(init) {
