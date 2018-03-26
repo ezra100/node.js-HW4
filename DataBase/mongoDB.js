@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_1 = require("./data");
-const types_1 = require("../types");
 // import the mongoose module
 const mongoose = require("mongoose");
 // set up default mongoose connection
@@ -27,6 +26,18 @@ let customerModel = userModel.discriminator("Customer", new mongoose.Schema({}, 
 let providerModel = userModel.discriminator("Provider", new mongoose.Schema({ branchID: Number }, { discriminatorKey: "provider" }));
 let employeerModel = userModel.discriminator("Employee", new mongoose.Schema({ branchID: Number }, { discriminatorKey: "employee" }));
 let managerModel = userModel.discriminator("Manager", new mongoose.Schema({ branchID: Number }, { discriminatorKey: "manager" }));
+function init() {
+    data_1.users
+        .map((u) => new userModel(Object.assign({}, u, { _id: u.userName })))
+        .forEach((v) => v.save((err, user) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(user);
+    }));
+}
+init();
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 class MongoDB {
@@ -34,6 +45,7 @@ class MongoDB {
         return data_1.flowers;
     }
     //#region users
+    // todo: return the users as a user object(?)
     getUsers(types, filter) {
         if (types) {
             // if filter isn't defined yet, define it as an empty object
@@ -41,11 +53,12 @@ class MongoDB {
             // types = types.map((v, i, a) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
             filter.className = new RegExp("^(" + types.map((clss) => clss.className).join("|") + ")$");
         }
-        for (var key in filter) {
+        for (const key of Object.keys(filter)) {
             if (filter[key] === "") {
+                delete filter[key];
                 continue;
             }
-            switch (typeof types_1.User[key]) {
+            switch (getUserKeyType(key)) {
                 case "string":
                     // replace it with a regex that will search for any one of the given words
                     filter[key] = new RegExp(filter[key].split(/\s+/)
@@ -66,7 +79,7 @@ class MongoDB {
                     if (typeof filter[key] === "string" || filter[key] instanceof String) {
                         filter[key] = parseInt(filter[key], 10);
                     }
-                    if (key === "gender" && filter[key] === "0") {
+                    if (key === "gender" && filter[key] === 0) {
                         delete filter[key];
                     }
             }
@@ -94,11 +107,12 @@ class MongoDB {
     }
     updateUser(user) {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(user.userName, user, (err, user) => {
+            userModel.findByIdAndUpdate(user.userName, user, (err, oldUser) => {
                 if (err) {
                     reject(err);
                     return;
                 }
+                // we want to send back the new one
                 resolve(user);
             });
         });
@@ -134,7 +148,7 @@ class MongoDB {
                 if (filter[key] === "") {
                     continue;
                 }
-                switch (typeof branch[key]) {
+                switch (getUserKeyType(key)) {
                     case "string":
                         var regex = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
                         if (!regex.test(branch[key])) {
@@ -186,4 +200,7 @@ class MongoDB {
     }
 }
 exports.MongoDB = MongoDB;
+function getUserKeyType(key) {
+    return userModel.schema.paths[key].instance.toLowerCase();
+}
 //# sourceMappingURL=mongoDB.js.map

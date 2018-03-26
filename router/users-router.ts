@@ -1,6 +1,6 @@
 import express = require("express");
 import { DBFactory } from "../DataBase/DBFactory";
-import {MongoDB} from "../DataBase/mongoDB";
+import { MongoDB } from "../DataBase/mongoDB";
 import { User, Customer, Manager, Employee, Provider } from "../types";
 import path = require("path");
 // tslint:disable:typedef
@@ -9,10 +9,11 @@ import { helpers } from "../helpers";
 
 var db = new MongoDB();
 
-router.get("/",async function (req, res) {
+router.get("/", async function (req, res) {
     var client = await db.findUser(req.query.clientUserName);
     var filter = req.query.filter;
-    var usersPromise : Promise<User[]> = db.getUsers(client.className === Manager.className ? null : [Customer, Provider], filter);
+    var usersPromise: Promise<User[]> =
+        db.getUsers(client.className === Manager.className ? null /* = any type*/ : [Customer, Provider], filter);
     res.json(await usersPromise);
 });
 

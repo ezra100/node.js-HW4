@@ -19,7 +19,7 @@ exports.router.get("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var client = yield db.findUser(req.query.clientUserName);
         var filter = req.query.filter;
-        var usersPromise = db.getUsers(client instanceof types_1.Manager ? [types_1.User] : [types_1.Customer, types_1.Provider], filter);
+        var usersPromise = db.getUsers(client.className === types_1.Manager.className ? null /* = any type*/ : [types_1.Customer, types_1.Provider], filter);
         res.json(yield usersPromise);
     });
 });

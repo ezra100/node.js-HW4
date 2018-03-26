@@ -55,7 +55,7 @@ class Manager extends Employee {
         this.className = Manager.name;
     }
 }
-Manager.className = "Manager";
+Manager.className = Manager.name;
 exports.Manager = Manager;
 class Branch {
     constructor(init) {

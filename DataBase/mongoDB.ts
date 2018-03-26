@@ -6,6 +6,8 @@ import { User, Flower, Branch, Customer, Manager, Provider } from "../types";
 import * as mongoose from "mongoose";
 import { resolve } from "dns";
 
+
+
 // set up default mongoose connection
 var connectionString: string = "mongodb://127.0.0.1/localhost";
 mongoose.connect(connectionString);
@@ -14,6 +16,8 @@ mongoose.connect(connectionString);
 var db: mongoose.Connection = mongoose.connection;
 // define a schema
 var Schema: any = mongoose.Schema;
+
+
 
 var UserSchema: any = new Schema({
     _id: String,
@@ -36,7 +40,19 @@ let employeerModel: mongoose.Model<any> = userModel.discriminator("Employee",
 let managerModel: mongoose.Model<any> = userModel.discriminator("Manager",
     new mongoose.Schema({ branchID: Number }, { discriminatorKey: "manager" }));
 
-
+function init(): void {
+    users
+        .map((u) => new userModel(Object.assign({}, u, { _id: u.userName })))
+        .forEach((v) => v.save((err: Error, user: User) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(user);
+        }
+        ));
+}
+init();
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
@@ -56,11 +72,12 @@ export class MongoDB {
             // types = types.map((v, i, a) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
             filter.className = new RegExp("^(" + types.map((clss) => clss.className).join("|") + ")$");
         }
-        for (var key in filter) {
+        for (const key of Object.keys(filter)) {
             if (filter[key] === "") {
+                delete filter[key];
                 continue;
             }
-            switch (typeof (<any>User)[key]) {
+            switch (getUserKeyType(key)) {
                 case "string":
                     // replace it with a regex that will search for any one of the given words
                     filter[key] = new RegExp(filter[key].split(/\s+/)
@@ -83,7 +100,7 @@ export class MongoDB {
                     if (typeof filter[key] === "string" || filter[key] instanceof String) {
                         filter[key] = parseInt(filter[key], 10);
                     }
-                    if (key === "gender" && filter[key] === "0") {
+                    if (key === "gender" && filter[key] === 0) {
                         delete filter[key];
                     }
             }
@@ -115,11 +132,12 @@ export class MongoDB {
     }
     updateUser(user: User): Promise<User | null> {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(user.userName, user, (err: Error, user: User) => {
+            userModel.findByIdAndUpdate(user.userName, user, (err: Error, oldUser: User) => {
                 if (err) {
                     reject(err);
                     return;
                 }
+                // we want to send back the new one
                 resolve(user);
             });
         });
@@ -159,7 +177,7 @@ export class MongoDB {
                 if (filter[key] === "") {
                     continue;
                 }
-                switch (typeof (<any>branch)[key]) {
+                switch (getUserKeyType(key)) {
                     case "string":
                         var regex: RegExp = new RegExp(filter[key].split(/\s+/).join("|"), "gi");
                         if (!regex.test((<any>branch)[key])) {
@@ -210,4 +228,8 @@ export class MongoDB {
         return branch;
     }
     //#endregion
+}
+
+function getUserKeyType(key: string): string {
+    return (<string>(<any>userModel.schema).paths[key].instance).toLowerCase();
 }
