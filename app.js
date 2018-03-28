@@ -1,5 +1,13 @@
 "use strict";
 // tslint:disable:typedef
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 const express = require("express");
 const DBFactory_1 = require("./DataBase/DBFactory");
 var app = express();
@@ -19,25 +27,29 @@ app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
 app.post("/login", function (req, res) {
-    var clientUserName = req.body.clientUserName;
-    var password = req.body.password;
-    var user = db.findUser(clientUserName);
-    if (!user) {
-        res.status(400);
-        res.end();
-        return;
-    }
-    if (user.password === password) {
-        res.status(200).json({ userType: user.className });
-    }
-    else {
-        res.status(401);
-        res.end();
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        var clientUserName = req.body.clientUserName;
+        var password = req.body.password;
+        var user = yield db.findUser(clientUserName);
+        if (!user) {
+            res.status(400);
+            res.end();
+            return;
+        }
+        if (user.password === password) {
+            res.status(200).json({ userType: user.className });
+        }
+        else {
+            res.status(401);
+            res.end();
+        }
+    });
 });
 app.post(/\/ajax\/*/i, function (req, res) {
-    var user = db.findUser(req.body.clientUserName);
-    res.render(req.url.substring(1), { query: req.body, user: user, data: { flowers: db.getFlowers() } });
+    return __awaiter(this, void 0, void 0, function* () {
+        var user = yield db.findUser(req.body.clientUserName);
+        res.render(req.url.substring(1), { query: req.body, user: user, data: { flowers: yield db.getFlowers() } });
+    });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {

@@ -43,7 +43,7 @@ app.post("/login",async function (req, res) {
 
 });
 app.post(/\/ajax\/*/i,async function (req: Request, res) {
-    var user = db.findUser(req.body.clientUserName);
+    var user = await db.findUser(req.body.clientUserName);
     res.render(req.url.substring(1),
         { query: req.body, user: user, data: { flowers:  await db.getFlowers() } });
 

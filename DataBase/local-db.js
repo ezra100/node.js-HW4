@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_1 = require("./data");
-class LocalDB {
+class LocalDB /*implements IDataBase*/ {
     getFlowers() {
-        return data_1.flowers;
+        return new Promise((resolve, reject) => resolve(data_1.flowers));
     }
     //#region users
     getUsers(types, filter) {

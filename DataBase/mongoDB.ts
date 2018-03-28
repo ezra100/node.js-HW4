@@ -21,7 +21,7 @@ let Schema: any = mongoose.Schema;
 
 
 
-let UserSchema: any = new Schema({
+let userSchema: mongoose.Schema = new Schema({
     _id: String,
     className: String,
     firstName: String,
@@ -32,7 +32,11 @@ let UserSchema: any = new Schema({
     gender: Number,
     address: String
 });
-let userModel: mongoose.Model<any> = mongoose.model("User", UserSchema);
+userSchema.pre("save", function (next: Function): void {
+    this._id = this.userName;
+    next();
+});
+let userModel: mongoose.Model<any> = mongoose.model("User", userSchema);
 
 let customerModel: mongoose.Model<any> = userModel.discriminator("Customer", new mongoose.Schema({}, { discriminatorKey: "customer" }));
 let providerModel: mongoose.Model<any> = userModel.discriminator("Provider",
@@ -49,6 +53,10 @@ let branchSchema: any = new Schema({
     active: Boolean,
     name: String
 });
+branchSchema.pre("save", function (next: Function): void {
+    this._id = this.id;
+    next();
+});
 let branchModel: mongoose.Model<any> = mongoose.model("Branch", branchSchema);
 let flowerSchema: any = new Schema({
     _id: String,
@@ -59,13 +67,17 @@ let flowerSchema: any = new Schema({
     colorDesc: String,
     color: String,
 });
+flowerSchema.pre("save", function (next: Function): void {
+    this._id = this.name;
+    next();
+});
 let flowerModel: mongoose.Model<any> = mongoose.model("Flower", flowerSchema);
 //#endregion
 
 function init(): void {
     // todo
     users
-        .map((u) => new userModel(Object.assign({}, u, { _id: u.userName })))
+        .map((u) => new userModel(u))
         .forEach((v) => v.save((err: Error, user: User) => {
             if (err) {
                 console.error(err);
@@ -75,23 +87,23 @@ function init(): void {
         }
         ));
     branches
-        .map((u) => new userModel(Object.assign({}, u, { _id: u.id })))
-        .forEach((v) => v.save((err: Error, user: User) => {
+        .map((u) => new branchModel(u))
+        .forEach((v) => v.save((err: Error, branch: Branch) => {
             if (err) {
                 console.error(err);
                 return;
             }
-            console.log(user);
+            console.log(branch);
         }
         ));
     flowers
-        .map((u) => new userModel(Object.assign({}, u, { _id: u.name })))
-        .forEach((v) => v.save((err: Error, user: User) => {
+        .map((u) => new flowerModel(u))
+        .forEach((v) => v.save((err: Error, flower: Flower) => {
             if (err) {
                 console.error(err);
                 return;
             }
-            console.log(user);
+            console.log(flower);
         }
         ));
 }
@@ -145,7 +157,7 @@ export class MongoDB implements IDataBase {
     addFlower(flower: Flower): Promise<Flower | null> {
         return new Promise(
             (resolve, reject) => {
-                let flowerDoc: any = new flowerModel(Object.assign({}, flower, { _id: flower.name }));
+                let flowerDoc: any = new flowerModel(flower);
                 flowerDoc.save((err: Error, flower: Flower) => {
                     if (err) {
                         reject(err);
@@ -251,7 +263,7 @@ export class MongoDB implements IDataBase {
     addUser(user: User): Promise<User | null> {
         return new Promise(
             (resolve, reject) => {
-                let userDoc: any = new userModel(Object.assign({}, user, { _id: user.userName }));
+                let userDoc: any = new userModel(user);
                 userDoc.save((err: Error, user: User) => {
                     if (err) {
                         reject(err);
@@ -312,7 +324,7 @@ export class MongoDB implements IDataBase {
         }
         return new Promise<Branch[]>(
             (resolve, reject) => {
-                userModel.find(filter, (err: Error, branches: Branch[]) => {
+                branchModel.find(filter, (err: Error, branches: Branch[]) => {
                     if (err) {
                         reject(err);
                         return;
@@ -351,7 +363,7 @@ export class MongoDB implements IDataBase {
     addBranch(branch: Branch): Promise<Branch | null> {
         return new Promise(
             (resolve, reject) => {
-                let branchDoc: any = new branchModel(Object.assign({}, branch, { _id: branch.id }));
+                let branchDoc: any = new branchModel(branch);
                 branchDoc.save((err: Error, branch: Branch) => {
                     if (err) {
                         reject(err);

@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const mongoDB_1 = require("../DataBase/mongoDB");
+const DBFactory_1 = require("../DataBase/DBFactory");
 const types_1 = require("../types");
 // tslint:disable:typedef
 exports.router = express.Router();
 const helpers_1 = require("../helpers");
-var db = new mongoDB_1.MongoDB();
+var db = DBFactory_1.DBFactory.getDB();
 exports.router.get("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var client = yield db.findUser(req.query.clientUserName);

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const local_db_1 = require("./local-db");
+const mongoDB_1 = require("./mongoDB");
 var DBType;
 (function (DBType) {
     DBType[DBType["Local"] = 0] = "Local";
@@ -12,7 +12,7 @@ class DBFactory {
             switch (this.type) {
                 case DBType.Local:
                 default:
-                    this.db = new local_db_1.LocalDB();
+                    this.db = new mongoDB_1.MongoDB();
                     break;
             }
         }
