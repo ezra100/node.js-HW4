@@ -1,16 +1,16 @@
 import { User, Flower, Branch } from "../types";
 
 export interface IDataBase {
-    getUsers(userType: any[], filter?: any): User[];
-    updateUser(user: User): User;
-    addUser(user: User): User;
-    deleteUser(user: User): User;
-    findUser(userName: string): User;
+    getUsers(userType: any[], filter?: any): Promise<User[]>;
+    updateUser(user: User): Promise<User>;
+    addUser(user: User): Promise<User>;
+    deleteUser(user: User): Promise<User>;
+    findUser(userName: string): Promise<User>;
 
-    getFlowers(): Flower[];
+    getFlowers(): Promise<Flower[]>;
 
-    getBranches(filter: any): Branch[];
-    addBranch(branch: Branch): Branch;
-    updateBranch(branch: Branch): Branch;
-    deleteBranch(branch: Branch): Branch;
+    getBranches(filter: any): Promise<Branch[]>;
+    addBranch(branch: Branch): Promise<Branch>;
+    updateBranch(branch: Branch): Promise<Branch>;
+    deleteBranch(branch: Branch): Promise<Branch>;
 }

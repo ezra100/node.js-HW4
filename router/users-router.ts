@@ -1,13 +1,12 @@
 import express = require("express");
 import { DBFactory } from "../DataBase/DBFactory";
-import { MongoDB } from "../DataBase/mongoDB";
-import { User, Customer, Manager, Employee, Provider } from "../types";
+import {User, Flower, Customer, Manager, Employee, Provider } from "../types";
 import path = require("path");
 // tslint:disable:typedef
 export var router = express.Router();
 import { helpers } from "../helpers";
 
-var db = new MongoDB();
+var db = DBFactory.getDB();
 
 router.get("/", async function (req, res) {
     var client = await db.findUser(req.query.clientUserName);

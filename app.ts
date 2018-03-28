@@ -2,7 +2,7 @@
 
 import express = require("express");
 import { DBFactory } from "./DataBase/DBFactory";
-import { Color, User, Customer, Manager, Employee } from "./types";
+import { Color, Flower, Customer, Manager, Employee } from "./types";
 import { Response } from "express-serve-static-core";
 import { Request } from "express";
  var app = express();
@@ -25,10 +25,10 @@ app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
 
-app.post("/login", function (req, res) {
+app.post("/login",async function (req, res) {
     var clientUserName = req.body.clientUserName;
     var password = req.body.password;
-    var user = db.findUser(clientUserName);
+    var user = await db.findUser(clientUserName);
     if (!user) {
         res.status(400);
         res.end();
@@ -42,10 +42,10 @@ app.post("/login", function (req, res) {
     }
 
 });
-app.post(/\/ajax\/*/i, function (req: Request, res) {
+app.post(/\/ajax\/*/i,async function (req: Request, res) {
     var user = db.findUser(req.body.clientUserName);
     res.render(req.url.substring(1),
-        { query: req.body, user: user, data: { flowers: db.getFlowers() } });
+        { query: req.body, user: user, data: { flowers:  await db.getFlowers() } });
 
 });
 

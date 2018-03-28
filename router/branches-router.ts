@@ -8,10 +8,10 @@ import { helpers } from "../helpers";
 
 var db = DBFactory.getDB();
 
-router.get("/", function (req, res) {
+router.get("/", async function (req, res) {
     var filter = req.query.filter;
-    var branches = db.getBranches(req.query.filter);
-    res.json(branches);
+    var branchesPromise = db.getBranches(req.query.filter);
+    res.json(await branchesPromise);
 });
 
 
@@ -19,21 +19,21 @@ router.get("/", function (req, res) {
 /**
  * update branch
  */
-router.put("/", function (req, res) {
+router.put("/", async function (req, res) {
     var branch = new Branch(req.body.item);
-    res.json(db.updateBranch(branch));
+    res.json(await db.updateBranch(branch));
 });
 /**
  * add branch
  */
-router.post("/", function (req, res) {
+router.post("/", async function (req, res) {
     var branch = new Branch(req.body.item);
-    res.json(db.addBranch(branch));
+    res.json(await db.addBranch(branch));
 });
 /**
  * delete branch
  */
-router.delete("/", function (req, res) {
-    res.json(db.deleteBranch(req.body.item));
+router.delete("/", async function (req, res) {
+    res.json(await db.deleteBranch(req.body.item));
 });
 

@@ -1,11 +1,12 @@
 import { branches, users, flowers } from "./data";
 import { IDataBase } from "./IDataBase";
 import { User, Flower, Branch, Customer, Manager, Provider } from "../types";
+import { resolve } from "url";
 
-export class LocalDB implements IDataBase {
+export class LocalDB /*implements IDataBase*/ {
 
-    getFlowers(): Flower[] {
-        return flowers;
+    getFlowers(): Promise<Flower[]> {
+        return new Promise((resolve, reject) => resolve(flowers));
     }
     //#region users
     getUsers(types?: any[], filter?: any): User[] {

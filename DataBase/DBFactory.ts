@@ -1,5 +1,6 @@
 import { IDataBase } from "./IDataBase";
 import { LocalDB } from "./local-db";
+import { MongoDB } from "./mongoDB";
 export enum DBType { Local, Mongo }
 export class DBFactory {
     static db: IDataBase = null;
@@ -9,7 +10,7 @@ export class DBFactory {
             switch (this.type) {
                 case DBType.Local:
                 default:
-                    this.db = new LocalDB();
+                    this.db = new MongoDB();
                     break;
             }
         }

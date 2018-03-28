@@ -51,7 +51,7 @@ let branchSchema: any = new Schema({
 });
 let branchModel: mongoose.Model<any> = mongoose.model("Branch", branchSchema);
 let flowerSchema: any = new Schema({
-    _id : String,
+    _id: String,
     name: String,
     family: String,
     price: Number,
@@ -63,8 +63,29 @@ let flowerModel: mongoose.Model<any> = mongoose.model("Flower", flowerSchema);
 //#endregion
 
 function init(): void {
+    // todo
     users
         .map((u) => new userModel(Object.assign({}, u, { _id: u.userName })))
+        .forEach((v) => v.save((err: Error, user: User) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(user);
+        }
+        ));
+    branches
+        .map((u) => new userModel(Object.assign({}, u, { _id: u.id })))
+        .forEach((v) => v.save((err: Error, user: User) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(user);
+        }
+        ));
+    flowers
+        .map((u) => new userModel(Object.assign({}, u, { _id: u.name })))
         .forEach((v) => v.save((err: Error, user: User) => {
             if (err) {
                 console.error(err);
@@ -80,7 +101,7 @@ init();
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-export class MongoDB {
+export class MongoDB implements IDataBase {
 
     getFlowers(): Promise<Flower[]> {
         return new Promise<Flower[]>(
