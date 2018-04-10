@@ -61,7 +61,16 @@
                         <span class="glyphicon glyphicon-log-out"></span> Logout
                     </button>
                 </li>
+                <li class="nav-item" id="nav-profile-img">
 
+                    <img class="profile-img" onclick="$('#profile-input').click()" src="/res/profile-image" alt="Profile Image">
+                    <form id="profile-form" action="/res/profile-image" method="post" target="hidden-frame">
+                        <input type="file" name="upload" onchange="$('#profile-form').submit()" id="profile-input" style="display:none" accept="image/*">
+                        <iframe name='hidden-frame' style="display:none">   </iframe>
+                    </form>
+                    
+                    
+                </li>
             </ul>
         </div>
     </nav>

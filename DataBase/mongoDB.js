@@ -20,7 +20,8 @@ let userSchema = new Schema({
     password: String,
     email: String,
     gender: Number,
-    address: String
+    address: String,
+    image: String
 });
 userSchema.pre("save", function (next) {
     this._id = this.userName;
@@ -88,7 +89,7 @@ function init() {
         console.log(flower);
     }));
 }
-init();
+// init();
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 class MongoDB {
@@ -167,6 +168,7 @@ class MongoDB {
                 case "string":
                     // replace it with a regex that will search for any one of the given words
                     filter[key] = new RegExp(filter[key].split(/\s+/)
+                        // escape regex characters
                         .map((v) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")).join("|"), "gi");
                     break;
                 case "boolean":
@@ -222,6 +224,18 @@ class MongoDB {
             });
         });
     }
+    updateUserById(userName, update) {
+        return new Promise((resolve, reject) => {
+            userModel.findByIdAndUpdate(userName, update, (err, oldUser) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                // sending back the new one
+                resolve(Object.assign([], oldUser, update));
+            });
+        });
+    }
     addUser(user) {
         return new Promise((resolve, reject) => {
             let userDoc = new userModel(user);
@@ -257,6 +271,7 @@ class MongoDB {
                 case "string":
                     // replace it with a regex that will search for any one of the given words
                     filter[key] = new RegExp(filter[key].split(/\s+/)
+                        // escape regex characters
                         .map((v) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")).join("|"), "gi");
                     break;
                 case "boolean":

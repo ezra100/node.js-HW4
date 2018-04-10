@@ -30,7 +30,8 @@ let userSchema: mongoose.Schema = new Schema({
     password: String,
     email: String,
     gender: Number,
-    address: String
+    address: String,
+    image: String
 });
 userSchema.pre("save", function (next: Function): void {
     this._id = this.userName;
@@ -107,13 +108,14 @@ function init(): void {
         }
         ));
 }
-init();
+// init();
 
 
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export class MongoDB implements IDataBase {
+
 
     getFlowers(): Promise<Flower[]> {
         return new Promise<Flower[]>(
@@ -257,6 +259,18 @@ export class MongoDB implements IDataBase {
                 }
                 // we want to send back the new one
                 resolve(user);
+            });
+        });
+    }
+    updateUserById(userName: string, update: Partial<User>): Promise<User> {
+        return new Promise((resolve, reject) => {
+            userModel.findByIdAndUpdate(userName, update, (err: Error, oldUser: User) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                // sending back the new one
+                resolve(Object.assign([], oldUser, update));
             });
         });
     }

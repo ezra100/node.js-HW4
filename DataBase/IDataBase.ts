@@ -3,6 +3,8 @@ import { User, Flower, Branch } from "../types";
 export interface IDataBase {
     getUsers(userType: any[], filter?: any): Promise<User[]>;
     updateUser(user: User): Promise<User>;
+    updateUserById(userName: string, update: Partial<User>): Promise<User>;
+
     addUser(user: User): Promise<User>;
     deleteUser(user: User): Promise<User>;
     findUser(userName: string): Promise<User>;

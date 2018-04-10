@@ -7,6 +7,8 @@ var Gender;
 })(Gender = exports.Gender || (exports.Gender = {}));
 class User {
     constructor(init) {
+        // used to remember the class type when the client sends back
+        // the object for update/deletion/client type etc.
         this.className = User.name;
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
@@ -21,7 +23,7 @@ class User {
         return this.userName.toLowerCase() === userName.toLowerCase();
     }
 }
-User.className = User.className;
+User.className = User.name;
 exports.User = User;
 class Customer extends User {
     constructor(init) {
@@ -29,7 +31,7 @@ class Customer extends User {
         this.className = Customer.name;
     }
 }
-Customer.className = "Customer";
+Customer.className = Customer.name;
 exports.Customer = Customer;
 class Provider extends User {
     constructor(init) {
@@ -46,7 +48,7 @@ class Employee extends User {
         this.className = Employee.name;
     }
 }
-Employee.className = "Employee";
+Employee.className = Employee.name;
 exports.Employee = Employee;
 class Manager extends Employee {
     constructor(init) {
