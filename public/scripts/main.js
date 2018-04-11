@@ -40,6 +40,8 @@ function postLogin() {
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
     $("#nav-logout").show();
+    refreshProfileImage();
+    $("#nav-profile-img").show();
     $("#nav-tabs").load("ajax/navbar-tabs", { clientUserName: clientUserName }, function () {
         // load the grid when the tab is shown
         $("a[data-toggle=\"tab\"][href=\"#nav-users\"]").on("shown.bs.tab", function (e) {
@@ -64,6 +66,7 @@ function postLogin() {
 function logout() {
     $("#nav-login").show();
     $("#nav-logout").hide();
+    $("#nav-profile-img").hide();
     $("#nav-tabs").html("");
     var save = $("#nav-about").detach();
     save.addClass("active show");
@@ -348,11 +351,23 @@ function loadBranches() {
 function loadUsers() {
     $("#users-grid").jsGrid("loadData");
 }
-function postFile(file, url) {
+function postFile(file, url, cb) {
     var formData = new FormData();
     formData.append("image", file);
-    var r = new XMLHttpRequest();
-    r.open("POST", url);
-    r.send(formData);
+    $.ajax({
+        url: url,
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (data) {
+            cb();
+        }
+    });
+}
+let profileImageLink = "/res/profile-image";
+function refreshProfileImage() {
+    let img = $("#profile-img")[0];
+    img.src = profileImageLink + "?" + Date.now();
 }
 //# sourceMappingURL=main.js.map

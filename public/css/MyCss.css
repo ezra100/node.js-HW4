@@ -100,6 +100,7 @@ td.jsgrid-cell {
 img.profile-img {
     border-radius: 50%;
     max-height: 2em;
+    max-width: 2em;
     margin-left: 5px;
     margin-right: 5px;
 }
