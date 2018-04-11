@@ -348,4 +348,11 @@ function loadBranches() {
 function loadUsers() {
     $("#users-grid").jsGrid("loadData");
 }
+function postFile(file, url) {
+    var formData = new FormData();
+    formData.append("image", file);
+    var r = new XMLHttpRequest();
+    r.open("POST", url);
+    r.send(formData);
+}
 //# sourceMappingURL=main.js.map

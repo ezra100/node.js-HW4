@@ -16,5 +16,16 @@
             "sourceMaps": true,
             "preLaunchTask": "build"    
         }
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test",
+            "program": "${workspaceFolder}/test/main",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "sourceMaps": true,
+            "preLaunchTask": "build test"    
+        }
     ]
 }

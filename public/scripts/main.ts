@@ -335,7 +335,7 @@ function indicate(id: string, command: "hide" | "success" | "loading" | "error")
         case "success":
             alert.addClass("alert alert-success alert-dismissable fade show")
                 .html(
-                `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>`
                 )
@@ -386,4 +386,12 @@ function loadBranches() {
 }
 function loadUsers() {
     $("#users-grid").jsGrid("loadData");
+}
+
+function postFile(file : File, url : string) {
+    var formData = new FormData();
+    formData.append("image", file);
+    var r = new XMLHttpRequest();
+    r.open("POST", url);
+    r.send(formData);
 }

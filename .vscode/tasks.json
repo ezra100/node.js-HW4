@@ -22,6 +22,15 @@
             "args": [
                 "http://localhost:8080"
             ]
+        },
+        {
+            "label": "build test",
+            "type": "shell",
+            "command": "tsc --sourceMap true ./test/main.ts",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build"
         }
     ]
 }

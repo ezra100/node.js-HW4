@@ -34,7 +34,7 @@ let userSchema: mongoose.Schema = new Schema({
     image: String
 });
 userSchema.pre("save", function (next: Function): void {
-    this._id = this.userName;
+    this._id = (<any>this).userName;
     next();
 });
 let userModel: mongoose.Model<any> = mongoose.model("User", userSchema);
