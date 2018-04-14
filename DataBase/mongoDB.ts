@@ -108,7 +108,7 @@ function init(): void {
         }
         ));
 }
-// init();
+ //init();
 
 
 // bind connection to error event (to get notification of connection errors)
