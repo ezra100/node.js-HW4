@@ -10,8 +10,9 @@ import * as formidable from "formidable";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 
-import usersRouter = require("./router/users-router");
-import branchesRouter = require("./router/branches-router");
+import * as usersRouter from "./router/users-router";
+import * as branchesRouter from "./router/branches-router";
+import * as flowersRouter from "./router/flowers-router";
 import * as resRouter from "./router/profile-router";
 import { DBFactory } from "./DataBase/DBFactory";
 import { Color, Flower, Customer, Manager, Employee } from "./types";
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.use("/users", usersRouter.router);
 app.use("/branches", branchesRouter.router);
+app.use("/flowers", flowersRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/res", resRouter.router);
 
@@ -57,7 +59,7 @@ app.post("/login", async function (req, res) {
 app.post(/\/ajax\/*/i, async function (req: Request, res) {
     var user = await db.findUser(req.cookies.userName);
     res.render(req.url.substring(1),
-        { query: req.body, user: user, data: { flowers: await db.getFlowers() } });
+        { query: req.body, Color, user: user, data: { flowers: await db.getFlowers() } });
 
 });
 

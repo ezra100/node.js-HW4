@@ -10,7 +10,7 @@ export interface IDataBase {
     findUser(userName: string): Promise<User>;
 
     getFlowers(): Promise<Flower[]>;
-
+    addFlower(flower : Flower): Promise<Flower>;
     getBranches(filter: any): Promise<Branch[]>;
     addBranch(branch: Branch): Promise<Branch>;
     updateBranch(branch: Branch): Promise<Branch>;

@@ -1,7 +1,62 @@
+<% if(user.className.toLowerCase() == "provider"){ %>
+    <div class="modal fade" id="flowerModal" tabindex="-1" role="dialog" aria-labelledby="flowerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flowerModal">Add Flower</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-flower-form" role="form">
+                        <div class="form-group">
+                            <input type="text" id="add-flower-name" name="name" class="form-control" placeholder="Name" required />
+                            <input type="text" id="add-flower-family" name="family" class="form-control" placeholder="Family" required />
+                            <input type="number" min="0" id="add-flower-price" name="price" class="form-control" placeholder="Price" required />
+                            <div class="custom-grouping">
+                                <label class="my-0" for="sel1">Select Color:</label>
+                                <select class="form-control" name="color" id="add-flower-color" required>
+                                    <option selected="" value="">Select...</option>
+                                    <% for (let color in Color){ %>
+                                        <option>
+                                            <%= color %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </div>
+                            <div class="custom-grouping" style="line-height: 1.8">
+                                <div class="custom-file">
+                                    <input style="display: none" type="file" accept="image/*" class="custom-file-input" name="image-file" id="add-flower-image">
+                                    <button class="btn btn-primary btn-block btn-medium" onclick="$('#add-flower-image').click(); event.preventDefault(); return false;">Choose Image File</button>
+                                </div>
+                                <br>
+                                OR
+                                <br>
+                                <input type="url" id="image-url" name="image-url" class="form-control" placeholder="Image Link"  />
 
-<div class="container-fluid" class="grid">
-<% for(flower of flowers){ %>
-    <%- include("flower", {flower : flower}) %>
-    
-<%  } %>
-</div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-block btn-high" onclick="addFlower()" id="add-button">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-dark btn-primary my-2 " data-toggle="modal" data-target="#flowerModal">
+        <span class="glyphicon glyphicon-log-in"></span> Add Flower
+    </button>
+    <% } %>
+
+        <div class="container-fluid" id="catalog" class="grid">
+
+            <% for(flower of flowers){ %>
+                <%- include("flower", {flower : flower}) %>
+
+                    <%  } %>
+
+        </div>

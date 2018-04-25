@@ -46,7 +46,6 @@ exports.router.get("/profile-image", function (req, res) {
 // uploads an image from the client (via form)
 exports.router.post("/profile-image", upload.any(), function (req, res) {
     var userName = req.cookies && req.cookies.userName;
-    console.log(req.files);
     db.updateUserById(userName, { image: req.files[0].filename });
     res.end();
 });

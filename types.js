@@ -81,7 +81,7 @@ exports.Branch = Branch;
 class Flower {
     constructor(init) {
         Object.assign(this, init);
-        this.color = colorMap[this.colorDesc];
+        this.colorDesc = colorMap[this.color];
     }
 }
 exports.Flower = Flower;

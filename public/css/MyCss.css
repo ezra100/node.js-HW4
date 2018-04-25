@@ -108,3 +108,23 @@ img.profile-img {
 button.btn.btn-dark.btn-primary {
     font-size: smaller;
 }
+
+.form-control {
+    font-size: 1.5rem;
+}
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.9rem + 2px);
+}
+
+.btn-high {
+    font-size: 2rem;
+}
+.custom-grouping {
+    border-radius: 1rem;
+    background: #a8d6ff73;
+    padding: 0.7rem 1.5rem;
+    margin: 0.7rem
+}
+.btn-medium{
+    font-size: 1.5rem
+}

@@ -1,6 +1,6 @@
 // tslint:disable: typedef interface-name
 
-
+import { Flower } from "../../types";
 
 
 var clientUserName: string;
@@ -408,6 +408,67 @@ function postFile(file: File, url: string, cb: Function) {
 
 let profileImageLink: string = "/res/profile-image";
 function refreshProfileImage() {
-        let img: HTMLImageElement = <any>$("#profile-img")[0];
-        img.src = profileImageLink + "?" + Date.now();
+    let img: HTMLImageElement = <any>$("#profile-img")[0];
+    img.src = profileImageLink + "?" + Date.now();
+}
+
+function addFlower() {
+    var form: HTMLFormElement = document.forms[<any>"add-flower-form"];
+    // if the file input has not files then the URL is required
+    (<HTMLInputElement>form.elements[<any>"image-url"]).required = !(<any>form.elements[<any>"image-file"]).files.length;
+    if (!form || !form.checkValidity()) {
+        return;
+    }
+    var fd: FormData = new FormData();
+    for (let element of form.elements) {
+        if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
+            fd.append(element.name, element.type == "file" ? (<any>element).files : (<any>element).value);
+        }
+    }
+    $.ajax({
+        url: "/flowers/",
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (data) {
+            addFlowerToPage(data);
+            $("#flowerModal").modal("hide");
+        }
+    });
+
+}
+
+function addFlowerToPage(flower: Flower) : null | JQuery<HTMLElement>{
+    if($(".card.productbox").length <= 0){
+        return null;
+    }
+    var flowerDiv = $(".card.productbox").clone();
+    (<any>flowerDiv.find("img")[0]).src = flower.img;
+    flowerDiv.find("th")[0].innerText = flower.family;
+    $(flowerDiv.find("th")[1]).text(flower.colorDesc).attr("background-color", flower.color)
+        .attr("color", invertColor(flower.color));
+    $("#catalog").append(flowerDiv);
+    return flowerDiv;
+}
+
+function invertColor(hex: string) {
+    if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+        throw new Error('Invalid HEX color.');
+    }
+    var r = parseInt(hex.slice(0, 2), 16),
+        g = parseInt(hex.slice(2, 4), 16),
+        b = parseInt(hex.slice(4, 6), 16);
+    // http://stackoverflow.com/a/3943023/112731
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+        ? '#000000'
+        : '#FFFFFF';
+
 }

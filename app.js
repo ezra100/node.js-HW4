@@ -14,8 +14,10 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const usersRouter = require("./router/users-router");
 const branchesRouter = require("./router/branches-router");
+const flowersRouter = require("./router/flowers-router");
 const resRouter = require("./router/profile-router");
 const DBFactory_1 = require("./DataBase/DBFactory");
+const types_1 = require("./types");
 var app = express();
 var db = DBFactory_1.DBFactory.getDB();
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -27,6 +29,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.use("/users", usersRouter.router);
 app.use("/branches", branchesRouter.router);
+app.use("/flowers", flowersRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/res", resRouter.router);
 app.get("/favicon.ico", function (req, res) {
@@ -55,7 +58,7 @@ app.post("/login", function (req, res) {
 app.post(/\/ajax\/*/i, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var user = yield db.findUser(req.cookies.userName);
-        res.render(req.url.substring(1), { query: req.body, user: user, data: { flowers: yield db.getFlowers() } });
+        res.render(req.url.substring(1), { query: req.body, Color: types_1.Color, user: user, data: { flowers: yield db.getFlowers() } });
     });
 });
 // redirecting form the home page to login page
