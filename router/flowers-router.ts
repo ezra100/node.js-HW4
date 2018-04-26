@@ -1,7 +1,7 @@
-import express = require("express");
+import * as express from "express";
 import { DBFactory } from "../DataBase/DBFactory";
 import { User, Flower, Customer, Manager, Employee, Provider } from "../types";
-import path = require("path");
+import * as path from "path";
 import {URL} from "url";
 // tslint:disable:typedef
 export var router = express.Router();
@@ -47,15 +47,26 @@ router.post("/", upload.any(), async function (req, res) {
         name: req.body.name,
         family: req.body.family,
         price: parseFloat(req.body.price),
-        color: req.body.color,
+        colorDesc: req.body.color,
     });
+    if((await db.findFlower(flower.name))){
+        res.status(400);
+        res.end("flower named '" + flower.name + "' already exists");
+        return;
+    }
+
+    let fileName : string;
+    let request : http.ClientRequest;
+    let file : fs.WriteStream;
     var files: any[] = <any>req.files;
     if (files.length > 0) {
-        flower.img = new URL("/flowers/" + files[0].filename, hostBase);
+        fileName = files[0].filename;
     } else {
         var url = new URL(req.body["image-url"]);
-        var file = fs.createWriteStream(path.join(flowersDir, flower.name));
-        let request;
+        // prevent duplicates
+        fileName =  flower.name + Date.now();
+        
+         file = fs.createWriteStream(path.join(flowersDir, fileName));
         switch (url.protocol) {
             case "https:":
 
@@ -71,9 +82,10 @@ router.post("/", upload.any(), async function (req, res) {
             default:
                 throw "unknown protocol" + JSON.stringify(url);
         }
-        flower.img = new URL("/flowers/" + flower.name, hostBase);
 
     }
+    flower.img = new URL("/flowers/" + fileName, hostBase);
+
     res.json(await db.addFlower(flower));
 });
 

@@ -16,13 +16,15 @@
             },
         },
         {
-            "label": "url-launch",
+            "label": "build public",
             "type": "shell",
-            "command": "start",
-            "args": [
-                "http://localhost:8080"
-            ]
-        },
+            "command": "tsc -p pubTSConfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+        }
+ ,
         {
             "label": "build test",
             "type": "shell",

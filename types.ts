@@ -101,7 +101,7 @@ export class Flower {
     color: string;
     public constructor(init?: Partial<Flower>) {
         Object.assign(this, init);
-        this.colorDesc = colorMap[this.color];
+        this.color = colorMap[this.colorDesc];
     }
 }
 

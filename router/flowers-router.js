@@ -51,16 +51,25 @@ exports.router.post("/", upload.any(), function (req, res) {
             name: req.body.name,
             family: req.body.family,
             price: parseFloat(req.body.price),
-            color: req.body.color,
+            colorDesc: req.body.color,
         });
+        if ((yield db.findFlower(flower.name))) {
+            res.status(400);
+            res.end("flower named '" + flower.name + "' already exists");
+            return;
+        }
+        let fileName;
+        let request;
+        let file;
         var files = req.files;
         if (files.length > 0) {
-            flower.img = new url_1.URL("/flowers/" + files[0].filename, hostBase);
+            fileName = files[0].filename;
         }
         else {
             var url = new url_1.URL(req.body["image-url"]);
-            var file = fs.createWriteStream(path.join(flowersDir, flower.name));
-            let request;
+            // prevent duplicates
+            fileName = flower.name + Date.now();
+            file = fs.createWriteStream(path.join(flowersDir, fileName));
             switch (url.protocol) {
                 case "https:":
                     request = https.get(url, function (response) {
@@ -75,8 +84,8 @@ exports.router.post("/", upload.any(), function (req, res) {
                 default:
                     throw "unknown protocol" + JSON.stringify(url);
             }
-            flower.img = new url_1.URL("/flowers/" + flower.name, hostBase);
         }
+        flower.img = new url_1.URL("/flowers/" + fileName, hostBase);
         res.json(yield db.addFlower(flower));
     });
 });

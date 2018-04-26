@@ -11,6 +11,8 @@ export interface IDataBase {
 
     getFlowers(): Promise<Flower[]>;
     addFlower(flower : Flower): Promise<Flower>;
+    findFlower(name: string): Promise<Flower | null> ;
+
     getBranches(filter: any): Promise<Branch[]>;
     addBranch(branch: Branch): Promise<Branch>;
     updateBranch(branch: Branch): Promise<Branch>;

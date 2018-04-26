@@ -27,31 +27,41 @@ function invertColor(hex, bw) {
     return "#" + padZero(r) + padZero(g) + padZero(b);
 }
 
-%>   
+%>
 
-   <div class="card productbox">
-    <img src="<%= flower.img %>" class="card-img-top">
-    <div class="card-body">
-    <p class="card-text"<%= flower.name %></p>
-    <table class="table table-sm">
-        <tbody>
-            <tr>
-                <th>Family</th>
-                <td><%= flower.family %></td>
-            </tr>
-            <tr>
-                <th>Color</th>
-                <td class="text-center border" style="background-color:<%= flower.color %>;color:<%= invertColor(flower.color, true)%>">
-                     <%= flower.colorDesc%>
-            </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="productprice">
-        <div class="float-right">
-            <a href="#" class="btn btn-danger btn-md" role="button">BUY</a>
+    <div class="card productbox">
+        <img src="<%= flower.img %>" class="card-img-top">
+        <div class="card-body">
+            <p class="card-text" <%=flower.name %></p>
+            <table class="table table-sm">
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <td>
+                            <%= flower.name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Family</th>
+                        <td>
+                            <%= flower.family %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Color</th>
+                        <td class="text-center border" style="background-color:<%= flower.color %>;color:<%= invertColor(flower.color, true)%>">
+                            <%= flower.colorDesc %>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="productprice">
+                <div class="float-right">
+                    <a href="#" class="btn btn-danger btn-md" role="button">BUY</a>
+                </div>
+                <div class="pricetext">₪
+                    <%= flower.price %>
+                </div>
+            </div>
         </div>
-        <div class="pricetext">₪<%= flower.price %></div>
     </div>
-    </div>
-</div>

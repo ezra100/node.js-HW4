@@ -3,7 +3,7 @@
 import * as express from "express";
 import { Response } from "express-serve-static-core";
 import { Request } from "express";
-import path = require("path");
+import * as path from "path";
 // import bodyParser = require("body-parser");
 import * as fs from "fs";
 import * as formidable from "formidable";
@@ -79,5 +79,4 @@ app.get("/login", function (req, res) {
 
 
 
-export = app;
-
+export default app;

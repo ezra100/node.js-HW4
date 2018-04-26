@@ -1,6 +1,4 @@
-"use strict";
 // tslint:disable: typedef interface-name
-Object.defineProperty(exports, "__esModule", { value: true });
 var clientUserName;
 var clientUserType;
 $(function () {
@@ -376,7 +374,7 @@ function addFlower() {
     var form = document.forms["add-flower-form"];
     // if the file input has not files then the URL is required
     form.elements["image-url"].required = !form.elements["image-file"].files.length;
-    if (!form || !form.checkValidity()) {
+    if (!form || !form.reportValidity()) {
         return;
     }
     var fd = new FormData();
@@ -393,17 +391,27 @@ function addFlower() {
         type: "POST",
         success: function (data) {
             addFlowerToPage(data);
+            form.reset();
             $("#flowerModal").modal("hide");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error:\n" + jqXHR.responseText);
         }
     });
 }
 function addFlowerToPage(flower) {
+    if ($(".card.productbox").length <= 0) {
+        return null;
+    }
     var flowerDiv = $(".card.productbox").clone();
     flowerDiv.find("img")[0].src = flower.img;
-    flowerDiv.find("th")[0].innerText = flower.family;
-    $(flowerDiv.find("th")[1]).text(flower.colorDesc).attr("background-color", flower.color)
+    flowerDiv.find("th")[0].innerText = flower.name;
+    flowerDiv.find("th")[1].innerText = flower.family;
+    //flowerDiv.show();
+    $(flowerDiv.find("th")[2]).text(flower.colorDesc).attr("background-color", flower.color)
         .attr("color", invertColor(flower.color));
     $("#catalog").append(flowerDiv);
+    return flowerDiv;
 }
 function invertColor(hex) {
     if (hex.indexOf('#') === 0) {

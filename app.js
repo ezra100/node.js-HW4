@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -68,5 +69,5 @@ app.get("/", function (req, res) {
 app.get("/login", function (req, res) {
     res.render("login", { flowers: db.getFlowers() });
 });
-module.exports = app;
+exports.default = app;
 //# sourceMappingURL=app.js.map

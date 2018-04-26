@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const app = require("../app");
+const appX = require("../app");
 const debugModule = require("debug");
 const http = require("http");
+let app = appX.default;
 let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
 debug.enabled = true;

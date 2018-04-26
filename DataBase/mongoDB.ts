@@ -181,6 +181,7 @@ export class MongoDB implements IDataBase {
             });
         });
     }
+    
     //#region users
     // todo: return the users as a user object(?)
     getUsers(types?: any[], filter?: any): Promise<User[]> {

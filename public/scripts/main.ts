@@ -416,7 +416,7 @@ function addFlower() {
     var form: HTMLFormElement = document.forms[<any>"add-flower-form"];
     // if the file input has not files then the URL is required
     (<HTMLInputElement>form.elements[<any>"image-url"]).required = !(<any>form.elements[<any>"image-file"]).files.length;
-    if (!form || !form.checkValidity()) {
+    if (!form || !form.reportValidity()) {
         return;
     }
     var fd: FormData = new FormData();
@@ -433,7 +433,11 @@ function addFlower() {
         type: "POST",
         success: function (data) {
             addFlowerToPage(data);
+            form.reset();
             $("#flowerModal").modal("hide");
+        },
+        error : function (jqXHR : JQueryXHR, textStatus : string, errorThrown : string){
+            alert("Error:\n" + jqXHR.responseText);
         }
     });
 
@@ -445,8 +449,10 @@ function addFlowerToPage(flower: Flower) : null | JQuery<HTMLElement>{
     }
     var flowerDiv = $(".card.productbox").clone();
     (<any>flowerDiv.find("img")[0]).src = flower.img;
-    flowerDiv.find("th")[0].innerText = flower.family;
-    $(flowerDiv.find("th")[1]).text(flower.colorDesc).attr("background-color", flower.color)
+    flowerDiv.find("th")[0].innerText = flower.name;
+    flowerDiv.find("th")[1].innerText = flower.family;
+    //flowerDiv.show();
+    $(flowerDiv.find("th")[2]).text(flower.colorDesc).attr("background-color", flower.color)
         .attr("color", invertColor(flower.color));
     $("#catalog").append(flowerDiv);
     return flowerDiv;
