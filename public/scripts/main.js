@@ -380,7 +380,7 @@ function addFlower() {
     var fd = new FormData();
     for (let element of form.elements) {
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
-            fd.append(element.name, element.type == "file" ? element.files : element.value);
+            fd.append(element.name, element.type == "file" ? element.files[0] : element.value);
         }
     }
     $.ajax({
@@ -390,7 +390,8 @@ function addFlower() {
         contentType: false,
         type: "POST",
         success: function (data) {
-            addFlowerToPage(data);
+            // wait a sec for the flower image to upload to the server
+            setTimeout(() => addFlowerToPage(data), 1000);
             form.reset();
             $("#flowerModal").modal("hide");
         },

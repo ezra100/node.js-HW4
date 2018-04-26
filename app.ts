@@ -4,7 +4,6 @@ import * as express from "express";
 import { Response } from "express-serve-static-core";
 import { Request } from "express";
 import * as path from "path";
-// import bodyParser = require("body-parser");
 import * as fs from "fs";
 import * as formidable from "formidable";
 import * as cookieParser from "cookie-parser";

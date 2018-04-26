@@ -422,7 +422,7 @@ function addFlower() {
     var fd: FormData = new FormData();
     for (let element of form.elements) {
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
-            fd.append(element.name, element.type == "file" ? (<any>element).files : (<any>element).value);
+            fd.append(element.name, element.type == "file" ? (<any>element).files[0] : (<any>element).value);
         }
     }
     $.ajax({
@@ -432,19 +432,22 @@ function addFlower() {
         contentType: false,
         type: "POST",
         success: function (data) {
-            addFlowerToPage(data);
+            // wait a sec for the flower image to upload to the server
+            setTimeout(() =>
+                addFlowerToPage(data), 1000
+            );
             form.reset();
             $("#flowerModal").modal("hide");
         },
-        error : function (jqXHR : JQueryXHR, textStatus : string, errorThrown : string){
+        error: function (jqXHR: JQueryXHR, textStatus: string, errorThrown: string) {
             alert("Error:\n" + jqXHR.responseText);
         }
     });
 
 }
 
-function addFlowerToPage(flower: Flower) : null | JQuery<HTMLElement>{
-    if($(".card.productbox").length <= 0){
+function addFlowerToPage(flower: Flower): null | JQuery<HTMLElement> {
+    if ($(".card.productbox").length <= 0) {
         return null;
     }
     var flowerDiv = $(".card.productbox").clone();

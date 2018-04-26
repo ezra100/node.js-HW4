@@ -8,19 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const DBFactory_1 = require("../DataBase/DBFactory");
-const types_1 = require("../types");
-const path = require("path");
-const url_1 = require("url");
 // tslint:disable:typedef
-exports.router = express.Router();
+const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 const crypto = require("crypto");
 const mime = require("mime");
 const https = require("https");
 const http = require("http");
+const url_1 = require("url");
+const DBFactory_1 = require("../DataBase/DBFactory");
+const types_1 = require("../types");
+exports.router = express.Router();
 var hostBase = "http://localhost:3000";
 var flowersDir = path.join(__dirname, "../public/flowers");
 if (!fs.existsSync(flowersDir)) {
@@ -59,7 +59,7 @@ exports.router.post("/", upload.any(), function (req, res) {
             return;
         }
         let fileName;
-        let request;
+        let request = null;
         let file;
         var files = req.files;
         if (files.length > 0) {
@@ -86,7 +86,13 @@ exports.router.post("/", upload.any(), function (req, res) {
             }
         }
         flower.img = new url_1.URL("/flowers/" + fileName, hostBase);
-        res.json(yield db.addFlower(flower));
+        // if there was a request, wait till the request complete to send the response
+        // so that when the client asks for the image, the image would be on the server already
+        request ? request.on("finish", function () {
+            return __awaiter(this, void 0, void 0, function* () {
+                res.json(yield db.addFlower(flower));
+            });
+        }) : res.json(yield db.addFlower(flower));
     });
 });
 //# sourceMappingURL=flowers-router.js.map
