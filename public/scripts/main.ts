@@ -7,6 +7,7 @@ var clientUserName: string;
 var clientUserType: string;
 
 
+
 $(function () {
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
@@ -44,6 +45,7 @@ function doLogin() {
 }
 
 function postLogin(): void {
+    $("#modal-error-msg").html("");
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
     $("#nav-logout").show();
@@ -480,4 +482,21 @@ function invertColor(hex: string) {
         ? '#000000'
         : '#FFFFFF';
 
+}
+
+
+function addFlowerImageChanged(files : FileList){
+    if(files.length <= 0){
+        return;
+    }
+ $("#add-flower-image-button").hide();
+ $("#add-flower-success").show("highlight")
+ .contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(files.item(0).name);
+
+}
+
+function addFlowerRemoveSelectedImage(){
+    $("#add-flower-success").hide();
+    $("#add-flower-image-button").show("fade");
+    $("#add-flower-image").val("");
 }

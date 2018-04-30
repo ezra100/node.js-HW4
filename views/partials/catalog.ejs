@@ -27,13 +27,18 @@
                             </div>
                             <div class="custom-grouping" style="line-height: 1.8">
                                 <div class="custom-file">
-                                    <input style="display: none" type="file" accept="image/*" class="custom-file-input" name="image-file" id="add-flower-image">
-                                    <button class="btn btn-primary btn-block btn-medium" onclick="$('#add-flower-image').click(); event.preventDefault(); return false;">Choose Image File</button>
+                                    <input style="display: none" type="file" accept="image/*" onchange="addFlowerImageChanged(this.files);event.preventDefault();return false;"
+                                        class="custom-file-input" name="image-file" id="add-flower-image">
+                                    <button id="add-flower-image-button" class="btn btn-primary btn-block btn-medium" onclick="$('#add-flower-image').click(); event.preventDefault(); return false;">Choose Image File</button>
+                                    <div id="add-flower-success" class="btn btn-success" style="display: none">File Choosen
+                                        <button type="button" class="close" onclick="addFlowerRemoveSelectedImage();event.preventDefault();return false;" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                 </div>
+                                <br> OR
                                 <br>
-                                OR
-                                <br>
-                                <input type="url" id="image-url" name="image-url" class="form-control" placeholder="Image Link"  />
+                                <input type="url" id="image-url" name="image-url" class="form-control" placeholder="Image Link" />
 
                             </div>
 
@@ -48,7 +53,7 @@
     </div>
 
     <button type="button" class="btn btn-dark btn-primary my-2 " data-toggle="modal" data-target="#flowerModal">
-        <span class="glyphicon glyphicon-log-in"></span> Add Flower
+        <span class="glyphicon glyphicon-plus"></span> Add Flower
     </button>
     <% } %>
 

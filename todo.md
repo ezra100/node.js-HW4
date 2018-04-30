@@ -1,4 +1,5 @@
 ### todo:
-* take care of image upload file - server side, multer
+* add indicator and clear button for image file
+#### optional:
 * add file extension name
-* add 
+* resize file
