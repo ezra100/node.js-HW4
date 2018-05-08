@@ -68,7 +68,8 @@ app.post(/\/ajax\/*/i, async function (req: Request, res) {
 
 // redirecting form the home page to login page
 app.get("/", function (req, res) {
-    res.redirect(301, "/login");
+    // temporary redirect, we don't want it to be cached in the browser after a shutdown
+    res.redirect(307, "/login");
 });
 app.get("/login", function (req, res) {
     res.render("login", { flowers: db.getFlowers() });
