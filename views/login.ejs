@@ -4,6 +4,7 @@
 <html lang="en">
 
 <head>
+
     <title>Flowers++</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,6 +33,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <!-- #endregion  -->
 
+    <!-- ionicons -->
+    <link href="https://unpkg.com/ionicons@4.0.0/dist/css/ionicons.min.css" rel="stylesheet" />
+
 
 </head>
 
@@ -49,6 +53,11 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div id="nav-tabs"></div>
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item" id="nav-signup">
+                    <button type="button" class="btn btn-dark btn-primary" data-toggle="modal" data-target="#signupModal">
+                        <i class="icon ion-md-person-add"></i> Signup
+                    </button>
+                </li>
                 <li class="nav-item" id="nav-login">
                     <button type="button" class="btn btn-dark btn-primary" data-toggle="modal" data-target="#loginModal">
 
@@ -86,10 +95,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form">
+                    <form role="form" id="login-form">
                         <div class="form-group">
-                            <input type="text" id="user-name" class="form-control" placeholder="User Name" required />
-                            <input type="password" id="password" class="form-control" placeholder="Password" required />
+                            <input type="text" name="username" class="form-control" placeholder="User Name" required />
+                            <input type="password" name="password" class="form-control" placeholder="Password" required />
                         </div>
                     </form>
                     <div id="modal-error-msg">
@@ -99,6 +108,62 @@
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-block" id="login-button">Log In</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sign Up</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form" action="/signup" id="signup-form" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="userName" class="form-control" placeholder="User Name" required />
+                            <input type="password" name="password" class="form-control" placeholder="Password" required />
+                            <input type="text" name="firstName" class="form-control" placeholder="First Name" required />
+                            <input type="text" name="lastName" class="form-control" placeholder="Last Name" required />
+                            <input type="email" name="email" class="form-control" placeholder="Email" required />
+                            <input type="text" name="address" class="form-control" placeholder="Address" required />
+                            <input type="number" name="branchID" class="form-control" placeholder="Branch ID" required disabled/>
+                            <label for="gender" class="mx-2">Gender:
+                                <select class="form-control" aria-placeholder="Gender" name="gender" required>
+                                    <option value="1">
+                                        Male
+                                    </option>
+                                    <option>
+                                        Female
+                                    </option value="2">
+                                </select>
+                            </label>
+                            <label for="className" class="mx-2">Select User Type:
+                                <select class="form-control" aria-placeholder="User Type" name="className" onchange="userTypeChanged();event.preventDefault();return false;"
+                                    required>
+                                    <option>
+                                        Customer
+                                    </option>
+                                    <option>
+                                        Provider
+                                    </option>
+                                    <option>
+                                        Employee
+                                    </option>
+                                    <option>
+                                        Manager
+                                    </option>
+                                </select>
+                            </label>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-block" onclick="$('#signup-form').submit()">Sign Up</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

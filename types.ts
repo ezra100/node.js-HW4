@@ -6,7 +6,6 @@ export abstract class User {
     save(arg0: any): any {
         throw new Error("Method not implemented.");
     }
-    static readonly className: string = User.name;
     // used to remember the class type when the client sends back
     // the object for update/deletion/client type etc.
     className: string = User.name;
@@ -17,7 +16,7 @@ export abstract class User {
     email: string;
     gender: Gender;
     address: string;
-    image : string;
+    image? : string;
     public constructor(init?: Partial<User>) {
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);
@@ -31,7 +30,6 @@ export abstract class User {
 }
 
 export class Customer extends User {
-    static readonly className: string = Customer.name;
 
     public constructor(init?: Partial<Customer>) {
         super(init);
@@ -50,7 +48,6 @@ export class Provider extends User {
 }
 
 export class Employee extends User {
-    static readonly className: string = Employee.name;
 
     branchID: number;
     public constructor(init?: Partial<Employee>) {
@@ -61,7 +58,6 @@ export class Employee extends User {
 }
 
 export class Manager extends Employee {
-    static readonly className: string = Manager.name;
 
     public constructor(init?: Partial<Manager>) {
         super(init);

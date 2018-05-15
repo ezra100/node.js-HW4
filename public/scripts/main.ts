@@ -11,12 +11,16 @@ var clientUserType: string;
 $(function () {
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
+    if (this.location.pathname.toLowerCase() === "/index") {
+        postLogin();
+    }
 });
 function doLogin() {
-    clientUserName = <string>$("#user-name").val();
+    let form = $("#login-form");
+    clientUserName = <string>form.find("[name='username']").val();
     var data = {
-        "clientUserName": $("#user-name").val(),
-        "password": $("#password").val()
+        "clientUserName": form.find("[name='username']").val(),
+        "password": form.find("[name='password']").val()
     };
     $.ajax({
         url: "/login",
@@ -45,9 +49,12 @@ function doLogin() {
 }
 
 function postLogin(): void {
+    history.replaceState("index", "Main Index", "/index");
     $("#modal-error-msg").html("");
     $("#loginModal").modal("hide");
     $("#nav-login").hide();
+    $("#nav-signup").hide();
+
     $("#nav-logout").show();
     refreshProfileImage();
     $("#nav-profile-img").show();
@@ -75,13 +82,21 @@ function postLogin(): void {
 }
 
 function logout(): void {
-    $("#nav-login").show();
-    $("#nav-logout").hide();
-    $("#nav-profile-img").hide();
-    $("#nav-tabs").html("");
-    var save = $("#nav-about").detach();
-    save.addClass("active show");
-    $("#nav-tabContent").empty().append(save);
+    $.ajax({
+        url: "/logout",
+        type: "POST",
+        success: function () {
+            $(window).attr("location", "/login");
+        }
+    });
+    // $("#nav-login").show();
+    // $("#nav-signup").show();
+    // $("#nav-logout").hide();
+    // $("#nav-profile-img").hide();
+    // $("#nav-tabs").html("");
+    // var save = $("#nav-about").detach();
+    // save.addClass("active show");
+    // $("#nav-tabContent").empty().append(save);
 }
 
 function printLoginError(msg: string) {
@@ -424,7 +439,7 @@ function addFlower() {
     var fd: FormData = new FormData();
     for (let element of form.elements) {
         if (element instanceof HTMLInputElement || element instanceof HTMLSelectElement) {
-            fd.append(element.name, element.type == "file" ? (<any>element).files[0] : (<any>element).value);
+            fd.append(element.name, element.type === "file" ? (<any>element).files[0] : (<any>element).value);
         }
     }
     $.ajax({
@@ -456,7 +471,7 @@ function addFlowerToPage(flower: Flower): null | JQuery<HTMLElement> {
     (<any>flowerDiv.find("img")[0]).src = flower.img;
     flowerDiv.find("th")[0].innerText = flower.name;
     flowerDiv.find("th")[1].innerText = flower.family;
-    //flowerDiv.show();
+    // flowerDiv.show();
     $(flowerDiv.find("th")[2]).text(flower.colorDesc).attr("background-color", flower.color)
         .attr("color", invertColor(flower.color));
     $("#catalog").append(flowerDiv);
@@ -464,7 +479,7 @@ function addFlowerToPage(flower: Flower): null | JQuery<HTMLElement> {
 }
 
 function invertColor(hex: string) {
-    if (hex.indexOf('#') === 0) {
+    if (hex.indexOf("#") === 0) {
         hex = hex.slice(1);
     }
     // convert 3-digit hex to 6-digits.
@@ -472,31 +487,37 @@ function invertColor(hex: string) {
         hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
     }
     if (hex.length !== 6) {
-        throw new Error('Invalid HEX color.');
+        throw new Error("Invalid HEX color.");
     }
     var r = parseInt(hex.slice(0, 2), 16),
         g = parseInt(hex.slice(2, 4), 16),
         b = parseInt(hex.slice(4, 6), 16);
     // http://stackoverflow.com/a/3943023/112731
     return (r * 0.299 + g * 0.587 + b * 0.114) > 186
-        ? '#000000'
-        : '#FFFFFF';
+        ? "#000000"
+        : "#FFFFFF";
 
 }
 
 
-function addFlowerImageChanged(files : FileList){
-    if(files.length <= 0){
+function addFlowerImageChanged(files: FileList) {
+    if (files.length <= 0) {
         return;
     }
- $("#add-flower-image-button").hide();
- $("#add-flower-success").show("highlight")
- .contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(files.item(0).name);
+    $("#add-flower-image-button").hide();
+    $("#add-flower-success").show("highlight")
+        .contents().filter(function () { return this.nodeType === 3; }).first().replaceWith(files.item(0).name);
 
 }
 
-function addFlowerRemoveSelectedImage(){
+function addFlowerRemoveSelectedImage() {
     $("#add-flower-success").hide();
     $("#add-flower-image-button").show("fade");
     $("#add-flower-image").val("");
+}
+
+function userTypeChanged() {
+    let form = $("#signup-form");
+    let userType = form.find("[name='className']").val();
+    form.find("[name='branchID']").prop("disabled", userType !== "Provider");
 }

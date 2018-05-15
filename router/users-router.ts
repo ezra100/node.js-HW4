@@ -12,7 +12,7 @@ router.get("/", async function (req, res) {
     var client = await db.findUser(req.query.clientUserName);
     var filter = req.query.filter;
     var usersPromise: Promise<User[]> =
-        db.getUsers(client.className === Manager.className ? null /* = any type*/ : [Customer, Provider], filter);
+        db.getUsers(client.className === Manager.name ? null /* = any type*/ : [Customer, Provider], filter);
     res.json(await usersPromise);
 });
 

@@ -19,13 +19,16 @@ const flowersRouter = require("./router/flowers-router");
 const resRouter = require("./router/profile-router");
 const DBFactory_1 = require("./DataBase/DBFactory");
 const types_1 = require("./types");
+const session = require("express-session");
+let secret = "atgasdv82aergfnsg";
 var app = express();
 var db = DBFactory_1.DBFactory.getDB();
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cookieParser());
+app.use(cookieParser(secret));
+app.use(session({ secret }));
 // set the view engine to ejs
 app.set("view engine", "ejs");
 app.use("/users", usersRouter.router);
@@ -41,13 +44,9 @@ app.post("/login", function (req, res) {
         var clientUserName = req.body.clientUserName;
         var password = req.body.password;
         var user = yield db.findUser(clientUserName);
-        if (!user) {
-            res.status(400);
-            res.end();
-            return;
-        }
-        if (user.password === password) {
-            res.cookie("userName", user.userName);
+        if (user && user.password === password) {
+            req.session.userName = user.userName;
+            req.session.userType = user.className;
             res.status(200).json({ userType: user.className });
         }
         else {
@@ -56,18 +55,47 @@ app.post("/login", function (req, res) {
         }
     });
 });
+app.post("/logout", function (req, res) {
+    delete req.session.userName;
+    delete req.session.userType;
+    res.end();
+});
 app.post(/\/ajax\/*/i, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var user = yield db.findUser(req.cookies.userName);
+        var user = yield db.findUser(req.session.userName);
         res.render(req.url.substring(1), { query: req.body, Color: types_1.Color, user: user, data: { flowers: yield db.getFlowers() } });
     });
 });
 // redirecting form the home page to login page
 app.get("/", function (req, res) {
-    res.redirect(301, "/login");
+    // temporary redirect, we don't want it to be cached in the browser after a shutdown
+    res.redirect(307, "/login");
 });
-app.get("/login", function (req, res) {
+app.get(["/login", "/index"], function (req, res) {
     res.render("login", { flowers: db.getFlowers() });
+});
+let userProperties = [
+    "address",
+    "userName",
+    "firstName",
+    "lastName",
+    "password",
+    "email",
+    "gender",
+    "className"
+];
+app.post("/signup", function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let user = {};
+        for (let key of userProperties) {
+            user[key] = req.body[key];
+        }
+        if (user.className === types_1.Provider.name) {
+            user.branchID = req.body.branchID;
+        }
+        user = yield db.addUser(user);
+        res.render("signup-success", { user });
+    });
 });
 exports.default = app;
 //# sourceMappingURL=app.js.map

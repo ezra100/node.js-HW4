@@ -30,7 +30,7 @@ var profileLocatoin: string = path.join(__dirname, "../res/profile-images/");
 
 // returns the user's profile image image
 router.get("/profile-image", async function (req, res) {
-    var user = req.cookies && req.cookies.userName && await db.findUser(req.cookies.userName).catch(console.error);
+    var user = req.session.userName && await db.findUser(req.session.userName).catch(console.error);
     if (user && user.image) {
         var imgPath = path.join(profileLocatoin, user.image);
         if (fs.existsSync(imgPath)) {
@@ -43,7 +43,7 @@ router.get("/profile-image", async function (req, res) {
 
 // uploads an image from the client (via form)
 router.post("/profile-image", /*upload.any(), */ function (req, res) {
-    var userName = req.cookies && req.cookies.userName;
+    var userName = req.session.userName;
     db.updateUserById(userName, { image: (<any>req.files)[0].filename });
     res.end();
 });
