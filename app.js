@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//#region import
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const crypto = require("crypto");
 const usersRouter = require("./router/users-router");
 const branchesRouter = require("./router/branches-router");
 const flowersRouter = require("./router/flowers-router");
@@ -20,6 +22,10 @@ const resRouter = require("./router/profile-router");
 const DBFactory_1 = require("./DataBase/DBFactory");
 const types_1 = require("./types");
 const session = require("express-session");
+const passport = require("passport");
+const passport_local_1 = require("passport-local");
+//#endregion
+//#region initialize
 let secret = "atgasdv82aergfnsg";
 var app = express();
 var db = DBFactory_1.DBFactory.getDB();
@@ -28,42 +34,47 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser(secret));
+// this must become before loginRouter
 app.use(session({ secret }));
+passport.use(new passport_local_1.Strategy(function (username, password, cb) {
+    return __awaiter(this, void 0, void 0, function* () {
+        db.findUser(username).catch(cb).then((user) => {
+            if (user && user.password === password) {
+                return cb(null, user);
+            }
+            return cb(null, false, { message: "Wrong username or password" });
+        });
+    });
+}));
+passport.serializeUser(function (user, cb) {
+    cb(null, user.userName);
+});
+passport.deserializeUser(function (userName, cb) {
+    return __awaiter(this, void 0, void 0, function* () {
+        db.findUser(userName).catch(cb).then((user) => cb(null, user));
+    });
+});
+app.use(passport.initialize());
+app.use(passport.session());
 // set the view engine to ejs
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
 app.use("/users", usersRouter.router);
 app.use("/branches", branchesRouter.router);
 app.use("/flowers", flowersRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/res", resRouter.router);
+//#endregion
 app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
-app.post("/login", function (req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        var clientUserName = req.body.clientUserName;
-        var password = req.body.password;
-        var user = yield db.findUser(clientUserName);
-        if (user && user.password === password) {
-            req.session.userName = user.userName;
-            req.session.userType = user.className;
-            res.status(200).json({ userType: user.className });
-        }
-        else {
-            res.status(401);
-            res.end();
-        }
-    });
-});
 app.post("/logout", function (req, res) {
-    delete req.session.userName;
-    delete req.session.userType;
+    req.logout();
     res.end();
 });
 app.post(/\/ajax\/*/i, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var user = yield db.findUser(req.session.userName);
-        res.render(req.url.substring(1), { query: req.body, Color: types_1.Color, user: user, data: { flowers: yield db.getFlowers() } });
+        res.render(req.url.substring(1), { query: req.body, Color: types_1.Color, user: req.user, data: { flowers: yield db.getFlowers() } });
     });
 });
 // redirecting form the home page to login page
@@ -93,9 +104,29 @@ app.post("/signup", function (req, res) {
         if (user.className === types_1.Provider.name) {
             user.branchID = req.body.branchID;
         }
-        user = yield db.addUser(user);
+        // todo(?) validation here or on the DB
+        user = yield db.addUser(user).catch(function (reason) {
+            res.status(500).end("Failed to add user, reason: " + JSON.stringify(reason));
+        });
         res.render("signup-success", { user });
     });
 });
+app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
+    res.status(200).json({ userType: req.user.className });
+});
+function getRandomString(length) {
+    return crypto.randomBytes(Math.ceil(length / 2))
+        .toString("hex") /** convert to hexadecimal format */
+        .slice(0, length); /** return required number of characters */
+}
+function sha512(password, salt) {
+    var hash = crypto.createHmac("sha512", salt); /** Hashing algorithm sha512 */
+    hash.update(password);
+    var value = hash.digest("hex");
+    return {
+        salt: salt,
+        passwordHash: value
+    };
+}
 exports.default = app;
 //# sourceMappingURL=app.js.map

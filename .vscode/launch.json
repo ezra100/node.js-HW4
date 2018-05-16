@@ -14,8 +14,7 @@
                 "${workspaceFolder}/**/*.js"
             ],
             "sourceMaps": true,
-            "preLaunchTask": "build"    
-        }
+        },
         {
             "type": "node",
             "request": "launch",

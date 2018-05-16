@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const appX = require("../app");
 const debugModule = require("debug");
-const http = require("http");
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 let app = appX.default;
 let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
@@ -14,9 +16,13 @@ debug.enabled = true;
 var port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
-var server = http.createServer(app);
+var privateKey = fs.readFileSync(path.join(__dirname, "../cert/key.pem"), 'utf8');
+var certificate = fs.readFileSync(path.join(__dirname, "../cert/cert.pem"), 'utf8');
+var credentials = { key: privateKey, cert: certificate,
+    passphrase: "asdf" };
+let server = https.createServer(credentials, app);
 /**
  * Listen on provided port, on all network interfaces.
  */

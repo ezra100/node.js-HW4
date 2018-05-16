@@ -108,7 +108,7 @@ function init(): void {
         }
         ));
 }
- //init();
+// init();
 
 
 // bind connection to error event (to get notification of connection errors)
@@ -181,7 +181,6 @@ export class MongoDB implements IDataBase {
             });
         });
     }
-    
     //#region users
     // todo: return the users as a user object(?)
     getUsers(types?: any[], filter?: any): Promise<User[]> {

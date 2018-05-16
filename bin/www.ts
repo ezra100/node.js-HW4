@@ -8,6 +8,9 @@
 import * as  appX from "../app";
 import * as debugModule from "debug";
 import * as http from "http";
+import * as https from "https";
+import * as fs from "fs";
+import * as path from "path";
 let app = appX.default;
 
 let debug=debugModule("hw5:server");
@@ -22,10 +25,15 @@ var port : number | string | boolean = normalizePort(process.env.PORT || "3000")
 app.set("port", port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
+var privateKey  = fs.readFileSync( path.join(__dirname,"../cert/key.pem"), 'utf8');
+var certificate = fs.readFileSync(path.join(__dirname,"../cert/cert.pem"), 'utf8');
 
-var server : http.Server = http.createServer(app);
+var credentials : https.ServerOptions = {key: privateKey, cert: certificate,
+passphrase : "asdf"};
+
+let server : https.Server = https.createServer(credentials,  app);
 
 /**
  * Listen on provided port, on all network interfaces.

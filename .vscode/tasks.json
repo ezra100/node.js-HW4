@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "tsc -p tsconfig.json",
+            "command": "date && tsc -p tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
