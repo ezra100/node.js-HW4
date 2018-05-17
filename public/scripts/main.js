@@ -1,4 +1,12 @@
 // tslint:disable: typedef interface-name
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var clientUserName;
 var clientUserType;
 $(function () {
@@ -8,36 +16,52 @@ $(function () {
         postLogin();
     }
 });
+function sha512(password, salt) {
+    var shaObj = new jsSHA("SHA-512", "TEXT");
+    shaObj.setHMACKey(salt, "TEXT");
+    shaObj.update(password);
+    return shaObj.getHMAC("HEX");
+}
 function doLogin() {
-    let form = $("#login-form");
-    clientUserName = form.find("[name='username']").val();
-    var data = {
-        "clientUserName": form.find("[name='username']").val(),
-        "password": form.find("[name='password']").val()
-    };
-    $.ajax({
-        url: "/login",
-        data: data,
-        async: true,
-        type: "POST",
-        error: (xhr, status, err) => {
-            switch (xhr.status) {
-                case 400:
-                    printLoginError("User with corresponding user-name not found");
-                    break;
-                case 401:
-                    printLoginError("Wrong Password");
+    return __awaiter(this, void 0, void 0, function* () {
+        let form = $("#login-form");
+        clientUserName = form.find("[name='username']").val();
+        let password = form.find("[name='password']").val();
+        let salts = yield $.ajax({
+            url: "/salts",
+            data: { user: { userName: clientUserName } },
+            type: "POST",
+            error: (xhr, status, err) => console.log(err)
+        });
+        let hashedPassword = sha512(sha512(password, salts.permSalt), salts.tempSalt);
+        var data = {
+            "clientUserName": form.find("[name='username']").val(),
+            "hashedPassword": hashedPassword
+        };
+        $.ajax({
+            url: "/login",
+            data: data,
+            async: true,
+            type: "POST",
+            error: (xhr, status, err) => {
+                switch (xhr.status) {
+                    case 400:
+                        printLoginError("User with corresponding user-name not found");
+                        break;
+                    case 401:
+                        printLoginError("Wrong Password");
+                }
+            },
+            success: function (data, status, xhr) {
+                if (xhr.status === 200) {
+                    clientUserType = data.userType;
+                    postLogin();
+                }
+                else {
+                    console.log("status is " + xhr.status);
+                }
             }
-        },
-        success: function (data, status, xhr) {
-            if (xhr.status === 200) {
-                clientUserType = data.userType;
-                postLogin();
-            }
-            else {
-                console.log("status is " + xhr.status);
-            }
-        }
+        });
     });
 }
 function postLogin() {
@@ -173,10 +197,12 @@ function initUsersGrid() {
             },
             insertItem: function (item) {
                 indicate("users-indicator", "loading");
+                let password = item.password;
+                delete item.password;
                 return $.ajax({
                     type: "POST",
                     url: "/users",
-                    data: { item },
+                    data: { item, password },
                     timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");

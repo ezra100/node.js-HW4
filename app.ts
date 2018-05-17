@@ -11,6 +11,7 @@ import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as crypto from "crypto";
 
+import {sha512, getRandomString, hashLength} from "./crypto";
 import * as usersRouter from "./router/users-router";
 import * as branchesRouter from "./router/branches-router";
 import * as flowersRouter from "./router/flowers-router";
@@ -20,6 +21,7 @@ import { User, Color, Flower, Customer, Manager, Employee, Provider } from "./ty
 import * as session from "express-session";
 import * as passport from "passport";
 import { Strategy } from "passport-local";
+import * as init from "./DataBase/initDB";
 //#endregion
 
 
@@ -35,11 +37,13 @@ app.use(cookieParser(secret));
 // this must become before loginRouter
 app.use(session({ secret }));
 
+let tempSecrets: { [userName: string]: string } = {};
 
 passport.use(new Strategy(
-    async function (username, password, cb) {
+    async function (username, hashedPassword, cb) {
         db.findUser(username).catch(cb).then((user) => {
-            if (user && user.password === password) {
+            if (user) {
+                let hashedPassword = sha512(user.hashedPassword, tempSecrets[username]);
                 return cb(null, user);
             }
             return cb(null, false, { message: "Wrong username or password" });
@@ -78,7 +82,7 @@ app.get("/favicon.ico", function (req, res) {
 
 
 app.post("/logout", function (req: Request, res) {
-    req.logout()
+    req.logout();
     res.end();
 });
 app.post(/\/ajax\/*/i, async function (req: Request, res) {
@@ -105,7 +109,6 @@ let userProperties: string[] = [
     "userName",
     "firstName",
     "lastName",
-    "password",
     "email",
     "gender",
     "className"
@@ -119,7 +122,7 @@ app.post("/signup", async function (req: Request, res) {
         user.branchID = req.body.branchID;
     }
     // todo(?) validation here or on the DB
-    user = await db.addUser(<User>user).catch(
+    user = await db.addUser(<User>user, req.body.password).catch(
         function (reason) {
             res.status(500).end("Failed to add user, reason: " + JSON.stringify(reason));
         }
@@ -134,19 +137,16 @@ app.post("/login",
     }
 );
 
-function getRandomString(length: number): string {
-    return crypto.randomBytes(Math.ceil(length / 2))
-        .toString("hex") /** convert to hexadecimal format */
-        .slice(0, length);   /** return required number of characters */
-}
-function sha512(password: string, salt: string): { salt: string, passwordHash: string } {
-    var hash = crypto.createHmac("sha512", salt); /** Hashing algorithm sha512 */
-    hash.update(password);
-    var value = hash.digest("hex");
-    return {
-        salt: salt,
-        passwordHash: value
-    };
-}
+app.post("/salts", async function (req, res) {
+    let username = req.body.user.username;
+    tempSecrets[username] = getRandomString(hashLength);
+    res.json(
+        {
+            tempSalt: tempSecrets[username],
+            permSalt: (await db.findUser(username)).salt
+        });
+});
+
+
 
 export default app;

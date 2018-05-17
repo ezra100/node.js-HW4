@@ -38,7 +38,8 @@ exports.router.put("/", function (req, res) {
 exports.router.post("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var user = helpers_1.helpers.objectToUser(req.body.item);
-        res.json(yield db.addUser(user));
+        let password = req.body.password;
+        res.json(yield db.addUser(user, password));
     });
 });
 /**

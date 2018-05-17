@@ -1,6 +1,7 @@
 // tslint:disable: typedef interface-name
 
 import { Flower } from "../../types";
+import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
 
 
 var clientUserName: string;
@@ -15,12 +16,34 @@ $(function () {
         postLogin();
     }
 });
-function doLogin() {
+
+function sha512(password: string, salt: string): string {
+    var shaObj = new jsSHA("SHA-512", "TEXT");
+    shaObj.setHMACKey(salt, "TEXT");
+    shaObj.update(password);
+    return shaObj.getHMAC("HEX");
+}
+async function doLogin() {
+
     let form = $("#login-form");
     clientUserName = <string>form.find("[name='username']").val();
+    let password: string = <string>form.find("[name='password']").val();
+
+    let salts: {
+        tempSalt: string
+        permSalt: string
+    } = await $.ajax({
+        url: "/salts",
+        data: { user: { userName: clientUserName } },
+        type: "POST",
+        error: (xhr, status, err) => console.log(err)
+    });
+
+    let hashedPassword = sha512(sha512(password, salts.permSalt), salts.tempSalt);
+
     var data = {
         "clientUserName": form.find("[name='username']").val(),
-        "password": form.find("[name='password']").val()
+        "hashedPassword": hashedPassword
     };
     $.ajax({
         url: "/login",
@@ -193,11 +216,12 @@ function initUsersGrid() {
             },
             insertItem: function (item: any) {
                 indicate("users-indicator", "loading");
-
+                let password = item.password;
+                delete item.password;
                 return $.ajax({
                     type: "POST",
                     url: "/users",
-                    data: { item },
+                    data: { item, password },
                     timeout: 5000,
                     success: () => {
                         indicate("users-indicator", "success");

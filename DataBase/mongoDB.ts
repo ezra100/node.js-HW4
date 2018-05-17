@@ -5,6 +5,7 @@ import { User, Flower, Branch, Customer, Manager, Provider } from "../types";
 // import the mongoose module
 import * as mongoose from "mongoose";
 import { resolve } from "dns";
+import { getRandomString, hashLength , sha512} from "../crypto";
 
 
 
@@ -27,11 +28,12 @@ let userSchema: mongoose.Schema = new Schema({
     firstName: String,
     lastName: String,
     userName: String,// key/id field
-    password: String,
+    hashedPassword: String,
     email: String,
     gender: Number,
     address: String,
-    image: String
+    image: String,
+    salt: String
 });
 userSchema.pre("save", function (next: Function): void {
     this._id = (<any>this).userName;
@@ -75,40 +77,7 @@ flowerSchema.pre("save", function (next: Function): void {
 let flowerModel: mongoose.Model<any> = mongoose.model("Flower", flowerSchema);
 //#endregion
 
-function init(): void {
-    // todo
-    users
-        .map((u) => new userModel(u))
-        .forEach((v) => v.save((err: Error, user: User) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log(user);
-        }
-        ));
-    branches
-        .map((u) => new branchModel(u))
-        .forEach((v) => v.save((err: Error, branch: Branch) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log(branch);
-        }
-        ));
-    flowers
-        .map((u) => new flowerModel(u))
-        .forEach((v) => v.save((err: Error, flower: Flower) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log(flower);
-        }
-        ));
-}
-// init();
+
 
 
 // bind connection to error event (to get notification of connection errors)
@@ -274,7 +243,12 @@ export class MongoDB implements IDataBase {
             });
         });
     }
-    addUser(user: User): Promise<User | null> {
+    addUser(user: User, password : string): Promise<User | null> {
+        if (user.salt) {
+            console.warn("Overriding salt for " + user.userName + ", previous salt: " +user.salt);
+        }
+        user.salt = getRandomString(hashLength);
+        user.hashedPassword = sha512(password, user.salt);
         return new Promise(
             (resolve, reject) => {
                 let userDoc: any = new userModel(user);

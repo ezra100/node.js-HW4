@@ -14,7 +14,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
+const crypto_1 = require("./crypto");
 const usersRouter = require("./router/users-router");
 const branchesRouter = require("./router/branches-router");
 const flowersRouter = require("./router/flowers-router");
@@ -36,10 +36,12 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser(secret));
 // this must become before loginRouter
 app.use(session({ secret }));
-passport.use(new passport_local_1.Strategy(function (username, password, cb) {
+let tempSecrets = {};
+passport.use(new passport_local_1.Strategy(function (username, hashedPassword, cb) {
     return __awaiter(this, void 0, void 0, function* () {
         db.findUser(username).catch(cb).then((user) => {
-            if (user && user.password === password) {
+            if (user) {
+                let hashedPassword = crypto_1.sha512(user.hashedPassword, tempSecrets[username]);
                 return cb(null, user);
             }
             return cb(null, false, { message: "Wrong username or password" });
@@ -90,7 +92,6 @@ let userProperties = [
     "userName",
     "firstName",
     "lastName",
-    "password",
     "email",
     "gender",
     "className"
@@ -105,7 +106,7 @@ app.post("/signup", function (req, res) {
             user.branchID = req.body.branchID;
         }
         // todo(?) validation here or on the DB
-        user = yield db.addUser(user).catch(function (reason) {
+        user = yield db.addUser(user, req.body.password).catch(function (reason) {
             res.status(500).end("Failed to add user, reason: " + JSON.stringify(reason));
         });
         res.render("signup-success", { user });
@@ -114,19 +115,14 @@ app.post("/signup", function (req, res) {
 app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
     res.status(200).json({ userType: req.user.className });
 });
-function getRandomString(length) {
-    return crypto.randomBytes(Math.ceil(length / 2))
-        .toString("hex") /** convert to hexadecimal format */
-        .slice(0, length); /** return required number of characters */
-}
-function sha512(password, salt) {
-    var hash = crypto.createHmac("sha512", salt); /** Hashing algorithm sha512 */
-    hash.update(password);
-    var value = hash.digest("hex");
-    return {
-        salt: salt,
-        passwordHash: value
-    };
-}
+app.post("/salts", function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        tempSecrets[req.body.user.username] = crypto_1.getRandomString(crypto_1.hashLength);
+        res.json({
+            tempSalt: tempSecrets[req.user.userName],
+            permSalt: (yield db.findUser(req.user.userName)).salt
+        });
+    });
+});
 exports.default = app;
 //# sourceMappingURL=app.js.map

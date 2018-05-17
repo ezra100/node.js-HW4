@@ -11,9 +11,13 @@ import * as http from "http";
 import * as https from "https";
 import * as fs from "fs";
 import * as path from "path";
+import * as express from "express";
+import * as httpolyglot from "httpolyglot";
 let app = appX.default;
 
-let debug=debugModule("hw5:server");
+
+
+let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
 debug.enabled = true;
 
@@ -21,19 +25,29 @@ debug.enabled = true;
  * Get port from environment and store in Express.
  */
 
-var port : number | string | boolean = normalizePort(process.env.PORT || "3000");
+var port: number | string | boolean = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
+
+
 
 /**
  * Create HTTPS server.
  */
-var privateKey  = fs.readFileSync( path.join(__dirname,"../cert/key.pem"), 'utf8');
-var certificate = fs.readFileSync(path.join(__dirname,"../cert/cert.pem"), 'utf8');
+var privateKey = fs.readFileSync(path.join(__dirname, "../cert/key.pem"), "utf8");
+var certificate = fs.readFileSync(path.join(__dirname, "../cert/cert.pem"), "utf8");
 
-var credentials : https.ServerOptions = {key: privateKey, cert: certificate,
-passphrase : "asdf"};
+var credentials: https.ServerOptions = {
+    key: privateKey, cert: certificate,
+    passphrase: "asdf"
+};
 
-let server : https.Server = https.createServer(credentials,  app);
+let server: https.Server = httpolyglot.createServer(credentials, function (req, res) {
+    if (!(<any>req.socket).encrypted) {
+        res.writeHead(301, { "Location": "https://" + req.headers.host + req.url });
+        return res.end();
+    }
+    app(req, res);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -67,12 +81,12 @@ function normalizePort(val: string): number | boolean | string {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error : any) {
+function onError(error: any) {
     if (error.syscall !== "listen") {
         throw error;
     }
 
-    var bind : string = typeof port === "string"
+    var bind: string = typeof port === "string"
         ? "Pipe " + port
         : "Port " + port;
 

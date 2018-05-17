@@ -30,7 +30,8 @@ router.put("/", async function (req, res) {
  */
 router.post("/", async function (req, res) {
     var user = helpers.objectToUser(req.body.item);
-    res.json(await db.addUser(user));
+    let password = req.body.password;
+    res.json(await db.addUser(user, password));
 });
 /**
  * delete user

@@ -12,11 +12,12 @@ export abstract class User {
     firstName: string;
     lastName: string;
     userName: string; // key/id field
-    password: string;
+    hashedPassword: string;
     email: string;
     gender: Gender;
     address: string;
     image? : string;
+    salt : string;
     public constructor(init?: Partial<User>) {
         // console.assert(!User.findByUserName(init.userName));
         Object.assign(this, init);

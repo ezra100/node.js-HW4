@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const data_1 = require("./data");
 // import the mongoose module
 const mongoose = require("mongoose");
+const crypto_1 = require("../crypto");
 // set up default mongoose connection
 var connectionString = "mongodb://127.0.0.1/flowersPP";
 mongoose.connect(connectionString);
@@ -17,11 +17,12 @@ let userSchema = new Schema({
     firstName: String,
     lastName: String,
     userName: String,
-    password: String,
+    hashedPassword: String,
     email: String,
     gender: Number,
     address: String,
-    image: String
+    image: String,
+    salt: String
 });
 userSchema.pre("save", function (next) {
     this._id = this.userName;
@@ -59,37 +60,6 @@ flowerSchema.pre("save", function (next) {
 });
 let flowerModel = mongoose.model("Flower", flowerSchema);
 //#endregion
-function init() {
-    // todo
-    data_1.users
-        .map((u) => new userModel(u))
-        .forEach((v) => v.save((err, user) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log(user);
-    }));
-    data_1.branches
-        .map((u) => new branchModel(u))
-        .forEach((v) => v.save((err, branch) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log(branch);
-    }));
-    data_1.flowers
-        .map((u) => new flowerModel(u))
-        .forEach((v) => v.save((err, flower) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log(flower);
-    }));
-}
-// init();
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 class MongoDB {
@@ -236,7 +206,12 @@ class MongoDB {
             });
         });
     }
-    addUser(user) {
+    addUser(user, password) {
+        if (user.salt) {
+            console.warn("Overriding salt for " + user.userName + ", previous salt: " + user.salt);
+        }
+        user.salt = crypto_1.getRandomString(crypto_1.hashLength);
+        user.hashedPassword = crypto_1.sha512(password, user.salt);
         return new Promise((resolve, reject) => {
             let userDoc = new userModel(user);
             userDoc.save((err, user) => {

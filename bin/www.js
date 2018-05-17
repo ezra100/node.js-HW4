@@ -3,9 +3,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const appX = require("../app");
 const debugModule = require("debug");
-const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const httpolyglot = require("httpolyglot");
 let app = appX.default;
 let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
@@ -18,11 +18,19 @@ app.set("port", port);
 /**
  * Create HTTPS server.
  */
-var privateKey = fs.readFileSync(path.join(__dirname, "../cert/key.pem"), 'utf8');
-var certificate = fs.readFileSync(path.join(__dirname, "../cert/cert.pem"), 'utf8');
-var credentials = { key: privateKey, cert: certificate,
-    passphrase: "asdf" };
-let server = https.createServer(credentials, app);
+var privateKey = fs.readFileSync(path.join(__dirname, "../cert/key.pem"), "utf8");
+var certificate = fs.readFileSync(path.join(__dirname, "../cert/cert.pem"), "utf8");
+var credentials = {
+    key: privateKey, cert: certificate,
+    passphrase: "asdf"
+};
+let server = httpolyglot.createServer(credentials, function (req, res) {
+    if (!req.socket.encrypted) {
+        res.writeHead(301, { "Location": "https://" + req.headers.host + req.url });
+        return res.end();
+    }
+    app(req, res);
+});
 /**
  * Listen on provided port, on all network interfaces.
  */

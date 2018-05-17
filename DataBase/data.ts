@@ -11,7 +11,7 @@ export var users: User[] = [
         "email": "stipper0@cafepress.com",
         "gender": Gender.Female,
         "address": "9 Continental Trail",
-        "password": "asdff"
+        "hashedPassword": "asdff",
     }), new Customer({
         "userName": "Rolland",
         "firstName": "Rolland",
@@ -19,7 +19,7 @@ export var users: User[] = [
         "email": "rbright1@yelp.com",
         "gender": Gender.Male,
         "address": "97 Mandrake Center",
-        "password": "asdf1234"
+        "hashedPassword": "asdf1234"
     }), new Customer({
         "userName": "Roderigo",
         "firstName": "Roderigo",
@@ -27,7 +27,7 @@ export var users: User[] = [
         "email": "rdomegan2@about.com",
         "gender": Gender.Male,
         "address": "9 Anzinger Way",
-        "password": "asdf"
+        "hashedPassword": "asdf"
     }), new Customer({
         "userName": "Dalston",
         "firstName": "Dalston",
@@ -35,7 +35,7 @@ export var users: User[] = [
         "email": "dbannester3@nsw.gov.au",
         "gender": Gender.Male,
         "address": "84 Nobel Lane",
-        "password": "fdsa"
+        "hashedPassword": "fdsa"
     }), new Customer({
         "userName": "Wilie",
 
@@ -44,7 +44,7 @@ export var users: User[] = [
         "email": "wnuss4@java.com",
         "gender": Gender.Female,
         "address": "1 Lien Place",
-        "password": "asdf1234"
+        "hashedPassword": "asdf1234"
     }), new Employee({
         "userName": "Aldo",
 
@@ -54,7 +54,7 @@ export var users: User[] = [
         "email": "ablackett5@vkontakte.ru",
         "gender": Gender.Male,
         "address": "14203 Thierer Crossing",
-        "password": "asdf4"
+        "hashedPassword": "asdf4"
     }), new Employee({
         "userName": "Raimund",
 
@@ -64,7 +64,7 @@ export var users: User[] = [
         "email": "rvink6@baidu.com",
         "gender": Gender.Male,
         "address": "30239 Gale Place",
-        "password": "fff"
+        "hashedPassword": "fff"
     }), new Employee({
         "userName": "Niki",
         "branchID": 2,
@@ -73,7 +73,7 @@ export var users: User[] = [
         "email": "nwedgwood7@merriam-webster.com",
         "gender": Gender.Male,
         "address": "5 Tony Pass",
-        "password": "assss"
+        "hashedPassword": "assss"
     }), new Manager({
         "branchID": 1,
         "userName": "Karine",
@@ -82,7 +82,7 @@ export var users: User[] = [
         "email": "kbolsteridge8@exblog.jp",
         "gender": Gender.Female,
         "address": "3654 Hanover Street",
-        "password": "sdfsdf"
+        "hashedPassword": "sdfsdf"
     }), new Manager({
         "branchID": 5,
         "userName": "Norman",
@@ -91,7 +91,7 @@ export var users: User[] = [
         "email": "nbradnam9@cornell.edu",
         "gender": Gender.Male,
         "address": "3179 Cascade Court",
-        "password": "aaa123"
+        "hashedPassword": "aaa123"
     }), new Employee({
         "branchID": 4,
         "userName": "Erich",
@@ -100,7 +100,7 @@ export var users: User[] = [
         "email": "elippitta@altervista.org",
         "gender": Gender.Male,
         "address": "147 Fieldstone Hill",
-        "password": "fff564"
+        "hashedPassword": "fff564"
     }), new Customer({
         "firstName": "Crawford",
         "userName": "Crawford",
@@ -108,7 +108,7 @@ export var users: User[] = [
         "email": "ccooksleyb@slashdot.org",
         "gender": Gender.Male,
         "address": "84336 Beilfuss Alley",
-        "password": "fdsa123"
+        "hashedPassword": "fdsa123"
     }), new Customer({
         "firstName": "Armando",
         "userName": "Armando",
@@ -116,7 +116,7 @@ export var users: User[] = [
         "email": "asharkeyc@cnbc.com",
         "gender": Gender.Male,
         "address": "3 Sloan Crossing",
-        "password": "fdas"
+        "hashedPassword": "fdas"
     }), new Customer({
         "userName": "Fredericka",
         "firstName": "Fredericka",
@@ -124,7 +124,7 @@ export var users: User[] = [
         "email": "fcrossgroved@shareasale.com",
         "gender": Gender.Female,
         "address": "45 Sloan Lane",
-        "password": "456852"
+        "hashedPassword": "456852"
     }), new Employee({
         "userName": "Paxton",
 
@@ -133,7 +133,7 @@ export var users: User[] = [
         "email": "peisake@reddit.com",
         "gender": Gender.Male,
         "address": "81305 Chive Park",
-        "password": "1111"
+        "hashedPassword": "1111"
     })];
 
 export var flowers: Flower[] = [
