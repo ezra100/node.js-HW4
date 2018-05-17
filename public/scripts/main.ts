@@ -34,7 +34,7 @@ async function doLogin() {
         permSalt: string
     } = await $.ajax({
         url: "/salts",
-        data: { user: { userName: clientUserName } },
+        data: { user: { username: clientUserName } },
         type: "POST",
         error: (xhr, status, err) => console.log(err)
     });
@@ -142,7 +142,7 @@ function initUsersGrid() {
         { name: "firstName", title: "First Name", type: "text", width: 90 },
         { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
-        { name: "userName", editing: false, title: "User Name", type: "text", width: 120 },
+        { name: "username", editing: false, title: "User Name", type: "text", width: 120 },
         { name: "email", title: "Email", type: "text", width: 200 },
         {
             name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id",
@@ -195,7 +195,7 @@ function initUsersGrid() {
         rowClick: () => { },
         rowClass: "",
         rowDoubleClick: (args: JsGrid.JsGridArgs) => { $("#users-grid").jsGrid("editItem", args.item); },
-        deleteConfirm: (item: any) => "Do you really want to delete " + item.userName + "?",
+        deleteConfirm: (item: any) => "Do you really want to delete " + item.username + "?",
         controller: {
             loadData: function (filter: any) {
                 indicate("users-indicator", "loading");

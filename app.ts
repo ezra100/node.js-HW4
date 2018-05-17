@@ -37,7 +37,7 @@ app.use(cookieParser(secret));
 // this must become before loginRouter
 app.use(session({ secret }));
 
-let tempSecrets: { [userName: string]: string } = {};
+let tempSecrets: { [username: string]: string } = {};
 
 passport.use(new Strategy(
     async function (username, hashedPassword, cb) {
@@ -51,11 +51,11 @@ passport.use(new Strategy(
     }));
 
 passport.serializeUser(function (user: User, cb) {
-    cb(null, user.userName);
+    cb(null, user.username);
 });
 
-passport.deserializeUser(async function (userName: string, cb) {
-    db.findUser(userName).catch(cb).then(
+passport.deserializeUser(async function (username: string, cb) {
+    db.findUser(username).catch(cb).then(
         (user) =>
             cb(null, <User>user)
     );
@@ -106,7 +106,7 @@ app.get(["/login", "/index"], function (req, res) {
 
 let userProperties: string[] = [
     "address",
-    "userName",
+    "username",
     "firstName",
     "lastName",
     "email",

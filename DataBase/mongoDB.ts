@@ -27,7 +27,7 @@ let userSchema: mongoose.Schema = new Schema({
     className: String,
     firstName: String,
     lastName: String,
-    userName: String,// key/id field
+    username: String,// key/id field
     hashedPassword: String,
     email: String,
     gender: Number,
@@ -36,7 +36,7 @@ let userSchema: mongoose.Schema = new Schema({
     salt: String
 });
 userSchema.pre("save", function (next: Function): void {
-    this._id = (<any>this).userName;
+    this._id = (<any>this).username;
     next();
 });
 let userModel: mongoose.Model<any> = mongoose.model("User", userSchema);
@@ -206,10 +206,10 @@ export class MongoDB implements IDataBase {
             }
         );
     }
-    findUser(userName: string): Promise<User | null> {
+    findUser(username: string): Promise<User | null> {
         return new Promise<User | null>(
             (resolve, reject) => {
-                userModel.findById(userName, (err: Error, user: User) => {
+                userModel.findById(username, (err: Error, user: User) => {
                     if (err) {
                         reject(err);
                         return;
@@ -221,7 +221,7 @@ export class MongoDB implements IDataBase {
     }
     updateUser(user: User): Promise<User | null> {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(user.userName, user, (err: Error, oldUser: User) => {
+            userModel.findByIdAndUpdate(user.username, user, (err: Error, oldUser: User) => {
                 if (err) {
                     reject(err);
                     return;
@@ -231,9 +231,9 @@ export class MongoDB implements IDataBase {
             });
         });
     }
-    updateUserById(userName: string, update: Partial<User>): Promise<User> {
+    updateUserById(username: string, update: Partial<User>): Promise<User> {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(userName, update, (err: Error, oldUser: User) => {
+            userModel.findByIdAndUpdate(username, update, (err: Error, oldUser: User) => {
                 if (err) {
                     reject(err);
                     return;
@@ -245,7 +245,7 @@ export class MongoDB implements IDataBase {
     }
     addUser(user: User, password : string): Promise<User | null> {
         if (user.salt) {
-            console.warn("Overriding salt for " + user.userName + ", previous salt: " +user.salt);
+            console.warn("Overriding salt for " + user.username + ", previous salt: " +user.salt);
         }
         user.salt = getRandomString(hashLength);
         user.hashedPassword = sha512(password, user.salt);
@@ -264,7 +264,7 @@ export class MongoDB implements IDataBase {
     }
     deleteUser(user: User): Promise<User | null> {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndRemove(user.userName, (err: Error, user: User) => {
+            userModel.findByIdAndRemove(user.username, (err: Error, user: User) => {
                 if (err) {
                     reject(err);
                     return;

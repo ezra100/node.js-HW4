@@ -11,7 +11,7 @@ export abstract class User {
     className: string = User.name;
     firstName: string;
     lastName: string;
-    userName: string; // key/id field
+    username: string; // key/id field
     hashedPassword: string;
     email: string;
     gender: Gender;
@@ -19,14 +19,14 @@ export abstract class User {
     image? : string;
     salt : string;
     public constructor(init?: Partial<User>) {
-        // console.assert(!User.findByUserName(init.userName));
+        // console.assert(!User.findByUserName(init.username));
         Object.assign(this, init);
     }
     compare(other: User): boolean {
-        return this.userName.toLowerCase() === other.userName.toLowerCase();
+        return this.username.toLowerCase() === other.username.toLowerCase();
     }
-    compareByUserName(userName: string): boolean {
-        return this.userName.toLowerCase() === userName.toLowerCase();
+    compareByUserName(username: string): boolean {
+        return this.username.toLowerCase() === username.toLowerCase();
     }
 }
 
