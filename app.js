@@ -24,8 +24,10 @@ const types_1 = require("./types");
 const session = require("express-session");
 const passport = require("passport");
 const passport_local_1 = require("passport-local");
+const initDB_1 = require("./DataBase/initDB");
 //#endregion
 //#region initialize
+initDB_1.initDB();
 let secret = "atgasdv82aergfnsg";
 var app = express();
 var db = DBFactory_1.DBFactory.getDB();
@@ -37,23 +39,25 @@ app.use(cookieParser(secret));
 // this must become before loginRouter
 app.use(session({ secret }));
 let tempSecrets = {};
-passport.use(new passport_local_1.Strategy(function (username, hashedPassword, cb) {
+passport.use(new passport_local_1.Strategy(function (username, password, cb) {
     return __awaiter(this, void 0, void 0, function* () {
         db.findUser(username).catch(cb).then((user) => {
             if (user) {
                 let hashedPassword = crypto_1.sha512(user.hashedPassword, tempSecrets[username]);
-                return cb(null, user);
+                if (hashedPassword === password) {
+                    return cb(null, user);
+                }
             }
             return cb(null, false, { message: "Wrong username or password" });
         });
     });
 }));
 passport.serializeUser(function (user, cb) {
-    cb(null, user.userName);
+    cb(null, user.username);
 });
-passport.deserializeUser(function (userName, cb) {
+passport.deserializeUser(function (username, cb) {
     return __awaiter(this, void 0, void 0, function* () {
-        db.findUser(userName).catch(cb).then((user) => cb(null, user));
+        db.findUser(username).catch(cb).then((user) => cb(null, user));
     });
 });
 app.use(passport.initialize());
@@ -89,7 +93,7 @@ app.get(["/login", "/index"], function (req, res) {
 });
 let userProperties = [
     "address",
-    "userName",
+    "username",
     "firstName",
     "lastName",
     "email",
@@ -112,15 +116,20 @@ app.post("/signup", function (req, res) {
         res.render("signup-success", { user });
     });
 });
-app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-    res.status(200).json({ userType: req.user.className });
+app.post("/login", passport.authenticate("local", { failureMessage: "wrong username or password" }), function (req, res) {
+    if (req.user) {
+        res.status(200).json({ userType: req.user.className });
+        return;
+    }
+    res.status(400).end("Wrong username or password");
 });
 app.post("/salts", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        tempSecrets[req.body.user.username] = crypto_1.getRandomString(crypto_1.hashLength);
+        let username = req.body.user.username;
+        tempSecrets[username] = crypto_1.getRandomString(crypto_1.hashLength);
         res.json({
-            tempSalt: tempSecrets[req.user.userName],
-            permSalt: (yield db.findUser(req.user.userName)).salt
+            tempSalt: tempSecrets[username],
+            permSalt: (yield db.findUser(username)).salt
         });
     });
 });

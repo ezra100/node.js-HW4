@@ -18,13 +18,12 @@
         {
             "label": "build public",
             "type": "shell",
-            "command": "tsc -p pubTSConfig.json",
+            "command": "cp ./types.ts ./public/scripts/types.ts &&  date && tsc -p pubTSConfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
             "group": "build",
-        }
- ,
+        },
         {
             "label": "build test",
             "type": "shell",

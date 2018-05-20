@@ -29,28 +29,22 @@ function doLogin() {
         let password = form.find("[name='password']").val();
         let salts = yield $.ajax({
             url: "/salts",
-            data: { user: { userName: clientUserName } },
-            type: "POST",
+            data: { user: { username: clientUserName } },
+            method: "POST",
             error: (xhr, status, err) => console.log(err)
         });
         let hashedPassword = sha512(sha512(password, salts.permSalt), salts.tempSalt);
         var data = {
-            "clientUserName": form.find("[name='username']").val(),
-            "hashedPassword": hashedPassword
+            "username": form.find("[name='username']").val(),
+            "password": hashedPassword
         };
         $.ajax({
             url: "/login",
             data: data,
             async: true,
-            type: "POST",
+            method: "POST",
             error: (xhr, status, err) => {
-                switch (xhr.status) {
-                    case 400:
-                        printLoginError("User with corresponding user-name not found");
-                        break;
-                    case 401:
-                        printLoginError("Wrong Password");
-                }
+                printLoginError(err);
             },
             success: function (data, status, xhr) {
                 if (xhr.status === 200) {
@@ -85,7 +79,7 @@ function postLogin() {
     $.ajax({
         url: "ajax/tab-panes",
         data: { clientUserName: clientUserName },
-        type: "POST",
+        method: "POST",
         async: true,
         success: function (data) {
             $("#nav-tabContent").append(data);
@@ -97,7 +91,7 @@ function postLogin() {
 function logout() {
     $.ajax({
         url: "/logout",
-        type: "POST",
+        method: "POST",
         success: function () {
             $(window).attr("location", "/login");
         }
@@ -129,7 +123,7 @@ function initUsersGrid() {
         { name: "firstName", title: "First Name", type: "text", width: 90 },
         { name: "lastName", title: "Last Name", type: "text", width: 90 },
         // user name can't be changed
-        { name: "userName", editing: false, title: "User Name", type: "text", width: 120 },
+        { name: "username", editing: false, title: "User Name", type: "text", width: 120 },
         { name: "email", title: "Email", type: "text", width: 200 },
         {
             name: "gender", title: "Gender", type: "select", items: genders, valueField: "Id",
@@ -176,13 +170,13 @@ function initUsersGrid() {
         rowClick: () => { },
         rowClass: "",
         rowDoubleClick: (args) => { $("#users-grid").jsGrid("editItem", args.item); },
-        deleteConfirm: (item) => "Do you really want to delete " + item.userName + "?",
+        deleteConfirm: (item) => "Do you really want to delete " + item.username + "?",
         controller: {
             loadData: function (filter) {
                 indicate("users-indicator", "loading");
                 var data = { filter: filter, clientUserName };
                 return $.ajax({
-                    type: "GET",
+                    method: "GET",
                     url: "/users",
                     data: data,
                     async: true,
@@ -489,5 +483,11 @@ function userTypeChanged() {
     let form = $("#signup-form");
     let userType = form.find("[name='className']").val();
     form.find("[name='branchID']").prop("disabled", userType !== "Provider");
+}
+function showResetEmail() {
+    let div = $("#password-reset-div");
+    div.find("[name='show-button']").hide();
+    div.find("[name='email-input']").show();
+    div.find("[name='send-button']").show();
 }
 //# sourceMappingURL=main.js.map

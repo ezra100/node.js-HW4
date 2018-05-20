@@ -10,6 +10,9 @@ export function initUsers(): void {
     users.forEach(function (user: User) {
         db.addUser(user, user.hashedPassword)
     });
+
+}
+
     // branches
     //     .map((u) => new branchModel(u))
     //     .forEach((v) => v.save((err: Error, branch: Branch) => {
@@ -30,12 +33,10 @@ export function initUsers(): void {
     //         console.log(flower);
     //     }
     //     ));
-}
 
 // here we decide if to init or not
-async function init() : Promise<void> {
+export async function initDB(): Promise<void> {
     if ((await db.getUsers()).length < 5) {
         initUsers();
     }
 }
-init();

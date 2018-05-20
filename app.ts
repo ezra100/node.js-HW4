@@ -11,7 +11,7 @@ import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as crypto from "crypto";
 
-import {sha512, getRandomString, hashLength} from "./crypto";
+import { sha512, getRandomString, hashLength } from "./crypto";
 import * as usersRouter from "./router/users-router";
 import * as branchesRouter from "./router/branches-router";
 import * as flowersRouter from "./router/flowers-router";
@@ -21,11 +21,12 @@ import { User, Color, Flower, Customer, Manager, Employee, Provider } from "./ty
 import * as session from "express-session";
 import * as passport from "passport";
 import { Strategy } from "passport-local";
-import * as init from "./DataBase/initDB";
+import { initDB } from "./DataBase/initDB";
 //#endregion
 
 
 //#region initialize
+initDB();
 let secret = "atgasdv82aergfnsg";
 var app = express();
 var db = DBFactory.getDB();
@@ -40,11 +41,13 @@ app.use(session({ secret }));
 let tempSecrets: { [username: string]: string } = {};
 
 passport.use(new Strategy(
-    async function (username, hashedPassword, cb) {
+    async function (username, password, cb) {
         db.findUser(username).catch(cb).then((user) => {
             if (user) {
                 let hashedPassword = sha512(user.hashedPassword, tempSecrets[username]);
-                return cb(null, user);
+                if (hashedPassword === password) {
+                    return cb(null, user);
+                }
             }
             return cb(null, false, { message: "Wrong username or password" });
         });
@@ -131,9 +134,13 @@ app.post("/signup", async function (req: Request, res) {
 });
 
 app.post("/login",
-    passport.authenticate("local", { failureRedirect: "/login" }),
-    (req, res) => {
-        res.status(200).json({ userType: req.user.className });
+    passport.authenticate("local", { failureMessage: "wrong username or password" }),
+    function (req, res) {
+        if (req.user) {
+            res.status(200).json({ userType: req.user.className });
+            return;
+        }
+        res.status(400).end("Wrong username or password");
     }
 );
 

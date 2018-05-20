@@ -19,7 +19,7 @@ interface OutputFormatOptions {
     b64Pad?: string;
 }
 
-interface jsSHA {
+declare class jsSHA {
     /**
      * jsSHA is the workhorse of the library.  Instantiate it with the string to
      * be hashed as the parameter
@@ -30,7 +30,7 @@ interface jsSHA {
      * @param {{encoding: (string|undefined), numRounds: (string|undefined)}=}
      *   options Optional values
      */
-    new(variant: string, inputFormat: string, options?: Options): jsSHA;
+    constructor(variant: string, inputFormat: string, options?: Options);
 
     /**
      * Sets the HMAC key for an eventual getHMAC call.  Must be called

@@ -1,6 +1,6 @@
 // tslint:disable: typedef interface-name
 
-import { Flower } from "../../types";
+import { Flower } from "./types";
 import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
 
 
@@ -35,29 +35,25 @@ async function doLogin() {
     } = await $.ajax({
         url: "/salts",
         data: { user: { username: clientUserName } },
-        type: "POST",
+        method: "POST",
         error: (xhr, status, err) => console.log(err)
     });
 
     let hashedPassword = sha512(sha512(password, salts.permSalt), salts.tempSalt);
 
     var data = {
-        "clientUserName": form.find("[name='username']").val(),
-        "hashedPassword": hashedPassword
+        "username": form.find("[name='username']").val(),
+        "password": hashedPassword
     };
     $.ajax({
         url: "/login",
         data: data,
         async: true,
-        type: "POST",
+        method: "POST",
         error: (xhr, status, err) => {
-            switch (xhr.status) {
-                case 400:
-                    printLoginError("User with corresponding user-name not found");
-                    break;
-                case 401:
-                    printLoginError("Wrong Password");
-            }
+
+            printLoginError(err);
+
         }
         ,
         success: function (data, status, xhr) {
@@ -94,7 +90,7 @@ function postLogin(): void {
     $.ajax({
         url: "ajax/tab-panes",
         data: { clientUserName: clientUserName },
-        type: "POST",
+        method: "POST",
         async: true,
         success: function (data: string): void {
             $("#nav-tabContent").append(data);
@@ -107,7 +103,7 @@ function postLogin(): void {
 function logout(): void {
     $.ajax({
         url: "/logout",
-        type: "POST",
+        method: "POST",
         success: function () {
             $(window).attr("location", "/login");
         }
@@ -201,7 +197,7 @@ function initUsersGrid() {
                 indicate("users-indicator", "loading");
                 var data = { filter: filter, clientUserName };
                 return $.ajax({
-                    type: "GET",
+                    method: "GET",
                     url: "/users",
                     data: data,
                     async: true,
@@ -544,4 +540,11 @@ function userTypeChanged() {
     let form = $("#signup-form");
     let userType = form.find("[name='className']").val();
     form.find("[name='branchID']").prop("disabled", userType !== "Provider");
+}
+
+function showResetEmail(){
+    let div = $("#password-reset-div");
+    div.find("[name='show-button']").hide();
+    div.find("[name='email-input']").show();
+    div.find("[name='send-button']").show();
 }

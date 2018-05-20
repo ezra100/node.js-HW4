@@ -5,7 +5,7 @@ const types_1 = require("../types");
 const url_1 = require("url");
 exports.users = [
     new types_1.Provider({
-        "userName": "Shelba",
+        "username": "Shelba",
         "firstName": "Shelba",
         "lastName": "Tipper",
         "email": "stipper0@cafepress.com",
@@ -13,7 +13,7 @@ exports.users = [
         "address": "9 Continental Trail",
         "hashedPassword": "asdff",
     }), new types_1.Customer({
-        "userName": "Rolland",
+        "username": "Rolland",
         "firstName": "Rolland",
         "lastName": "Bright",
         "email": "rbright1@yelp.com",
@@ -21,7 +21,7 @@ exports.users = [
         "address": "97 Mandrake Center",
         "hashedPassword": "asdf1234"
     }), new types_1.Customer({
-        "userName": "Roderigo",
+        "username": "Roderigo",
         "firstName": "Roderigo",
         "lastName": "Domegan",
         "email": "rdomegan2@about.com",
@@ -29,7 +29,7 @@ exports.users = [
         "address": "9 Anzinger Way",
         "hashedPassword": "asdf"
     }), new types_1.Customer({
-        "userName": "Dalston",
+        "username": "Dalston",
         "firstName": "Dalston",
         "lastName": "Bannester",
         "email": "dbannester3@nsw.gov.au",
@@ -37,7 +37,7 @@ exports.users = [
         "address": "84 Nobel Lane",
         "hashedPassword": "fdsa"
     }), new types_1.Customer({
-        "userName": "Wilie",
+        "username": "Wilie",
         "firstName": "Wilie",
         "lastName": "Nuss",
         "email": "wnuss4@java.com",
@@ -45,7 +45,7 @@ exports.users = [
         "address": "1 Lien Place",
         "hashedPassword": "asdf1234"
     }), new types_1.Employee({
-        "userName": "Aldo",
+        "username": "Aldo",
         "branchID": 5,
         "firstName": "Aldo",
         "lastName": "Blackett",
@@ -54,7 +54,7 @@ exports.users = [
         "address": "14203 Thierer Crossing",
         "hashedPassword": "asdf4"
     }), new types_1.Employee({
-        "userName": "Raimund",
+        "username": "Raimund",
         "branchID": 3,
         "firstName": "Raimund",
         "lastName": "Vink",
@@ -63,7 +63,7 @@ exports.users = [
         "address": "30239 Gale Place",
         "hashedPassword": "fff"
     }), new types_1.Employee({
-        "userName": "Niki",
+        "username": "Niki",
         "branchID": 2,
         "firstName": "Niki",
         "lastName": "Wedgwood",
@@ -73,7 +73,7 @@ exports.users = [
         "hashedPassword": "assss"
     }), new types_1.Manager({
         "branchID": 1,
-        "userName": "Karine",
+        "username": "Karine",
         "firstName": "Karine",
         "lastName": "Bolsteridge",
         "email": "kbolsteridge8@exblog.jp",
@@ -82,7 +82,7 @@ exports.users = [
         "hashedPassword": "sdfsdf"
     }), new types_1.Manager({
         "branchID": 5,
-        "userName": "Norman",
+        "username": "Norman",
         "firstName": "Norman",
         "lastName": "Bradnam",
         "email": "nbradnam9@cornell.edu",
@@ -91,7 +91,7 @@ exports.users = [
         "hashedPassword": "aaa123"
     }), new types_1.Employee({
         "branchID": 4,
-        "userName": "Erich",
+        "username": "Erich",
         "firstName": "Erich",
         "lastName": "Lippitt",
         "email": "elippitta@altervista.org",
@@ -100,7 +100,7 @@ exports.users = [
         "hashedPassword": "fff564"
     }), new types_1.Customer({
         "firstName": "Crawford",
-        "userName": "Crawford",
+        "username": "Crawford",
         "lastName": "Cooksley",
         "email": "ccooksleyb@slashdot.org",
         "gender": types_1.Gender.Male,
@@ -108,14 +108,14 @@ exports.users = [
         "hashedPassword": "fdsa123"
     }), new types_1.Customer({
         "firstName": "Armando",
-        "userName": "Armando",
+        "username": "Armando",
         "lastName": "Sharkey",
         "email": "asharkeyc@cnbc.com",
         "gender": types_1.Gender.Male,
         "address": "3 Sloan Crossing",
         "hashedPassword": "fdas"
     }), new types_1.Customer({
-        "userName": "Fredericka",
+        "username": "Fredericka",
         "firstName": "Fredericka",
         "lastName": "Crossgrove",
         "email": "fcrossgroved@shareasale.com",
@@ -123,7 +123,7 @@ exports.users = [
         "address": "45 Sloan Lane",
         "hashedPassword": "456852"
     }), new types_1.Employee({
-        "userName": "Paxton",
+        "username": "Paxton",
         "firstName": "Paxton",
         "lastName": "Eisak",
         "email": "peisake@reddit.com",

@@ -16,7 +16,7 @@ let userSchema = new Schema({
     className: String,
     firstName: String,
     lastName: String,
-    userName: String,
+    username: String,
     hashedPassword: String,
     email: String,
     gender: Number,
@@ -25,7 +25,7 @@ let userSchema = new Schema({
     salt: String
 });
 userSchema.pre("save", function (next) {
-    this._id = this.userName;
+    this._id = this.username;
     next();
 });
 let userModel = mongoose.model("User", userSchema);
@@ -122,10 +122,8 @@ class MongoDB {
     }
     //#region users
     // todo: return the users as a user object(?)
-    getUsers(types, filter) {
+    getUsers(types, filter = {}) {
         if (types) {
-            // if filter isn't defined yet, define it as an empty object
-            filter = filter || {};
             // types = types.map((v, i, a) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
             filter.className = new RegExp("^(" + types.map((clss) => clss.className).join("|") + ")$");
         }
@@ -171,9 +169,9 @@ class MongoDB {
             });
         });
     }
-    findUser(userName) {
+    findUser(username) {
         return new Promise((resolve, reject) => {
-            userModel.findById(userName, (err, user) => {
+            userModel.findById(username, (err, user) => {
                 if (err) {
                     reject(err);
                     return;
@@ -184,7 +182,7 @@ class MongoDB {
     }
     updateUser(user) {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(user.userName, user, (err, oldUser) => {
+            userModel.findByIdAndUpdate(user.username, user, (err, oldUser) => {
                 if (err) {
                     reject(err);
                     return;
@@ -194,9 +192,9 @@ class MongoDB {
             });
         });
     }
-    updateUserById(userName, update) {
+    updateUserById(username, update) {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(userName, update, (err, oldUser) => {
+            userModel.findByIdAndUpdate(username, update, (err, oldUser) => {
                 if (err) {
                     reject(err);
                     return;
@@ -208,7 +206,7 @@ class MongoDB {
     }
     addUser(user, password) {
         if (user.salt) {
-            console.warn("Overriding salt for " + user.userName + ", previous salt: " + user.salt);
+            console.warn("Overriding salt for " + user.username + ", previous salt: " + user.salt);
         }
         user.salt = crypto_1.getRandomString(crypto_1.hashLength);
         user.hashedPassword = crypto_1.sha512(password, user.salt);
@@ -225,7 +223,7 @@ class MongoDB {
     }
     deleteUser(user) {
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndRemove(user.userName, (err, user) => {
+            userModel.findByIdAndRemove(user.username, (err, user) => {
                 if (err) {
                     reject(err);
                     return;

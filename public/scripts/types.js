@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Gender;
+export var Gender;
 (function (Gender) {
     Gender[Gender["Male"] = 1] = "Male";
     Gender[Gender["Female"] = 2] = "Female";
-})(Gender = exports.Gender || (exports.Gender = {}));
-class User {
+})(Gender || (Gender = {}));
+export class User {
     constructor(init) {
         // used to remember the class type when the client sends back
         // the object for update/deletion/client type etc.
@@ -23,39 +21,34 @@ class User {
         return this.username.toLowerCase() === username.toLowerCase();
     }
 }
-exports.User = User;
-class Customer extends User {
+export class Customer extends User {
     constructor(init) {
         super(init);
         this.className = Customer.name;
     }
 }
-exports.Customer = Customer;
-class Provider extends User {
+export class Provider extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);
         this.className = Provider.name;
     }
 }
-exports.Provider = Provider;
-class Employee extends User {
+export class Employee extends User {
     constructor(init) {
         super(init);
         Object.assign(this, init);
         this.className = Employee.name;
     }
 }
-exports.Employee = Employee;
-class Manager extends Employee {
+export class Manager extends Employee {
     constructor(init) {
         super(init);
         Object.assign(this, init);
         this.className = Manager.name;
     }
 }
-exports.Manager = Manager;
-class Branch {
+export class Branch {
     constructor(init) {
         // ture by default
         this.active = true;
@@ -73,15 +66,13 @@ class Branch {
     }
 }
 Branch.id = 0;
-exports.Branch = Branch;
-class Flower {
+export class Flower {
     constructor(init) {
         Object.assign(this, init);
         this.color = colorMap[this.colorDesc];
     }
 }
-exports.Flower = Flower;
-var Color;
+export var Color;
 (function (Color) {
     Color["black"] = "black";
     Color["silver"] = "silver";
@@ -231,7 +222,7 @@ var Color;
     Color["whitesmoke"] = "whitesmoke";
     Color["yellowgreen"] = "yellowgreen";
     Color["rebeccapurple"] = "rebeccapurple";
-})(Color = exports.Color || (exports.Color = {}));
+})(Color || (Color = {}));
 const colorMap = {
     black: "#000000",
     silver: "#c0c0c0",

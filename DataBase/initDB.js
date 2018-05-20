@@ -16,35 +16,35 @@ function initUsers() {
     data_1.users.forEach(function (user) {
         db.addUser(user, user.hashedPassword);
     });
-    // branches
-    //     .map((u) => new branchModel(u))
-    //     .forEach((v) => v.save((err: Error, branch: Branch) => {
-    //         if (err) {
-    //             console.error(err);
-    //             return;
-    //         }
-    //         console.log(branch);
-    //     }
-    //     ));
-    // flowers
-    //     .map((u) => new flowerModel(u))
-    //     .forEach((v) => v.save((err: Error, flower: Flower) => {
-    //         if (err) {
-    //             console.error(err);
-    //             return;
-    //         }
-    //         console.log(flower);
-    //     }
-    //     ));
 }
 exports.initUsers = initUsers;
+// branches
+//     .map((u) => new branchModel(u))
+//     .forEach((v) => v.save((err: Error, branch: Branch) => {
+//         if (err) {
+//             console.error(err);
+//             return;
+//         }
+//         console.log(branch);
+//     }
+//     ));
+// flowers
+//     .map((u) => new flowerModel(u))
+//     .forEach((v) => v.save((err: Error, flower: Flower) => {
+//         if (err) {
+//             console.error(err);
+//             return;
+//         }
+//         console.log(flower);
+//     }
+//     ));
 // here we decide if to init or not
-function init() {
+function initDB() {
     return __awaiter(this, void 0, void 0, function* () {
         if ((yield db.getUsers()).length < 5) {
             initUsers();
         }
     });
 }
-init();
+exports.initDB = initDB;
 //# sourceMappingURL=initDB.js.map

@@ -1,0 +1,32 @@
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="login-form">
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" placeholder="User Name" required />
+                        <input type="password" name="password" class="form-control" placeholder="Password" required />
+                    </div>
+                </form>
+                <div class="row px-5" id="password-reset-div">
+                    <button type="button" class="btn py-0" name="show-button" onclick="showResetEmail();event.preventDefault();">I forgot my password</button>
+                    <input type="email" name="email-input" class="p-2" placeholder="Enter your email" style="display: none" required/>
+                    <button type="button" name="send-button" onclick="sendResetRequest();event.preventDefault();" style="display: none" class="btn btn-primary m-2">Submit</button>
+                </div>
+
+                <div id="modal-error-msg">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-block" id="login-button">Log In</button>
+            </div>
+        </div>
+    </div>
+</div>

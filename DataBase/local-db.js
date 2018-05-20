@@ -46,8 +46,8 @@ class LocalDB /*implements IDataBase*/ {
             return true;
         });
     }
-    findUser(userName) {
-        return data_1.users.find((user) => user.compareByUserName(userName));
+    findUser(username) {
+        return data_1.users.find((user) => user.compareByUserName(username));
     }
     updateUser(user) {
         var index = data_1.users.findIndex((u) => u.compare(user));
@@ -61,7 +61,7 @@ class LocalDB /*implements IDataBase*/ {
     addUser(user) {
         // check that the user doesn't exists yet
         if (data_1.users.findIndex((u) => u.compare(user)) >= 0) {
-            console.error("User" + user.userName + " already exists");
+            console.error("User" + user.username + " already exists");
             return null;
         }
         data_1.users.push(user);

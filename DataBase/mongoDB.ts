@@ -152,12 +152,10 @@ export class MongoDB implements IDataBase {
     }
     //#region users
     // todo: return the users as a user object(?)
-    getUsers(types?: any[], filter?: any): Promise<User[]> {
+    getUsers(types?: any[], filter: any = {}): Promise<User[]> {
 
 
         if (types) {
-            // if filter isn't defined yet, define it as an empty object
-            filter = filter || {};
             // types = types.map((v, i, a) => v.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
             filter.className = new RegExp("^(" + types.map((clss) => clss.className).join("|") + ")$");
         }
