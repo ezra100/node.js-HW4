@@ -24,11 +24,22 @@ let userSchema = new Schema({
     image: String,
     salt: String
 });
+let userDataSchema = new Schema({
+    _id: String,
+    username: String,
+    recoveryKey: String,
+    creationDate: Date
+});
+userDataSchema.pre("save", function (next) {
+    this._id = this.username;
+    next();
+});
 userSchema.pre("save", function (next) {
     this._id = this.username;
     next();
 });
 let userModel = mongoose.model("User", userSchema);
+let userDataModel = mongoose.model("UserData", userDataSchema);
 let customerModel = userModel.discriminator("Customer", new mongoose.Schema({}, { discriminatorKey: "customer" }));
 let providerModel = userModel.discriminator("Provider", new mongoose.Schema({ branchID: Number }, { discriminatorKey: "provider" }));
 let employeerModel = userModel.discriminator("Employee", new mongoose.Schema({ branchID: Number }, { discriminatorKey: "employee" }));
@@ -63,6 +74,51 @@ let flowerModel = mongoose.model("Flower", flowerSchema);
 // bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 class MongoDB {
+    getResetKey(username) {
+        return new Promise((resolve, reject) => {
+            userDataModel.findById(username, (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(data);
+            });
+        });
+    }
+    updateResetKey(username, key) {
+        let data = { username: username, recoveryKey: key, creationDate: new Date() };
+        return new Promise((resolve, reject) => {
+            userDataModel.findByIdAndUpdate(username, data, { upsert: true }, (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(data.username);
+            });
+        });
+    }
+    removeKey(username) {
+        return new Promise((resolve, reject) => {
+            userDataModel.findByIdAndRemove(username, (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(data.username);
+            });
+        });
+    }
+    findUserByEmail(email) {
+        return new Promise((resolve, reject) => {
+            userModel.findOne({ email }, (err, user) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(user);
+            });
+        });
+    }
     getFlowers() {
         return new Promise((resolve, reject) => {
             flowerModel.find({}, (err, flowers) => {

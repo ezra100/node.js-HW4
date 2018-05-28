@@ -1,5 +1,3 @@
-import { read } from "fs";
-
 export enum Gender { Male = 1, Female = 2 }
 
 export abstract class User {
@@ -28,6 +26,12 @@ export abstract class User {
     compareByUserName(username: string): boolean {
         return this.username.toLowerCase() === username.toLowerCase();
     }
+}
+
+export interface UserData {
+    username: string;
+    recoveryKey: string;
+    creationDate: Date;
 }
 
 export class Customer extends User {

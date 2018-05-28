@@ -2,3 +2,4 @@ node_modules/
 test/
 res/*
 public/flowers/*
+data.json

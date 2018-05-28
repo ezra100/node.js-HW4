@@ -1,11 +1,11 @@
 import { branches, users, flowers } from "./data";
 import { IDataBase } from "./IDataBase";
-import { User, Flower, Branch, Customer, Manager, Provider } from "../types";
+import { User, Flower, Branch, Customer, Manager, Provider, UserData } from "../types";
 
 // import the mongoose module
 import * as mongoose from "mongoose";
 import { resolve } from "dns";
-import { getRandomString, hashLength , sha512} from "../crypto";
+import { getRandomString, hashLength, sha512 } from "../crypto";
 
 
 
@@ -35,12 +35,26 @@ let userSchema: mongoose.Schema = new Schema({
     image: String,
     salt: String
 });
+
+let userDataSchema: mongoose.Schema = new Schema(
+    {
+        _id: String,
+        username: String,// key/id field
+        recoveryKey: String,
+        creationDate: Date
+    }
+);
+userDataSchema.pre("save", function (next: Function): void {
+    this._id = (<any>this).username;
+
+    next();
+});
 userSchema.pre("save", function (next: Function): void {
     this._id = (<any>this).username;
     next();
 });
 let userModel: mongoose.Model<any> = mongoose.model("User", userSchema);
-
+let userDataModel: mongoose.Model<any> = mongoose.model("UserData", userDataSchema);
 let customerModel: mongoose.Model<any> = userModel.discriminator("Customer", new mongoose.Schema({}, { discriminatorKey: "customer" }));
 let providerModel: mongoose.Model<any> = userModel.discriminator("Provider",
     new mongoose.Schema({ branchID: Number }, { discriminatorKey: "provider" }));
@@ -86,6 +100,64 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 export class MongoDB implements IDataBase {
 
 
+    getResetKey(username: string): Promise<UserData> {
+        return new Promise<UserData>(
+            (resolve, reject) => {
+                userDataModel.findById(username, (err: Error, data: UserData) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(data);
+                });
+            }
+        );
+    }
+    updateResetKey(username: string, key: string): Promise<string> {
+        let data: UserData = { username: username, recoveryKey: key, creationDate: new Date() };
+        return new Promise(
+            (resolve, reject) => {
+                userDataModel.findByIdAndUpdate(
+                    username, data, { upsert: true },
+                    (err: Error, data: UserData) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        resolve(data.username);
+                    });
+            }
+        );
+    }
+    removeKey(username: string): Promise<string>{
+        return new Promise(
+            (resolve, reject) => {
+                userDataModel.findByIdAndRemove(username,
+                    (err: Error, data: UserData) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        resolve(data.username);
+                    });
+            }
+        );
+    }
+
+
+    findUserByEmail(email: string): Promise<User> {
+        return new Promise<User | null>(
+            (resolve, reject) => {
+                userModel.findOne({ email }, (err: Error, user: User) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(user);
+                });
+            }
+        );
+    }
     getFlowers(): Promise<Flower[]> {
         return new Promise<Flower[]>(
             (resolve, reject) => {
@@ -241,9 +313,9 @@ export class MongoDB implements IDataBase {
             });
         });
     }
-    addUser(user: User, password : string): Promise<User | null> {
+    addUser(user: User, password: string): Promise<User | null> {
         if (user.salt) {
-            console.warn("Overriding salt for " + user.username + ", previous salt: " +user.salt);
+            console.warn("Overriding salt for " + user.username + ", previous salt: " + user.salt);
         }
         user.salt = getRandomString(hashLength);
         user.hashedPassword = sha512(password, user.salt);

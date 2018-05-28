@@ -22,6 +22,8 @@ import * as session from "express-session";
 import * as passport from "passport";
 import { Strategy } from "passport-local";
 import { initDB } from "./DataBase/initDB";
+import { helpers } from "./helpers";
+import { ENAMETOOLONG } from "constants";
 //#endregion
 
 
@@ -78,6 +80,13 @@ app.use("/res", resRouter.router);
 
 //#endregion
 
+const resetString = `
+Dear customer <br>
+You've requested a password reset for your account, in order to complete this procedure please click the follwoing 
+<a href="placeholder">
+link
+</a>
+`;
 app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
@@ -143,6 +152,45 @@ app.post("/login",
         res.status(400).end("Wrong username or password");
     }
 );
+
+app.post("/resetPassword", async function (req, res) {
+    let email = req.body.email;
+    let key = getRandomString(16);
+    let users = await db.getUsers(null, { email: email });
+    if (users.length > 1) {
+        res.status(400).end("There's more than one user with the email " + email);
+        return;
+    }
+    if (users.length < 1) {
+        res.status(400).end("There's no user with the email " + email);
+        return;
+    }
+    let user = users[0];
+    db.updateResetKey(user.username, key);
+    helpers.sendEmail(email, user.firstName + " " + user.lastName , "Password reset for your account at flowers++",
+        resetString.replace("placeholder", "https://localhost:3000/completeReset?key=" + key + "&&username=" + user.username));
+    res.end("reset email sent to " + email);
+});
+
+app.get("/completeReset", async function (req, res) {
+    let key = req.query.key;
+    let username = req.query.username;
+    let userData = await db.getResetKey(username);
+    if (userData && userData.recoveryKey === key) {
+        // if more than 24 hours past since the creation
+        if ((new Date()).getTime() - userData.creationDate.getTime() >= (1000 * 3600 * 24)) {
+            res.status(400).end("Can't reset after more than 24 hours");
+            return;
+        }
+        //todo
+        res.end("password reset successfully");
+        db.removeKey(username);
+        return;
+    } else {
+        res.status(400).end("failed to reset password, key doesn't match or username not found");
+    }
+});
+
 
 app.post("/salts", async function (req, res) {
     let username = req.body.user.username;

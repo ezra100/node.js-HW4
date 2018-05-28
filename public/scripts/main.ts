@@ -119,14 +119,18 @@ function logout(): void {
 }
 
 function printLoginError(msg: string) {
-    var alert = $("<div/>");
-    alert.addClass("alert alert-danger alert-dismissable");
-    alert.text(msg);
+    var alert = createAlert(msg, "danger");
     $("#modal-error-msg").html("");
     $("#modal-error-msg").append(alert);
     alert.effect("bounce");
 }
 
+function createAlert(msg: string, type: string) {
+    var alert = $("<div/>");
+    alert.addClass("alert alert-" + type + " alert-dismissable");
+    alert.text(msg);
+    return alert;
+}
 
 
 function initUsersGrid() {
@@ -542,9 +546,30 @@ function userTypeChanged() {
     form.find("[name='branchID']").prop("disabled", userType !== "Provider");
 }
 
-function showResetEmail(){
+function showResetEmail() {
     let div = $("#password-reset-div");
     div.find("[name='show-button']").hide();
     div.find("[name='email-input']").show();
     div.find("[name='send-button']").show();
+}
+
+async function sendResetRequest() {
+    let div = $("#password-reset-div");
+    let email = div.find("[name='email-input']").val();
+    let ajaxResp = $.ajax({
+        url: "/resetPassword",
+        method: "POST",
+        data : {email},
+        error: (jqxhr, status: string, error: string) => {
+            printLoginError(error);
+        },
+    });
+    let response = await ajaxResp;
+    if (ajaxResp.status === 200) {
+        div.find("[name='show-button']").show();
+        div.find("[name='email-input']").hide();
+        div.find("[name='send-button']").hide();
+        div.find("[name='alert']").text(response);
+        div.show("highlight");
+    }
 }

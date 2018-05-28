@@ -106,12 +106,16 @@ function logout() {
     // $("#nav-tabContent").empty().append(save);
 }
 function printLoginError(msg) {
-    var alert = $("<div/>");
-    alert.addClass("alert alert-danger alert-dismissable");
-    alert.text(msg);
+    var alert = createAlert(msg, "danger");
     $("#modal-error-msg").html("");
     $("#modal-error-msg").append(alert);
     alert.effect("bounce");
+}
+function createAlert(msg, type) {
+    var alert = $("<div/>");
+    alert.addClass("alert alert-" + type + " alert-dismissable");
+    alert.text(msg);
+    return alert;
 }
 function initUsersGrid() {
     var genders = [
@@ -489,5 +493,27 @@ function showResetEmail() {
     div.find("[name='show-button']").hide();
     div.find("[name='email-input']").show();
     div.find("[name='send-button']").show();
+}
+function sendResetRequest() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let div = $("#password-reset-div");
+        let email = div.find("[name='email-input']").val();
+        let ajaxResp = $.ajax({
+            url: "/resetPassword",
+            method: "POST",
+            data: { email },
+            error: (jqxhr, status, error) => {
+                printLoginError(error);
+            },
+        });
+        let response = yield ajaxResp;
+        if (ajaxResp.status === 200) {
+            div.find("[name='show-button']").show();
+            div.find("[name='email-input']").hide();
+            div.find("[name='send-button']").hide();
+            div.find("[name='alert']").text(response);
+            div.show("highlight");
+        }
+    });
 }
 //# sourceMappingURL=main.js.map
