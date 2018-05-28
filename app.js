@@ -72,20 +72,16 @@ app.use("/flowers", flowersRouter.router);
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/res", resRouter.router);
 //#endregion
-const resetString = `
-Dear customer <br>
-You've requested a password reset for your account, in order to complete this procedure please click the follwoing 
-<a href="placeholder">
-link
-</a>
-`;
+// server favicon (without an external package)
 app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
+// logout the user
 app.post("/logout", function (req, res) {
     req.logout();
     res.end();
 });
+// serves html parts that are requested via ajax (see the views/ajax folder)
 app.post(/\/ajax\/*/i, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         res.render(req.url.substring(1), { query: req.body, Color: types_1.Color, user: req.user, data: { flowers: yield db.getFlowers() } });
@@ -157,7 +153,21 @@ app.post("/update-details", function (req, res) {
         }
     });
 });
-app.post("/resetPassword", function (req, res) {
+//#region reset
+// reset message that will be sent to the user by mail
+const resetString = `
+Dear customer <br>
+You've requested a password reset for your account, in order to complete this procedure please click the follwoing 
+<a href="placeholder">
+link
+</a>
+<br>
+Thanks,
+<br>
+Flowers++
+`;
+// request a password reset - sends an email to the given address if a user with such email exists
+app.post("/requestPasswordReset", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let email = req.body.email;
         let key = crypto_1.getRandomString(16);
@@ -171,16 +181,22 @@ app.post("/resetPassword", function (req, res) {
             res.status(400).end("There's no user with the email " + email);
             return;
         }
+        if (!user.username) {
+            console.log(user);
+            console.error(user.username + " not found");
+        }
         db.updateResetKey(user.username, key);
         helpers_1.helpers.sendEmail(email, user.firstName + " " + user.lastName, "Password reset for your account at flowers++", resetString.replace("placeholder", "https://localhost:3000/completeReset?key=" + key + "&&username=" + user.username));
         res.end("reset email sent to " + email);
     });
 });
+// returns a page with the reset form
 app.get("/completeReset", function (req, res) {
     let key = req.query.key;
     let username = req.query.username;
     res.render("password-recovery", { key, username });
 });
+// the target of the reset form - here the  password is replaced with the new one
 app.post("/completeReset", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let key = req.body.key;
@@ -210,6 +226,8 @@ app.post("/completeReset", function (req, res) {
         }
     });
 });
+//#endregion
+// requests the salts for the challengs
 app.post("/salts", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let username = req.body.user.username;

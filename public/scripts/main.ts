@@ -68,6 +68,7 @@ async function doLogin() {
     });
 }
 
+// after login is confirmed, change the page programically
 function postLogin(): void {
     history.replaceState("index", "Main Index", "/index");
     $("#modal-error-msg").html("");
@@ -103,6 +104,7 @@ function postLogin(): void {
     });
 }
 
+// logut
 function logout(): void {
     $.ajax({
         url: "/logout",
@@ -114,6 +116,7 @@ function logout(): void {
 
 }
 
+// show the login error to the user
 function printLoginError(msg: string) {
     var alert = createAlert(msg, "danger");
     $("#modal-error-msg").html("");
@@ -128,7 +131,7 @@ function createAlert(msg: string, type: string) {
     return alert;
 }
 
-
+// initialize users' grid
 function initUsersGrid() {
     var genders: any[] = [
         { "Name": "", Id: "" },
@@ -265,6 +268,7 @@ function initUsersGrid() {
 
 }
 
+// initialize branches' grid
 function initBranchesGrid() {
 
     var fields: (Partial<JsGrid.JsGridField> | any)[] = [
@@ -366,6 +370,7 @@ function initBranchesGrid() {
 
 }
 
+// show indication (success, loading, error) regarding operations done on the grids
 function indicate(id: string, command: "hide" | "success" | "loading" | "error"): void {
     var alert: JQuery<HTMLElement> = $("<div/>").addClass("py-1 my-1 text-center");
     switch (command) {
@@ -398,6 +403,7 @@ function indicate(id: string, command: "hide" | "success" | "loading" | "error")
     }
 }
 
+// submit the 'contact us' form
 function contactFormSubmit(e: Event): boolean {
     e.preventDefault();
     var firstName = $("#contact-form").find("#first-name").val();
@@ -420,14 +426,16 @@ function contactFormSubmit(e: Event): boolean {
     $("#contact-form").hide();
     return false;
 }
-
+// load the branches' grid with data
 function loadBranches() {
     $("#branches-grid").jsGrid("loadData");
 }
+// load the users' grid with data
 function loadUsers() {
     $("#users-grid").jsGrid("loadData");
 }
 
+// post a file to some url via form-data
 function postFile(file: File, url: string, cb: Function) {
     var formData = new FormData();
     formData.append("image", file);
@@ -448,7 +456,7 @@ function refreshProfileImage() {
     let img: HTMLImageElement = <any>$("#profile-img")[0];
     img.src = profileImageLink + "?" + Date.now();
 }
-
+// add a new flower to the DB
 function addFlower() {
     var form: HTMLFormElement = document.forms[<any>"add-flower-form"];
     // if the file input has not files then the URL is required
@@ -483,6 +491,7 @@ function addFlower() {
 
 }
 
+// add to the page a flower (i.e. show it)
 function addFlowerToPage(flower: Flower): null | JQuery<HTMLElement> {
     if ($(".card.productbox").length <= 0) {
         return null;
@@ -498,6 +507,7 @@ function addFlowerToPage(flower: Flower): null | JQuery<HTMLElement> {
     return flowerDiv;
 }
 
+// get the opposite color (white for drak colors, black for lighter colors)
 function invertColor(hex: string) {
     if (hex.indexOf("#") === 0) {
         hex = hex.slice(1);
@@ -536,12 +546,14 @@ function addFlowerRemoveSelectedImage() {
     $("#add-flower-image").val("");
 }
 
+// on the sign-up form - if the user type has changed - change the fields avilable accordingly
 function userTypeChanged() {
     let form = $("#signup-form");
     let userType = form.find("[name='className']").val();
     form.find("[name='branchID']").prop("disabled", userType !== "Provider");
 }
 
+// show a form that lets the user to send a reset request
 function showResetEmail() {
     let div = $("#password-reset-div");
     div.find("[name='show-button']").hide();
@@ -549,11 +561,12 @@ function showResetEmail() {
     div.find("[name='send-button']").show();
 }
 
+// send the reset request to the server
 async function sendResetRequest() {
     let div = $("#password-reset-div");
     let email = div.find("[name='email-input']").val();
     let ajaxResp = $.ajax({
-        url: "/resetPassword",
+        url: "/requestPasswordReset",
         method: "POST",
         data : {email},
         error: (jqxhr, status: string, error: string) => {

@@ -80,23 +80,20 @@ app.use("/res", resRouter.router);
 
 //#endregion
 
-const resetString = `
-Dear customer <br>
-You've requested a password reset for your account, in order to complete this procedure please click the follwoing 
-<a href="placeholder">
-link
-</a>
-`;
+
+// server favicon (without an external package)
 app.get("/favicon.ico", function (req, res) {
     res.sendFile(path.join(__dirname, "public/img/favicon.jpg"));
 });
 
 
-
+// logout the user
 app.post("/logout", function (req: Request, res) {
     req.logout();
     res.end();
 });
+
+// serves html parts that are requested via ajax (see the views/ajax folder)
 app.post(/\/ajax\/*/i, async function (req: Request, res) {
     res.render(req.url.substring(1),
         { query: req.body, Color, user: req.user, data: { flowers: await db.getFlowers() } });
@@ -181,7 +178,23 @@ app.post("/update-details", function (req, res) {
     });
 });
 
-app.post("/resetPassword", async function (req, res) {
+//#region reset
+// reset message that will be sent to the user by mail
+const resetString = `
+Dear customer <br>
+You've requested a password reset for your account, in order to complete this procedure please click the follwoing 
+<a href="placeholder">
+link
+</a>
+<br>
+Thanks,
+<br>
+Flowers++
+`;
+
+
+// request a password reset - sends an email to the given address if a user with such email exists
+app.post("/requestPasswordReset", async function (req, res) {
     let email = req.body.email;
     let key = getRandomString(16);
     let users = await db.getUsers(null, { email: email });
@@ -204,12 +217,13 @@ app.post("/resetPassword", async function (req, res) {
     res.end("reset email sent to " + email);
 });
 
-
+// returns a page with the reset form
 app.get("/completeReset", function (req, res) {
     let key = req.query.key;
     let username = req.query.username;
     res.render("password-recovery", { key, username });
 });
+// the target of the reset form - here the  password is replaced with the new one
 app.post("/completeReset", async function (req, res) {
     let key = req.body.key;
     let username = req.body.username;
@@ -237,8 +251,10 @@ app.post("/completeReset", async function (req, res) {
         res.status(400).end("failed to reset password, key doesn't match or username not found");
     }
 });
+//#endregion
 
 
+// requests the salts for the challengs
 app.post("/salts", async function (req, res) {
     let username = req.body.user.username;
     tempSecrets[username] = getRandomString(hashLength);
