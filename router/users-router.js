@@ -17,7 +17,7 @@ const helpers_1 = require("../helpers");
 var db = DBFactory_1.DBFactory.getDB();
 exports.router.get("/", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var client = yield db.findUser(req.query.clientUserName);
+        var client = req.user;
         var filter = req.query.filter;
         var usersPromise = db.getUsers(client.className === types_1.Manager.name ? null /* = any type*/ : [types_1.Customer, types_1.Provider], filter);
         res.json(yield usersPromise);

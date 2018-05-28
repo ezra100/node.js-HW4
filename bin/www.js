@@ -2,14 +2,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const appX = require("../app");
-const debugModule = require("debug");
 const fs = require("fs");
 const path = require("path");
 const httpolyglot = require("httpolyglot");
 let app = appX.default;
-let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
-debug.enabled = true;
 /**
  * Get port from environment and store in Express.
  */
@@ -84,6 +81,6 @@ function onListening() {
     var bind = typeof addr === "string"
         ? "pipe " + addr
         : "port " + addr.port;
-    debug("Listening on " + bind);
+    console.log("Listening on " + bind);
 }
 //# sourceMappingURL=www.js.map

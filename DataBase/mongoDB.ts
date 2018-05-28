@@ -129,7 +129,7 @@ export class MongoDB implements IDataBase {
             }
         );
     }
-    removeKey(username: string): Promise<string>{
+    removeKey(username: string): Promise<string> {
         return new Promise(
             (resolve, reject) => {
                 userDataModel.findByIdAndRemove(username,
@@ -289,7 +289,11 @@ export class MongoDB implements IDataBase {
             }
         );
     }
-    updateUser(user: User): Promise<User | null> {
+    updateUser(user: Partial<User>, password?: string): Promise<User | null> {
+        if (password) {
+            user.salt = getRandomString(hashLength);
+            user.hashedPassword = sha512(password, user.salt);
+        }
         return new Promise((resolve, reject) => {
             userModel.findByIdAndUpdate(user.username, user, (err: Error, oldUser: User) => {
                 if (err) {
@@ -297,19 +301,23 @@ export class MongoDB implements IDataBase {
                     return;
                 }
                 // we want to send back the new one
-                resolve(user);
+                resolve(Object.assign({}, oldUser, user));
             });
         });
     }
-    updateUserById(username: string, update: Partial<User>): Promise<User> {
+    updateUserById(username: string, user: Partial<User>, password?: string): Promise<User> {
+        if (password) {
+            user.salt = getRandomString(hashLength);
+            user.hashedPassword = sha512(password, user.salt);
+        }
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(username, update, (err: Error, oldUser: User) => {
+            userModel.findByIdAndUpdate(username, user, (err: Error, oldUser: User) => {
                 if (err) {
                     reject(err);
                     return;
                 }
                 // sending back the new one
-                resolve(Object.assign([], oldUser, update));
+                resolve(Object.assign([], oldUser, user));
             });
         });
     }

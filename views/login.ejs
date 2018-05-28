@@ -72,6 +72,12 @@
                         <span class="glyphicon glyphicon-log-out"></span> Logout
                     </button>
                 </li>
+                <li class="nav-item" id="nav-update-details">
+                    <button type="button" class="btn btn-dark btn-primary" data-toggle="modal" data-target="#update-detailsModal">
+
+                        <span class="glyphicon glyphicon-user"></span> Update Details
+                    </button>
+                </li>
                 <li class="nav-item" id="nav-profile-img" style="display:none">
 
                     <img class="profile-img" id="profile-img" onclick="$('#profile-input').click()" src="" alt="Profile Image">
@@ -138,6 +144,33 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary btn-block" onclick="$('#signup-form').submit()">Sign Up</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="update-detailsModal" tabindex="-1" role="dialog" aria-labelledby="update-detailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" action="/update-details" id="update-details-form" method="POST">
+                            <div class="form-group">
+                                <input type="text" name="firstName" class="form-control" placeholder="First Name" required />
+                                <input type="text" name="lastName" class="form-control" placeholder="Last Name" required />
+                                <input type="email" name="email" class="form-control" placeholder="Email" required />
+                                <input type="text" name="address" class="form-control" placeholder="Address" required />
+                                <input type="number" name="branchID" class="form-control" placeholder="Branch ID" required style="display: none" />
+                        </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary btn-block" onclick="$('#update-details-form').submit()">Update Details</button>
                         </div>
                     </div>
 

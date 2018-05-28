@@ -1,7 +1,6 @@
 // tslint:disable:typedef
 import * as express from "express";
 import { Router } from "express-serve-static-core";
-//import * as multer from "multer";
 import * as fs from "fs";
 import * as path from "path";
 import * as crypto from "crypto";
@@ -30,7 +29,7 @@ var profileLocatoin: string = path.join(__dirname, "../res/profile-images/");
 
 // returns the user's profile image image
 router.get("/profile-image", async function (req, res) {
-    var user = req.session.username && await db.findUser(req.session.username).catch(console.error);
+    var user = req.user;
     if (user && user.image) {
         var imgPath = path.join(profileLocatoin, user.image);
         if (fs.existsSync(imgPath)) {
@@ -43,7 +42,7 @@ router.get("/profile-image", async function (req, res) {
 
 // uploads an image from the client (via form)
 router.post("/profile-image", /*upload.any(), */ function (req, res) {
-    var username = req.session.username;
+    var username = req.user.username;
     db.updateUserById(username, { image: (<any>req.files)[0].filename });
     res.end();
 });

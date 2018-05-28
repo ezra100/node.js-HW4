@@ -6,7 +6,6 @@
  */
 
 import * as  appX from "../app";
-import * as debugModule from "debug";
 import * as http from "http";
 import * as https from "https";
 import * as fs from "fs";
@@ -17,9 +16,7 @@ let app = appX.default;
 
 
 
-let debug = debugModule("hw5:server");
 // since we cannot add an enviroment variable in VSCode we'll just enable it form here
-debug.enabled = true;
 
 /**
  * Get port from environment and store in Express.
@@ -114,5 +111,5 @@ function onListening() {
     var bind = typeof addr === "string"
         ? "pipe " + addr
         : "port " + addr.port;
-    debug("Listening on " + bind);
+    console.log("Listening on " + bind);
 }

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 // tslint:disable:typedef
 const express = require("express");
-//import * as multer from "multer";
 const fs = require("fs");
 const path = require("path");
 const DBFactory_1 = require("../DataBase/DBFactory");
@@ -30,7 +29,7 @@ var profileLocatoin = path.join(__dirname, "../res/profile-images/");
 // returns the user's profile image image
 exports.router.get("/profile-image", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var user = req.session.username && (yield db.findUser(req.session.username).catch(console.error));
+        var user = req.user;
         if (user && user.image) {
             var imgPath = path.join(profileLocatoin, user.image);
             if (fs.existsSync(imgPath)) {
@@ -43,7 +42,7 @@ exports.router.get("/profile-image", function (req, res) {
 });
 // uploads an image from the client (via form)
 exports.router.post("/profile-image", /*upload.any(), */ function (req, res) {
-    var username = req.session.username;
+    var username = req.user.username;
     db.updateUserById(username, { image: req.files[0].filename });
     res.end();
 });

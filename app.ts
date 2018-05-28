@@ -153,6 +153,34 @@ app.post("/login",
     }
 );
 
+let updateUserProperties: string[] = [
+    "address",
+    "username",
+    "firstName",
+    "lastName",
+    "email",
+    "gender",
+    "className"
+];
+app.post("/update-details", function (req, res) {
+    let user: any = {};
+    for (let key of userProperties) {
+        if (req.body[key]) {
+            user[key] = req.body[key];
+        }
+    }
+    let username = req.user.username;
+    let response = db.updateUserById(username, user);
+    res.render("redirect", {
+        data:
+            {
+                header: "user updated successfully",
+                paragraph: "",
+                redirect: "/index"
+            }
+    });
+});
+
 app.post("/resetPassword", async function (req, res) {
     let email = req.body.email;
     let key = getRandomString(16);
@@ -161,29 +189,48 @@ app.post("/resetPassword", async function (req, res) {
         res.status(400).end("There's more than one user with the email " + email);
         return;
     }
-    if (users.length < 1) {
+    let user = users[0];
+    if (!(user && user.username)) {
         res.status(400).end("There's no user with the email " + email);
         return;
     }
-    let user = users[0];
+    if(! user.username){
+        console.log(user);
+        console.error(user.username + " not found");
+    }
     db.updateResetKey(user.username, key);
-    helpers.sendEmail(email, user.firstName + " " + user.lastName , "Password reset for your account at flowers++",
+    helpers.sendEmail(email, user.firstName + " " + user.lastName, "Password reset for your account at flowers++",
         resetString.replace("placeholder", "https://localhost:3000/completeReset?key=" + key + "&&username=" + user.username));
     res.end("reset email sent to " + email);
 });
 
-app.get("/completeReset", async function (req, res) {
+
+app.get("/completeReset", function (req, res) {
     let key = req.query.key;
     let username = req.query.username;
+    res.render("password-recovery", { key, username });
+});
+app.post("/completeReset", async function (req, res) {
+    let key = req.body.key;
+    let username = req.body.username;
+    let newPassword = req.body.password;
     let userData = await db.getResetKey(username);
-    if (userData && userData.recoveryKey === key) {
+    if (newPassword && userData && userData.recoveryKey === key) {
         // if more than 24 hours past since the creation
         if ((new Date()).getTime() - userData.creationDate.getTime() >= (1000 * 3600 * 24)) {
             res.status(400).end("Can't reset after more than 24 hours");
             return;
         }
-        //todo
-        res.end("password reset successfully");
+        db.updateUserById(username, {}, newPassword);
+        res.render("redirect", {
+            data:
+                {
+                    header: "password reset successfully",
+                    paragraph: "you'll be redirected to login soon",
+                    redirect: "/login",
+                    title: "password reset successfully"
+                }
+        });
         db.removeKey(username);
         return;
     } else {

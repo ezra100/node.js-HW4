@@ -12,6 +12,7 @@ var clientUserType;
 $(function () {
     $("#login-button").click(doLogin);
     $("#nav-logout").click(logout).hide();
+    $("#nav-update-details").hide();
     if (this.location.pathname.toLowerCase() === "/index") {
         postLogin();
     }
@@ -65,6 +66,7 @@ function postLogin() {
     $("#nav-login").hide();
     $("#nav-signup").hide();
     $("#nav-logout").show();
+    $("#nav-update-details").show();
     refreshProfileImage();
     $("#nav-profile-img").show();
     $("#nav-tabs").load("ajax/navbar-tabs", { clientUserName: clientUserName }, function () {
@@ -96,14 +98,6 @@ function logout() {
             $(window).attr("location", "/login");
         }
     });
-    // $("#nav-login").show();
-    // $("#nav-signup").show();
-    // $("#nav-logout").hide();
-    // $("#nav-profile-img").hide();
-    // $("#nav-tabs").html("");
-    // var save = $("#nav-about").detach();
-    // save.addClass("active show");
-    // $("#nav-tabContent").empty().append(save);
 }
 function printLoginError(msg) {
     var alert = createAlert(msg, "danger");

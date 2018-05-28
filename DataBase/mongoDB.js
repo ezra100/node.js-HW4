@@ -236,7 +236,11 @@ class MongoDB {
             });
         });
     }
-    updateUser(user) {
+    updateUser(user, password) {
+        if (password) {
+            user.salt = crypto_1.getRandomString(crypto_1.hashLength);
+            user.hashedPassword = crypto_1.sha512(password, user.salt);
+        }
         return new Promise((resolve, reject) => {
             userModel.findByIdAndUpdate(user.username, user, (err, oldUser) => {
                 if (err) {
@@ -244,19 +248,23 @@ class MongoDB {
                     return;
                 }
                 // we want to send back the new one
-                resolve(user);
+                resolve(Object.assign({}, oldUser, user));
             });
         });
     }
-    updateUserById(username, update) {
+    updateUserById(username, user, password) {
+        if (password) {
+            user.salt = crypto_1.getRandomString(crypto_1.hashLength);
+            user.hashedPassword = crypto_1.sha512(password, user.salt);
+        }
         return new Promise((resolve, reject) => {
-            userModel.findByIdAndUpdate(username, update, (err, oldUser) => {
+            userModel.findByIdAndUpdate(username, user, (err, oldUser) => {
                 if (err) {
                     reject(err);
                     return;
                 }
                 // sending back the new one
-                resolve(Object.assign([], oldUser, update));
+                resolve(Object.assign([], oldUser, user));
             });
         });
     }

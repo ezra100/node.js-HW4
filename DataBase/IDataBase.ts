@@ -3,8 +3,8 @@ import { User, Flower, Branch, UserData } from "../types";
 export interface IDataBase {
     // leave userType null or undefined in order to show all types
     getUsers(userType?: any[], filter?: any): Promise<User[]>;
-    updateUser(user: User): Promise<User>;
-    updateUserById(username: string, update: Partial<User>): Promise<User>;
+    updateUser(user: Partial<User>, password? : string): Promise<User>;
+    updateUserById(username: string, update: Partial<User>, password?: string): Promise<User>;
 
     addUser(user: User, password: string): Promise<User>;
     deleteUser(user: User): Promise<User>;
